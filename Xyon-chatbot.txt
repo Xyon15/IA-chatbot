@@ -27,7 +27,7 @@ A faire :
 
 demander a chat quesque n eut faire avec .yaml de continue
 
-faire git sur serv truenas
+faire git sur serv truenas (a voir avec vscode dev)
 
 voire extension les plus populaires pour vscode
 
