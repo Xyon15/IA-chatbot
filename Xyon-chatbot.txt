@@ -35,6 +35,8 @@ voir polu ytb
 
 claude 3.7 sonnet
 
+mettre a jour README
+
 
 
 # Vérification sécurité
