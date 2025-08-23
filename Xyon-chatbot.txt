@@ -35,6 +35,7 @@ claude 3.7 sonnet
 
 test depuis tel github
 
+test depuis vscode dev web
 
 
 # Vérification sécurité
