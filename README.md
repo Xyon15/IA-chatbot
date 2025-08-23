@@ -1,6 +1,8 @@
-# 🤖 Neuro-Bot
+# 🤖 IA-ChatBot
 
 Développé par Xyon
+
+Idée principale de vedal (https://vedal.ai).
 
 **Neuro-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, et une interface graphique intuitive.
 
