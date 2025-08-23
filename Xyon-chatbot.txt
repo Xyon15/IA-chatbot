@@ -27,6 +27,8 @@ A faire :
 
 demander a chat quesque n eut faire avec .yaml de continue
 
+faire git sur serv truenas
+
 voir polu ytb
 
 claude 3.7 sonnet
