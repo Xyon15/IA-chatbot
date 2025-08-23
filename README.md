@@ -1,4 +1,4 @@
-# 🤖 Neuro-Bot
+# 🤖 ChatBot
 
 Développé par Xyon
 
