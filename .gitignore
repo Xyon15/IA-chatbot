@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# xyon perso ignore
+*.gguf
+llama-cpp-python/
+llama-venv/
+__pycache__/
+
 # User-specific files
 *.rsuser
 *.suo
