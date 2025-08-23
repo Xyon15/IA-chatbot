@@ -36,15 +36,6 @@ claude 3.7 sonnet
 
 
 
-admin
-ggxDL_W9mBsEo2hQ
-
-15f12e5c4890d4bf8c3e1fbd
-
-
-
-
-
 
 # Vérification sécurité
 if not TOKEN or not AUTH_SECRET:
