@@ -13,24 +13,25 @@ def check_requirements():
     """Vérifie que tous les prérequis sont installés"""
     print("🔍 Vérification des prérequis...")
     
-    required_packages = [
-        'discord.py',
-        'llama-cpp-python', 
-        'python-dotenv',
-        'pyside6',
-        'pynvml',
-        'aiohttp',
-        'selectolax',
-        'transformers',
-        'pyotp'
-    ]
+    # Mapping des noms de packages vers leurs noms d'import
+    required_packages = {
+        'discord.py': 'discord',
+        'llama-cpp-python': 'llama_cpp', 
+        'python-dotenv': 'dotenv',
+        'pyside6': 'PySide6',
+        'pynvml': 'pynvml',
+        'aiohttp': 'aiohttp',
+        'selectolax': 'selectolax',
+        'transformers': 'transformers',
+        'pyotp': 'pyotp'
+    }
     
     missing = []
-    for package in required_packages:
+    for package_name, import_name in required_packages.items():
         try:
-            __import__(package.replace('-', '_'))
+            __import__(import_name)
         except ImportError:
-            missing.append(package)
+            missing.append(package_name)
     
     if missing:
         print(f"❌ Packages manquants: {', '.join(missing)}")

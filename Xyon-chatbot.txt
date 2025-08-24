@@ -3,9 +3,9 @@ Xyon chatbot :
 
 Launch
 
-cd C:\Dev\neuro-bot
+cd C:\Dev\IA-chatbot
 .\llama-venv\Scripts\activate
-python bot_gui.py
+python start_bot.py
 
 
 

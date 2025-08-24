@@ -60,11 +60,11 @@ def setup(bot):
 def _should_search_web(prompt: str) -> bool:
     """Détermine si une recherche web est nécessaire"""
     web_keywords = [
-        r'\b(?:qu[\'']?est-ce que|que sais-tu|dis-moi|explique|parle-moi de)\b',
+        r'\b(?:quest-ce que|que sais-tu|dis-moi|explique|parle-moi de)\b',
         r'\b(?:actualité|news|nouveau|récent|dernière|info)\b',
         r'\b(?:météo|temps|température)\b',
         r'\b(?:prix|coût|combien)\b',
-        r'\b(?:définition|c\'est quoi|signifie)\b'
+        r'\b(?:définition|cest quoi|signifie)\b'
     ]
     
     prompt_lower = prompt.lower()
