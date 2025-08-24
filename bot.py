@@ -1,23 +1,21 @@
 # --- Imports ---
-from config import (
-    TOKEN, AUTH_SECRET, AUTHORIZED_ROLE,
-    LIMITS_FILE, WEB_STATE_FILE, CONFIG_PATH, AUTO_REPLY_PATH, DB_PATH, MODEL_PATH
-)
+from config import config, logger
 from utils import count_tokens, truncate_text_to_tokens, shorten_response
 from memory import get_history, save_fact, save_interaction, clear_memory, get_facts
 from model import generate_reply
 from web import duckduckgo_search, duckduckgo_html_fallback, load_web_state, save_web_state
 
-
 import os
 import json
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 import time
 import asyncio
 from commands import setup_all_commands
 from events import setup_all_events
+
+# Initialisation du logging
+logger.info("Démarrage du bot Neuro...")
 
 web_enabled = load_web_state()
 
@@ -35,12 +33,7 @@ from pynvml import (
 
 
 
-# --- Chargement du token discord ---
-load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")  # Assure-toi que le token est dans le fichier .env
-
-# --- Authentification 2FA pour !reset ---
-AUTH_SECRET = os.getenv("AUTH_SECRET")
+# Configuration déjà chargée via config.py
 
 # --- Intents Discord ---
 intents = discord.Intents.default()
@@ -49,26 +42,32 @@ intents.message_content = True  # Nécessaire pour lire le contenu des messages
 
 
 # --- Limite de charactère ---
-LIMITS_FILE = os.path.join("JSON", "character_limits.json")
-
 def get_max_reply_length() -> int:
+    """Récupère la limite maximale de réponse"""
     try:
-        with open(LIMITS_FILE, "r", encoding="utf-8") as f:
-            config = json.load(f)
-            return config.get("max_reply_length", 1900)
-    except Exception:
+        with open(config.LIMITS_FILE, "r", encoding="utf-8") as f:
+            limits_config = json.load(f)
+            return limits_config.get("max_reply_length", 1900)
+    except Exception as e:
+        logger.warning(f"Erreur lecture limits: {e}")
         return 1900   # Valeur par défaut
 
 def set_max_reply_length(length: int):
-    with open(LIMITS_FILE, "w", encoding="utf-8") as f:
-        json.dump({"max_reply_length": length}, f, indent=2)
+    """Définit la limite maximale de réponse"""
+    try:
+        with open(config.LIMITS_FILE, "w", encoding="utf-8") as f:
+            json.dump({"max_reply_length": length}, f, indent=2)
+        logger.info(f"Limite de réponse définie à {length}")
+    except Exception as e:
+        logger.error(f"Erreur sauvegarde limits: {e}")
+        raise
 
 
 
 # --- Configuration du bot Discord ---
 bot_start_time = time.time()  # ← Enregistre l'heure de démarrage du bot
 
-AUTHORIZED_ROLE = "NeuroMaster"  # ← Remplace par le nom exact du rôle autorisé
+# Configuration des rôles déjà dans config.py
 
 
 # --- Démarrage du bot ---
@@ -78,6 +77,9 @@ _bot_task = None
 _bot_loop = None
 
 def create_bot():
+    """Crée et configure l'instance du bot Discord"""
+    logger.info("Création de l'instance du bot Discord...")
+    
     intents = discord.Intents.default()
     intents.messages = True
     intents.message_content = True
@@ -86,44 +88,58 @@ def create_bot():
 
     # Charge dynamiquement le context_limit
     try:
-        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            config = json.load(f)
-            bot.current_context_limit = config.get("context_limit", 10)
-    except Exception:
+        with open(config.CONFIG_PATH, "r", encoding="utf-8") as f:
+            bot_config = json.load(f)
+            bot.current_context_limit = bot_config.get("context_limit", 10)
+        logger.info(f"Context limit chargé: {bot.current_context_limit}")
+    except Exception as e:
         bot.current_context_limit = 10
+        logger.warning(f"Erreur chargement context limit: {e}, utilisation valeur par défaut")
 
     # Charge dynamiquement l'état auto_reply
     try:
-        with open(AUTO_REPLY_PATH, "r", encoding="utf-8") as f:
+        with open(config.AUTO_REPLY_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
             bot.auto_reply_enabled = data.get("enabled", False)
-    except Exception:
+        logger.info(f"Auto reply chargé: {bot.auto_reply_enabled}")
+    except Exception as e:
         bot.auto_reply_enabled = False
+        logger.warning(f"Erreur chargement auto reply: {e}, utilisation valeur par défaut")
 
     bot.web_enabled = load_web_state()
-    bot.DB_PATH = DB_PATH
+    bot.DB_PATH = config.DB_PATH
     bot.bot_start_time = time.time()
+    
+    # Configuration des commandes et événements
     setup_all_commands(bot)
     setup_all_events(bot)
+    
+    logger.info("Bot Discord configuré avec succès")
     return bot
 
 def start_bot(loop=None):
+    """Démarre le bot Discord"""
     global bot, _bot_task, _bot_loop
     if bot is not None:
+        logger.warning("Bot déjà démarré")
         return _bot_task
     if loop is None:
         loop = asyncio.get_event_loop()
     _bot_loop = loop
     bot = create_bot()
-    return bot.start(TOKEN)
+    logger.info("Démarrage du bot Discord...")
+    return bot.start(config.TOKEN)
 
 async def stop_bot():
+    """Arrête le bot Discord proprement"""
     global bot, _bot_task, _bot_loop
     if bot:
+        logger.info("Arrêt du bot Discord...")
         await bot.close()
         bot = None
         _bot_task = None
         _bot_loop = None
+        logger.info("Bot Discord arrêté")
 
 if __name__ == "__main__":
     asyncio.run(start_bot())

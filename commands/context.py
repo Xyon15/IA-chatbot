@@ -1,27 +1,38 @@
-from discord.ext.commands import has_role
-from config import AUTHORIZED_ROLE, CONFIG_PATH
+from auth_decorators import require_authorized_role
+from config import config, logger
 import json
 
 def setup(bot):
     @bot.command()
-    @has_role(AUTHORIZED_ROLE)
-    async def context(ctx, count: int = None):
+    @require_authorized_role
+    async def context(ctx, limit: int = None):
+        """Définit ou affiche la limite du contexte conversationnel"""
+        if limit is None:
+            current_limit = getattr(bot, 'current_context_limit', 10)
+            await ctx.send(f"🧠 Contexte actuel : **{current_limit}** échanges mémorisés.\nUtilise `!context <1-50>` pour changer.")
+            logger.debug(f"Contexte consulté par {ctx.author.id}: {current_limit}")
+            return
+
+        if not (1 <= limit <= 50):
+            await ctx.send("❌ La limite doit être entre 1 et 50.")
+            return
+
         try:
-            if count is None:
-                await ctx.send(f"🔍 Neuro utilise actuellement **{bot.current_context_limit}** derniers échanges en mémoire.")
-                return
-
-            if count < 1 or count > 50:
-                await ctx.send("❌ Le nombre de messages doit être entre 1 et 50.")
-                return
-
-            bot.current_context_limit = count
-            # Mets à jour le fichier JSON
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                config = json.load(f)
-            config["context_limit"] = count
-            with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-                json.dump(config, f, indent=2)
-            await ctx.send(f"✅ Contexte mis à jour : Neuro utilisera désormais les **{count}** derniers échanges.")
+            # Mise à jour en mémoire
+            bot.current_context_limit = limit
+            
+            # Sauvegarde dans le fichier
+            with open(config.CONFIG_PATH, "r", encoding="utf-8") as f:
+                bot_config = json.load(f)
+            
+            bot_config["context_limit"] = limit
+            
+            with open(config.CONFIG_PATH, "w", encoding="utf-8") as f:
+                json.dump(bot_config, f, indent=2, ensure_ascii=False)
+            
+            await ctx.send(f"✅ Contexte défini à **{limit}** échanges.")
+            logger.info(f"Contexte modifié à {limit} par {ctx.author.id}")
+            
         except Exception as e:
-            await ctx.send(f"❌ Une erreur est survenue lors de la mise à jour du contexte : `{e}`")
+            await ctx.send("❌ Erreur lors de la sauvegarde de la configuration.")
+            logger.error(f"Erreur context par {ctx.author.id}: {e}")

@@ -37,7 +37,7 @@ claude 3.7 sonnet
 
 mettre a jour README
 
-
+chercher une autre ia continue et lmstudio c nul
 
 # Vérification sécurité
 if not TOKEN or not AUTH_SECRET:
@@ -47,7 +47,7 @@ if not TOKEN or not AUTH_SECRET:
 
 
 
-
+                   
 
 
 
@@ -101,4 +101,4 @@ Perso : "Tu es une Neuro, une VTubeuse française, drôle, naturelle, expressive
 
 
 
-TOKEN discord bot : MTM5NzY2ODczNTA5MDgyMzM0MA.GYBpfb.i20OezmMlhGzclho9sVADwt1PzeFQL063-wyXc
+

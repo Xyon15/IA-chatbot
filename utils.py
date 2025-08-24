@@ -1,9 +1,12 @@
+from config import logger
+
 try:
     from transformers import GPT2TokenizerFast
     tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
+    logger.info("Tokenizer GPT-2 initialisé avec succès")
 except Exception as e:
     tokenizer = None
-    print(f"[WARN] tokenizer non disponible : {e}")
+    logger.warning(f"Tokenizer non disponible : {e}")
 
 def count_tokens(text: str) -> int:
     if tokenizer:
@@ -35,14 +38,16 @@ def shorten_response(text: str, max_length: int | None = None) -> str:
     Raccourci la réponse proprement.
     Si max_length est None on lit le fichier character_limits.json.
     """
-    from config import LIMITS_FILE
+    from config import config
     import json
+    
     if max_length is None:
         try:
-            with open(LIMITS_FILE, "r", encoding="utf-8") as f:
-                config = json.load(f)
-                max_length = config.get("max_reply_length", 1900)
-        except Exception:
+            with open(config.LIMITS_FILE, "r", encoding="utf-8") as f:
+                limits_config = json.load(f)
+                max_length = limits_config.get("max_reply_length", 1900)
+        except Exception as e:
+            logger.warning(f"Erreur lecture limits file: {e}, utilisation valeur par défaut")
             max_length = 1900
 
     if len(text) <= max_length:
@@ -54,4 +59,5 @@ def shorten_response(text: str, max_length: int | None = None) -> str:
         cut_point = max_length
 
     truncated = text[:cut_point].rstrip()
+    logger.debug(f"Réponse tronquée de {len(text)} à {len(truncated)} caractères")
     return truncated

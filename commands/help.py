@@ -1,32 +1,38 @@
-from discord.ext.commands import has_role
-from config import AUTHORIZED_ROLE
+from config import logger
 
 def setup(bot):
     @bot.command(name="helpme")
-    @has_role(AUTHORIZED_ROLE)
-    async def helpme(ctx):
-        help_text = (
-            "```\n"
-            "📚 COMMANDES DE NEURO\n"
-            "────────────────────────────\n"
-            "💬 Parle à Neuro simplement en la mentionnant ou en envoyant un message sans préfixe (!).\n"
-            "\n"
-            "🔧 Commandes disponibles :\n"
-            "🧠 !reset        → Réinitialise la mémoire\n"
-            "📊 !stats        → Affiche les stats système et mémoire de Neuro\n"
-            "🛠️ !auto on/off  → Active ou désactive les réponses automatiques\n"
-            "🔢 !context <1-50>  → Choisis le nombre de d'échanges que neuro se souvient activement\n"
-            "🌐 !web on/off         → Active ou désactive l’accès web (DuckDuckGo)\n"
-            "🧪 !web test <texte>   → Teste une recherche web manuellement\n"
-            "🧾 !remember [texte]   → Ajoute un fait à la mémoire à long terme de Neuro\n"
-            "🔍 !facts [@user]      → Affiche les faits connus (soi-même ou un autre utilisateur)\n"
-            "🧹 !forget me/@user/all → Oublie les faits \n"
-            "📏 !limits [valeur]     → Définit ou affiche la longueur maximale des réponses\n"
-            "♻️ !resetlimits         → Restaure la limite par défaut (1900 caractères)\n"
-            "👋 !bye               → Arrête proprement le bot\n"
-            "❓ !helpme         → Affiche ce message d’aide\n"
-            "\n"
-            "⚠️ Seuls les utilisateurs avec le rôle « NeuroMaster » peuvent utiliser ces commandes.\n"
-            "```"
-        )
-        await ctx.send(help_text)
+    async def help_command(ctx):
+        """Affiche l'aide des commandes disponibles"""
+        try:
+            help_text = """
+🤖 **Commandes Neuro-Bot** 🤖
+
+**📋 Commandes générales :**
+• `!helpme` → Affiche cette aide
+• `!stats` → Statistiques système et GPU
+
+**🧠 Gestion de la mémoire :**
+• `!context <1-50>` → Définit le nombre d'échanges mémorisés
+• `!remember <texte>` → Mémorise un fait personnel
+• `!facts [@user]` → Affiche les faits mémorisés
+• `!forget me/@user/all` → Efface les faits (🔒 2FA requis)
+• `!reset @user/all` → Réinitialise la mémoire conversationnelle (🔒 2FA requis)
+
+**🌐 Recherche web :**
+• `!web on/off` → Active/désactive la recherche web
+
+**⚙️ Configuration :**
+• `!auto on/off` → Active/désactive les réponses automatiques
+• `!limits [valeur]` → Définit la longueur max des réponses
+
+**🔒 Commandes administrateur :**
+• `!bye` → Arrêt sécurisé du bot (🔒 2FA requis)
+
+*Les commandes marquées 🔒 nécessitent le rôle autorisé et une authentification 2FA.*
+            """
+            await ctx.send(help_text)
+            logger.info(f"Aide consultée par {ctx.author.id}")
+        except Exception as e:
+            await ctx.send("❌ Erreur lors de l'affichage de l'aide.")
+            logger.error(f"Erreur help par {ctx.author.id}: {e}")

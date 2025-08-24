@@ -8,6 +8,10 @@
 llama-cpp-python/
 llama-venv/
 __pycache__/
+config.yaml - Raccourci.lnk
+sync.ffs_db
+.env
+repo.md
 
 # User-specific files
 *.rsuser
@@ -422,3 +426,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
