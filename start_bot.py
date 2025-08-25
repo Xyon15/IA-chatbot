@@ -9,6 +9,35 @@ import os
 import asyncio
 from pathlib import Path
 
+def clean_environment():
+    """Nettoie l'environnement des variables en cache - SOLUTION AU PROBLÈME TOKEN"""
+    print("🧹 Nettoyage de l'environnement...")
+    
+    # Supprimer les variables d'environnement en cache
+    cache_vars_removed = 0
+    for var in ['DISCORD_TOKEN', 'AUTH_SECRET']:
+        if var in os.environ:
+            del os.environ[var]
+            cache_vars_removed += 1
+    
+    # Supprimer les modules Python en cache liés à la config
+    modules_to_remove = []
+    for name in sys.modules:
+        if any(keyword in name.lower() for keyword in ['config', 'dotenv']):
+            modules_to_remove.append(name)
+    
+    for name in modules_to_remove:
+        del sys.modules[name]
+    
+    if cache_vars_removed > 0 or modules_to_remove:
+        print(f"✅ Cache nettoyé: {cache_vars_removed} variables, {len(modules_to_remove)} modules")
+    else:
+        print("✅ Environnement déjà propre")
+    
+    # Forcer le rechargement du .env
+    from dotenv import load_dotenv
+    load_dotenv(override=True)  # Force le rechargement même si déjà chargé
+
 def check_requirements():
     """Vérifie que tous les prérequis sont installés"""
     print("🔍 Vérification des prérequis...")
@@ -144,7 +173,10 @@ def main():
     print("🤖 Neuro-Bot - Démarrage Sécurisé")
     print("=" * 40)
     
-    # Vérifications préalables
+    # 1. NETTOYAGE DU CACHE EN PREMIER (solution au problème token)
+    clean_environment()
+    
+    # 2. Vérifications préalables
     checks = [
         check_requirements,
         check_files,

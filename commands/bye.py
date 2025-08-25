@@ -1,10 +1,10 @@
-from auth_decorators import require_role_and_2fa
+from auth_decorators import require_authorized_role
 from config import config, logger
 from discord.ext.commands import CheckFailure
 
 def setup(bot):
     @bot.command()
-    @require_role_and_2fa()
+    @require_authorized_role
     async def bye(ctx):
         """Arrête le bot de manière sécurisée"""
         try:

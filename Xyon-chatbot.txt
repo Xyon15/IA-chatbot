@@ -22,22 +22,21 @@ A faire :
 - Pas de réponse pour !web test
 - Gestion de la mémoire et apprentissage (cad ajouter une table dans db pour les recherches) 
 - Elle enregistre elle même des facts
-- Te préparer un README minimal (comment configurer, dépendances pip exactes et variables d’environnement).
 - Externaliser la configuration (paths, model params) dans un fichier config.json pour éviter d'éditer le code.
 
-demander a chat quesque n eut faire avec .yaml de continue
-
+Améliorer le système de recherche web
 faire git sur serv truenas (a voir avec vscode dev)
 
-voire extension les plus populaires pour vscode
+régler le gui : plus utilisé a remettre en place
 
-voir polu ytb
+demander quels param pour gpu-cpu use 
 
-claude 3.7 sonnet
+changer l'emplacement db
 
-mettre a jour README
 
-chercher une autre ia continue et lmstudio c nul
+faire des logs détaillés par exemple par  type d'erreur
+
+
 
 # Vérification sécurité
 if not TOKEN or not AUTH_SECRET:

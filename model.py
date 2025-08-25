@@ -42,7 +42,20 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
         return error_msg
     
     try:
-        max_total = getattr(llm, "n_ctx", config.LLM_CONFIG.get('n_ctx', 4096))
+        # Récupération sécurisée de n_ctx (peut être un attribut ou une méthode)
+        n_ctx_attr = getattr(llm, "n_ctx", None)
+        if callable(n_ctx_attr):
+            # Si c'est une méthode, l'appeler
+            max_total = n_ctx_attr()
+        elif n_ctx_attr is not None:
+            # Si c'est un attribut, l'utiliser directement
+            max_total = n_ctx_attr
+        else:
+            # Fallback vers la configuration
+            max_total = config.LLM_CONFIG.get('n_ctx', 4096)
+        
+        # S'assurer que max_total est un entier
+        max_total = int(max_total)
         max_tokens = 400
         min_context = 1
 
