@@ -42,6 +42,7 @@ améliorer le design
 
 
 
+
 # Vérification sécurité
 if not TOKEN or not AUTH_SECRET:
     print("❌ ERREUR : Les variables d'environnement DISCORD_TOKEN et/ou AUTH_SECRET sont manquantes.")
