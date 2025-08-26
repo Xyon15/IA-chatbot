@@ -33,8 +33,12 @@ demander quels param pour gpu-cpu use
 
 changer l'emplacement db
 
+--------------------------------------------------
+Effacer les logs sur l'app log ne fonctionne pas
 
-faire des logs détaillés par exemple par  type d'erreur
+problèmes de crop sur le gui ( logs et stats)
+améliorer le design 
+
 
 
 
