@@ -38,7 +38,7 @@ Effacer les logs sur l'app log ne fonctionne pas
 
 problèmes de crop sur le gui ( logs et stats)
 améliorer le design 
-
+t
 
 
 
