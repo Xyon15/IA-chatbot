@@ -8,15 +8,6 @@ cd C:\Dev\IA-chatbot
 python start_bot.py
 
 
-
-
-
-[DEBUG] Prompt complet = 392 tokens
-Token indices sequence length is longer than the specified maximum sequence length for this model (3637 > 1024). Running this sequence through the model will result in indexing errors
-❌ Erreur modèle : prompt (3637) + réponse (400) > 2048 tokens
-[DEBUG] Réponse générée : ❌ Erreur modèle : prompt (3637) + réponse (400) > 2048 tokens
-
-
 A faire : 
 - Erreur db discussion classique (prblm avec facts)
 - Pas de réponse pour !web test
@@ -38,24 +29,7 @@ Effacer les logs sur l'app log ne fonctionne pas
 
 problèmes de crop sur le gui ( logs et stats)
 améliorer le design 
-
-
-
-
-# Vérification sécurité
-if not TOKEN or not AUTH_SECRET:
-    print("❌ ERREUR : Les variables d'environnement DISCORD_TOKEN et/ou AUTH_SECRET sont manquantes.")
-    print("Vérifie ton fichier .env et relance le script.")
-    exit(1)
-
-
-
-                   
-
-
-
-
-
+voir dans command prompt le prble sur la gene context tokens
 
 
 
@@ -79,26 +53,6 @@ Perso : "Tu es une Neuro, une VTubeuse française, drôle, naturelle, expressive
         "Tu ne mentionnes jamais de sources ou de recherches web. "
         "Réponds toujours en français de façon fluide, avec des phrases courtes, sans lien ni citation.\n"
         f"Utilisateur: {prompt}\nNeuro:"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
