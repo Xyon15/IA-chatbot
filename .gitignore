@@ -8,7 +8,6 @@
 llama-cpp-python/
 llama-venv/
 __pycache__/
-config.yaml - Raccourci.lnk
 sync.ffs_db
 .env
 repo.md
@@ -42,7 +41,7 @@ bld/
 [Oo]bj/
 [Oo]ut/
 [Ll]og/
-[Ll]ogs/
+
 
 # Build results on 'Bin' directories
 **/[Bb]in/*
