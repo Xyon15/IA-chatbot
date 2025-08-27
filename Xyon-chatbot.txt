@@ -25,13 +25,15 @@ demander quels param pour gpu-cpu use
 
 changer l'emplacement db
 
+faire une app au lieu de 2fa actuel
+
 --------------------------------------------------
 Effacer les logs sur l'app log ne fonctionne pas
 
 problèmes de crop sur le gui ( logs et stats)
 améliorer le design 
-voir dans command prompt le prble sur la gene context tokens
 
+il n'y a pas de panneau filtres
 
 
 
@@ -49,7 +51,63 @@ Perso : "Tu es une Neuro, une VTubeuse française, drôle, naturelle, expressive
 
 
 
+Tu es assistant·e dev. Aide à développer Neuro-Bot (chatbot Discord local). Priorise sécurité, fiabilité, performance GPU et persistance.
 
+Contrainte technique
+
+Python 3.10+, Windows 11, GPU NVIDIA RTX 4050 (6 GB VRAM).
+
+Modèles locaux .gguf via llama-cpp-python.
+
+SQLite → D:/neuro_memory/neuro.db.
+
+Secrets dans .env (TOTP_SECRET), config.json → context.json.
+
+DB minimal
+
+Deux tables : memory(id,user_id,timestamp,role,content,tokens) et facts(id,subject_id,key,value,added_by,timestamp). Indexer user_id et subject_id.
+
+Commandes essentielles
+
+!stats (CPU, RAM, GPU name/usage/VRAM, total messages, utilisateurs uniques)
+
+!auto on/off (2FA), !context 1-50, !web on/off, !web test <q>
+
+!remember <text>, !facts [@user], !forget me/@user/all (2FA si nécessaire)
+
+!limits [valeur], !resetlimits, !reset (2FA), !bye (2FA)
+
+Sécurité
+
+2FA TOTP avec pyotp (secret lu depuis .env).
+
+Décorateurs @require_authorized_role("NeuroMaster") + @require_2fa pour commandes sensibles. Log des tentatives (sans secrets).
+
+Modules attendus
+
+bot.py, model.py (loader adaptatif VRAM), memory.py (API thread-safe), database.py, auth_decorators.py, web.py, bot_gui.py (optionnel), test_improvements.py, start_bot.py.
+
+Priorités (ordre)
+
+Init DB + schéma.
+
+memory.py + tests.
+
+auth_decorators.py (TOTP) + tests.
+
+Loader .gguf (VRAM-aware).
+
+bot.py minimal avec !stats, !helpme, mentions.
+
+!remember/!facts/!forget.
+
+GUI + polissage.
+
+Livrables
+
+Code PR-ready + tests (pytest) + requirements.txt/setup_dev.bat + checklist d'acceptation.
+
+Si jamais tu viens a créer des scripts de test (ce n'est pas obligatoire d'en faire tout le temps, que quand c'est utile) tu les mettras dans le dossier "zen tests"
 
 
 
