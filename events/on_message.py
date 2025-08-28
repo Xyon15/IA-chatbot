@@ -32,18 +32,18 @@ def setup(bot):
                 
                 logger.debug(f"Traitement message de {user_id}: {prompt[:50]}...")
                 
-                await message.channel.typing()
-                
-                # Recherche web si activée et détectée
-                web_info = ""
-                if getattr(bot, 'web_enabled', False) and _should_search_web(prompt):
-                    logger.info(f"Recherche web déclenchée pour: {prompt[:30]}...")
-                    web_info = await duckduckgo_search(prompt)
-                    if web_info and not web_info.startswith("❌"):
-                        prompt += f"\n\nInformation trouvée : {web_info}"
-                
-                reply = await generate_reply(user_id, prompt, context_limit=bot.current_context_limit)
-                reply = shorten_response(reply)
+                # Indicateur de frappe pendant les opérations potentiellement longues
+                async with message.channel.typing():
+                    # Recherche web si activée et détectée
+                    web_info = ""
+                    if getattr(bot, 'web_enabled', False) and _should_search_web(prompt):
+                        logger.info(f"Recherche web déclenchée pour: {prompt[:30]}...")
+                        web_info = await duckduckgo_search(prompt)
+                        if web_info and not web_info.startswith("❌"):
+                            prompt += f"\n\nInformation trouvée : {web_info}"
+                    
+                    reply = await generate_reply(user_id, prompt, context_limit=bot.current_context_limit)
+                    reply = shorten_response(reply)
                 
                 await message.reply(reply)
                 logger.info(f"Réponse envoyée à {user_id}")

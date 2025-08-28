@@ -32,6 +32,7 @@ Idée principale de vedal (https://vedal.ai).
 ```
 neuro-bot/
 ├── 📝 README.md           # Documentation du projet
+├── 🚀 start_neuro.py      # Script de démarrage principal
 ├── 🤖 bot.py              # Bot Discord principal 
 ├── 🖥️ bot_gui.py          # Interface graphique
 ├── 🧠 model.py            # Gestion des modèles LLM 
@@ -41,8 +42,8 @@ neuro-bot/
 ├── 🗄️ database.py         # Gestionnaire de base de données 
 ├── 🔒 auth_decorators.py  # Authentification 2FA 
 ├── 🛠️ utils.py            # Utilitaires divers 
-├── 🧪 test_improvements.py # Tests de validation 
-├── 🚀 start_bot.py        # Script de démarrage sécurisé 
+├── 📦 requirements.txt    # Dépendances du projet
+├── 🔧 setup.bat           # Script d'installation Windows
 ├── 📁 commands/           # Commandes Discord 
 │   ├── auto.py           # Gestion réponses automatiques + 2FA
 │   ├── bye.py            # Arrêt du bot + 2FA
@@ -50,28 +51,32 @@ neuro-bot/
 │   ├── help.py           # Aide et documentation + sécurité
 │   ├── limits.py         # Limites de caractères + validation
 │   ├── memory.py         # Commandes mémoire + 2FA
+│   ├── optimize.py       # Optimisation GPU et profils
 │   ├── stats.py          # Statistiques système + monitoring
 │   └── web_cmd.py        # Commandes web + gestion d'erreurs
 ├── 📁 events/             # Gestionnaires d'événements
 │   └── on_message.py     # Traitement des messages (recherche intelligente)
+├── 📁 tools/              # Utilitaires et outils
+│   ├── gpu_optimizer.py  # Optimiseur GPU RTX 4050
+│   ├── advanced_logging.py # Système de logs avancé
+│   └── log_viewer_gui.py # Interface de visualisation des logs
 ├── 📁 JSON/               # Fichiers de configuration
 │   ├── autoreply.json    # Config réponses auto
 │   ├── character_limits.json # Limites caractères
 │   ├── config.json       # Configuration générale
 │   ├── context.json      # Paramètres contexte
+│   ├── log_config.json   # Configuration système de logs
 │   └── web.json          # État recherche web
 ├── 📁 models/             # Modèles LLM quantifiés
 │   ├── zephyr-7b-beta.Q5_K_M.gguf
 │   ├── mistral-7b-instruct-v0.2.Q5_K_M.gguf
 │   └── phi-2.Q5_K_M.gguf
-├── 📁 data/               # Base de données 
-│   └── neuro.db          # SQLite avec index optimisés
-├── 📁 logs/               # Logs rotatifs 
-│   └── neuro_bot.log     # Logging détaillé avec rotation
-├── 📁 .zencoder/          # Documentation et règles
-│   └── rules/
-│       └── IMPROVEMENTS.md # Documentation des améliorations
-└── 📁 llama-cpp-python/   # Bindings Python pour llama.cpp
+├── 📁 data/               # Base de données et logs
+│   ├── neuro.db          # SQLite avec index optimisés
+│   ├── logs.db           # Base de données des logs
+│   └── neuro_bot_advanced.log # Logs avancés
+├── 📁 logs/               # Logs système
+│   └── neuro_bot.log     # Logging standard
 ```
 
 ## 🚀 Installation
@@ -88,22 +93,27 @@ git clone <votre-repo>
 cd neuro-bot
 ```
 
-### 2. Créer l'environnement virtuel
+### 2. Installation automatique (Windows)
 ```bash
-python -m venv llama-venv
-llama-venv\Scripts\activate
+# Exécutez le script d'installation
+setup.bat
 ```
 
-### 3. Installer les dépendances
+### 3. Installation manuelle
 ```bash
-pip install discord.py llama-cpp-python python-dotenv pyside6 pynvml aiohttp selectolax transformers pyotp
+# Créer l'environnement virtuel
+python -m venv llama-venv
+llama-venv\Scripts\activate
+
+# Installer les dépendances
+pip install -r requirements.txt
 ```
 
 ### 4. Configuration
-Créez un fichier `.env` à la racine du projet :
-```env
-DISCORD_TOKEN=votre_token_discord_ici
-AUTH_SECRET=votre_secret_2fa_ici
+```bash
+# Copiez le fichier d'exemple et éditez-le
+copy .env.example .env
+# Puis éditez .env avec vos tokens
 ```
 
 ### 5. Télécharger les modèles
@@ -114,24 +124,20 @@ Placez vos modèles GGUF dans le dossier `models/`. Les modèles supportés :
 
 ## 🎯 Utilisation
 
-### Démarrage sécurisé du bot Discord (RECOMMANDÉ)
+### Démarrage du bot Discord (RECOMMANDÉ)
 ```bash
-python start_bot.py
+python start_neuro.py
 ```
 
-### Démarrage classique du bot Discord
+### Démarrage avec interface graphique
 ```bash
-python bot.py
-```
-
-### Démarrage de l'interface graphique
-```bash
-python bot_gui.py
+python start_neuro.py --gui
 ```
 
 ### Tests de validation
 ```bash
-python test_improvements.py
+python "zen tests/test_start_neuro.py"
+python "zen tests/integration_test.py"
 ```
 
 ### Commandes Discord

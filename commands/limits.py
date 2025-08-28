@@ -33,3 +33,19 @@ def setup(bot):
         except Exception as e:
             await ctx.send("❌ Erreur lors de la sauvegarde de la configuration.")
             logger.error(f"Erreur limits par {ctx.author.id}: {e}")
+    
+    @bot.command()
+    @require_authorized_role
+    async def resetlimits(ctx):
+        """Restaure la limite par défaut (1900 caractères)"""
+        try:
+            default_limit = 1900
+            with open(config.LIMITS_FILE, "w", encoding="utf-8") as f:
+                json.dump({"max_reply_length": default_limit}, f, indent=2, ensure_ascii=False)
+            
+            await ctx.send(f"♻️ Limite de réponse restaurée à la valeur par défaut : **{default_limit}** caractères.")
+            logger.info(f"Limite de réponse restaurée à {default_limit} par {ctx.author.id}")
+            
+        except Exception as e:
+            await ctx.send("❌ Erreur lors de la restauration de la configuration.")
+            logger.error(f"Erreur resetlimits par {ctx.author.id}: {e}")

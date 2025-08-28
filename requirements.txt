@@ -1,0 +1,32 @@
+# Neuro-Bot Dependencies
+# Discord
+discord.py>=2.3.0
+
+# LLM et modèles
+llama-cpp-python>=0.2.0
+
+# Interface graphique
+PySide6>=6.5.0
+
+# Configuration et variables d'environnement
+python-dotenv>=1.0.0
+
+# Monitoring système et GPU
+psutil>=5.9.0
+pynvml>=11.5.0
+
+# Requêtes HTTP et web scraping
+aiohttp>=3.8.0
+selectolax>=0.3.0
+
+# Tokenization
+transformers>=4.30.0
+
+# Authentification 2FA
+pyotp>=2.8.0
+
+# Base de données
+# sqlite3 est inclus avec Python
+
+# Tests (optionnel)
+pytest>=7.0.0

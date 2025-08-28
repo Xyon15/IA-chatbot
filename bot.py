@@ -1,5 +1,5 @@
 # --- Imports ---
-from config import config, logger
+from config import config, logger, advanced_log_manager
 from utils import count_tokens, truncate_text_to_tokens, shorten_response
 from memory import get_history, save_fact, save_interaction, clear_memory, get_facts
 from model import generate_reply
@@ -16,6 +16,12 @@ from events import setup_all_events
 
 # Initialisation du logging
 logger.info("Démarrage du bot Neuro...")
+
+# Vérification du système de logs avancé
+if advanced_log_manager:
+    logger.info("Système de logs avancé activé")
+else:
+    logger.warning("Système de logs avancé non disponible - mode standard")
 
 web_enabled = load_web_state()
 

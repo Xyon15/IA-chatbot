@@ -1,0 +1,32 @@
+{
+  "log_level": "INFO",
+  "max_file_size_mb": 10,
+  "backup_count": 5,
+  "cleanup_days": 30,
+  "notifications_enabled": true,
+  "notification_levels": ["ERROR", "CRITICAL"],
+  "gui_max_entries": 1000,
+  "auto_scroll": true,
+  "dark_theme": true,
+  "export_formats": ["json", "csv", "txt"],
+  "real_time_updates": true,
+  "show_thread_info": false,
+  "show_module_info": true,
+  "color_scheme": {
+    "DEBUG": "#6c757d",
+    "INFO": "#17a2b8",
+    "WARNING": "#ffc107",
+    "ERROR": "#dc3545",
+    "CRITICAL": "#6f42c1"
+  },
+  "filters": {
+    "default_limit": 1000,
+    "max_limit": 10000,
+    "default_days": 7
+  },
+  "performance": {
+    "batch_size": 100,
+    "update_interval_ms": 1000,
+    "max_memory_entries": 5000
+  }
+}

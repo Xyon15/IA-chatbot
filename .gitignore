@@ -11,6 +11,9 @@ __pycache__/
 sync.ffs_db
 .env
 repo.md
+zen tests/
+zen rapports/
+.zencoder
 
 # User-specific files
 *.rsuser

@@ -6,6 +6,7 @@ from .help import setup as setup_help
 from .context import setup as setup_context
 from .auto import setup as setup_auto
 from .limits import setup as setup_limits
+from .optimize import setup as setup_optimize
 
 def setup_all_commands(bot):
     setup_memory(bot)
@@ -16,3 +17,4 @@ def setup_all_commands(bot):
     setup_context(bot)
     setup_auto(bot)
     setup_limits(bot)
+    setup_optimize(bot)

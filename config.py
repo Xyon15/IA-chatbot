@@ -24,11 +24,32 @@ def setup_logging():
     logger = logging.getLogger('neuro_bot')
     return logger
 
+def setup_advanced_logging():
+    """Configure le système de logging avancé"""
+    try:
+        from tools.advanced_logging import init_advanced_logging
+        
+        # Chemin de la base de données des logs
+        log_db_path = os.path.join(os.path.dirname(__file__), "data", "logs.db")
+        log_config_path = os.path.join(os.path.dirname(__file__), "JSON", "log_config.json")
+        
+        # Initialise le gestionnaire de logs avancé
+        log_manager = init_advanced_logging(log_db_path, log_config_path)
+        
+        return log_manager
+    except ImportError:
+        print("Module advanced_logging non disponible, utilisation du logging standard")
+        return None
+    except Exception as e:
+        print(f"Erreur initialisation logging avancé: {e}")
+        return None
+
 class Config:
     """Classe de configuration centralisée pour le bot Neuro"""
     
     def __init__(self):
-        load_dotenv()
+        # Forcer le rechargement du fichier .env pour éviter les problèmes de cache
+        load_dotenv(override=True)
         
         # Variables d'environnement
         self.TOKEN = os.getenv("DISCORD_TOKEN")
@@ -62,14 +83,8 @@ class Config:
         self.MODEL_PATH = os.getenv("MODEL_PATH", 
                                    os.path.join(self.models_dir, default_model))
         
-        # Configuration LLM
-        self.LLM_CONFIG = {
-            'n_gpu_layers': int(os.getenv("N_GPU_LAYERS", "32")),
-            'n_threads': int(os.getenv("N_THREADS", "6")),
-            'n_ctx': int(os.getenv("N_CTX", "4096")),
-            'n_batch': int(os.getenv("N_BATCH", "256")),
-            'verbose': os.getenv("LLM_VERBOSE", "True").lower() == "true"
-        }
+        # Configuration LLM déplacée vers model.py pour gestion automatique
+        # Les profils sont maintenant gérés automatiquement selon la VRAM disponible
         
         # Validation des variables critiques
         self._validate_config()
@@ -101,3 +116,6 @@ MODEL_PATH = config.MODEL_PATH
 
 # Logger global
 logger = setup_logging()
+
+# Gestionnaire de logs avancé (optionnel)
+advanced_log_manager = setup_advanced_logging()
