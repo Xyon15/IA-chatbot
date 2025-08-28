@@ -24,8 +24,11 @@ Idée principale de vedal (https://vedal.ai).
 - **Système d'autorisation** : Contrôle d'accès basé sur les rôles Discord
 
 ### 🖥️ Interface Graphique
-- **GUI PySide6** : Interface de bureau pour la gestion du bot
+- **GUI PySide6** : Interface de bureau moderne pour la gestion du bot
 - **Monitoring en temps réel** : Surveillance des performances GPU et système
+- **Architecture modulaire** : Tous les composants GUI organisés dans le dossier `gui/`
+- **Interface moderne** : Design sombre avec notifications toast et graphiques animés
+- **Interface legacy** : Interface basique pour compatibilité
 
 ## 🏗️ Architecture
 
@@ -33,8 +36,8 @@ Idée principale de vedal (https://vedal.ai).
 neuro-bot/
 ├── 📝 README.md           # Documentation du projet
 ├── 🚀 start_neuro.py      # Script de démarrage principal
+├── 🖥️ launch_gui.py       # Lanceur GUI principal (recommandé)
 ├── 🤖 bot.py              # Bot Discord principal 
-├── 🖥️ bot_gui.py          # Interface graphique
 ├── 🧠 model.py            # Gestion des modèles LLM 
 ├── 💾 memory.py           # Système de mémoire SQLite 
 ├── 🌐 web.py              # Fonctionnalités de recherche web 
@@ -44,6 +47,21 @@ neuro-bot/
 ├── 🛠️ utils.py            # Utilitaires divers 
 ├── 📦 requirements.txt    # Dépendances du projet
 ├── 🔧 setup.bat           # Script d'installation Windows
+├── 📁 gui/                # Interface graphique modulaire
+│   ├── neuro_gui.py      # Interface GUI moderne (principale)
+│   ├── launch_neuro_gui.py # Lanceur GUI moderne
+│   ├── bot_gui.py        # Interface GUI legacy
+│   ├── chart_widgets.py  # Widgets de graphiques temps réel
+│   ├── theme_manager.py  # Gestionnaire de thèmes
+│   ├── notification_system.py # Notifications toast modernes
+│   ├── advanced_controls.py # Contrôles avancés
+│   ├── plugin_system.py  # Système de plugins extensible
+│   ├── icons_generator.py # Générateur d'icônes SVG
+│   ├── dark_theme_helper.py # Helper thème sombre
+│   ├── THEME_GUIDE.md    # Guide des thèmes GUI
+│   ├── assets/           # Ressources (icônes SVG)
+│   └── tools/            # Outils GUI
+│       └── log_viewer_gui.py # Visualiseur de logs GUI
 ├── 📁 commands/           # Commandes Discord 
 │   ├── auto.py           # Gestion réponses automatiques + 2FA
 │   ├── bye.py            # Arrêt du bot + 2FA
@@ -58,8 +76,7 @@ neuro-bot/
 │   └── on_message.py     # Traitement des messages (recherche intelligente)
 ├── 📁 tools/              # Utilitaires et outils
 │   ├── gpu_optimizer.py  # Optimiseur GPU RTX 4050
-│   ├── advanced_logging.py # Système de logs avancé
-│   └── log_viewer_gui.py # Interface de visualisation des logs
+│   └── advanced_logging.py # Système de logs avancé
 ├── 📁 JSON/               # Fichiers de configuration
 │   ├── autoreply.json    # Config réponses auto
 │   ├── character_limits.json # Limites caractères
@@ -131,7 +148,14 @@ python start_neuro.py
 
 ### Démarrage avec interface graphique
 ```bash
+# Méthode 1 : Lanceur principal (recommandé)
+python launch_gui.py
+
+# Méthode 2 : Avec start_neuro.py
 python start_neuro.py --gui
+
+# Méthode 3 : Lancement direct
+python gui/launch_neuro_gui.py
 ```
 
 ### Tests de validation
@@ -267,9 +291,79 @@ python "zen tests/integration_test.py"
 - **Fichiers séparés** : Logs dans le dossier `logs/`
 
 ### Interface graphique
-- Monitoring en temps réel
-- Contrôles intuitifs
-- Logs détaillés avec filtrage
+- **Interface moderne** (`neuro_gui.py`) : Design sombre avec animations
+- **Monitoring temps réel** : CPU, RAM, GPU avec graphiques animés
+- **Notifications toast** : Alertes visuelles modernes
+- **Système de thèmes** : Couleurs personnalisables
+- **Contrôles intuitifs** : Interface utilisateur simplifiée
+- **Logs détaillés** : Visualiseur avancé avec filtrage (`log_viewer_gui.py`)
+- **Système de plugins** : Architecture extensible
+
+## 🖥️ Interface Graphique Complète
+
+### 🎨 Interfaces disponibles
+
+#### Interface Moderne (`neuro_gui.py`)
+- **Design moderne** : Thème sombre avec palette de couleurs personnalisée
+- **Monitoring temps réel** : CPU, RAM, GPU avec graphiques animés
+- **Notifications toast** : Alertes visuelles avec animations fluides
+- **Système de thèmes** : Gestionnaire de thèmes intégré
+- **Plugins extensibles** : Architecture modulaire pour fonctionnalités custom
+
+#### Interface Legacy (`bot_gui.py`)
+- **Interface simple** : Contrôles basiques de démarrage/arrêt
+- **Monitoring basique** : Informations système essentielles  
+- **Compatibilité** : Maintenue pour rétrocompatibilité
+
+### 🧩 Composants GUI
+
+#### Widgets Spécialisés
+- **`chart_widgets.py`** : Graphiques temps réel avec animations
+- **`notification_system.py`** : Système de notifications toast
+- **`advanced_controls.py`** : Contrôles de performance avancés
+- **`plugin_system.py`** : Framework de plugins extensible
+
+#### Personnalisation
+- **`theme_manager.py`** : Gestion de thèmes dynamique
+- **`icons_generator.py`** : Générateur d'icônes SVG
+- **`dark_theme_helper.py`** : Helper pour thème sombre
+
+#### Outils Avancés
+- **`tools/log_viewer_gui.py`** : Visualiseur de logs avancé
+- **`assets/`** : Bibliothèque d'icônes SVG
+
+### 🚀 Lancement de l'interface
+
+```bash
+# Recommandé : Lanceur principal
+python launch_gui.py
+
+# Alternative : Lancement direct
+python gui/launch_neuro_gui.py
+
+# Via start_neuro.py
+python start_neuro.py --gui
+```
+
+### 📁 Organisation modulaire
+
+```
+gui/
+├── neuro_gui.py              # Interface principale moderne
+├── launch_neuro_gui.py       # Lanceur GUI moderne
+├── bot_gui.py                # Interface legacy
+├── chart_widgets.py          # Widgets de graphiques
+├── theme_manager.py          # Gestionnaire de thèmes
+├── notification_system.py    # Notifications toast
+├── advanced_controls.py      # Contrôles avancés
+├── plugin_system.py          # Système de plugins
+├── icons_generator.py        # Générateur d'icônes
+├── dark_theme_helper.py      # Helper thème sombre
+├── THEME_GUIDE.md           # Guide des thèmes
+├── assets/                   # Ressources (icônes)
+└── tools/
+    └── log_viewer_gui.py     # Visualiseur de logs
+```
 
 ## 🛡️ Sécurité 
 
@@ -301,6 +395,8 @@ python "zen tests/integration_test.py"
 - ⚙️ **Configuration centralisée** pour une maintenance simplifiée
 - 🧪 **Tests automatisés** pour valider les fonctionnalités
 - 🚀 **Script de démarrage sécurisé** avec vérifications préalables
+- 🖥️ **Interface GUI modulaire** : Architecture organisée dans le dossier `gui/`
+- 🎨 **Design moderne** : Interface sombre avec notifications toast et graphiques animés
 
 ### 📈 Performances améliorées
 - **+300% plus rapide** : Index automatiques sur les requêtes fréquentes

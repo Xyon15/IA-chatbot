@@ -26,10 +26,10 @@ def check_dependencies():
             missing.append(package)
     
     if missing:
-        print("❌ Dépendances manquantes :")
+        print("Dependances manquantes :")
         for pkg in missing:
             print(f"   - {pkg}")
-        print("\n📦 Pour installer les dépendances :")
+        print("\nPour installer les dependances :")
         print("pip install PySide6 psutil pynvml")
         return False
     
@@ -41,7 +41,7 @@ def launch_gui():
         return False
     
     try:
-        print("🚀 Lancement de NeuroBot GUI Moderne...")
+        print("Lancement de NeuroBot GUI Moderne...")
         
         # Créer l'application Qt d'abord pour éviter les conflits
         from PySide6.QtWidgets import QApplication
@@ -67,7 +67,7 @@ def launch_gui():
         window = MainWindow()
         window.show()
         
-        print("✅ Interface lancée avec succès !")
+        print("Interface lancee avec succes !")
         
         # Exécuter l'application seulement si elle a été créée ici
         if app_created:
@@ -77,7 +77,7 @@ def launch_gui():
             return True
         
     except Exception as e:
-        print(f"❌ Erreur lors du lancement : {e}")
+        print(f"Erreur lors du lancement : {e}")
         import traceback
         traceback.print_exc()
         return False

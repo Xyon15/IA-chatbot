@@ -10,7 +10,7 @@ import os
 
 def main():
     """Lance l'interface graphique moderne"""
-    print("🚀 Lancement de NeuroBot GUI...")
+    print("Lancement de NeuroBot GUI...")
     
     # Ajouter le répertoire gui au path
     gui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gui')
@@ -21,15 +21,15 @@ def main():
         success = launch_gui()
         
         if not success:
-            print("❌ Échec du lancement de l'interface")
+            print("Echec du lancement de l'interface")
             return 1
             
     except ImportError as e:
-        print(f"❌ Erreur d'import : {e}")
-        print("💡 Assurez-vous que tous les modules GUI sont présents dans le dossier gui/")
+        print(f"Erreur d'import : {e}")
+        print("Assurez-vous que tous les modules GUI sont présents dans le dossier gui/")
         return 1
     except Exception as e:
-        print(f"❌ Erreur inattendue : {e}")
+        print(f"Erreur inattendue : {e}")
         return 1
         
     return 0
