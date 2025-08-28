@@ -5,7 +5,9 @@ Launch
 
 cd C:\Dev\IA-chatbot
 .\llama-venv\Scripts\activate
-python start_bot.py
+python gui/launch_gui.py
+
+
 
 
 
@@ -15,10 +17,10 @@ A faire :
 - Elle enregistre elle même des facts
 - Externaliser la configuration (paths, model params) dans un fichier config.json pour éviter d'éditer le code.
 
-Améliorer le système de recherche web
-faire git sur serv truenas (a voir avec vscode dev)
+Améliorer le système de recherche web (trop de texte et aussi en anglais)
 
-régler le gui : plus utilisé a remettre en place
+
+
 
 demander quels param pour gpu-cpu use 
 
@@ -36,7 +38,9 @@ faire un commit et en faire souvent
 
 
 
+vérifier si launch_gui fonctionne vraiment
 
+modifier le gui car il est nul
 
 
 
