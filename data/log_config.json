@@ -1,0 +1,14 @@
+{
+  "log_level": "INFO",
+  "max_file_size_mb": 10,
+  "backup_count": 5,
+  "cleanup_days": 30,
+  "notifications_enabled": true,
+  "notification_levels": [
+    "ERROR",
+    "CRITICAL"
+  ],
+  "gui_max_entries": 1000,
+  "auto_scroll": true,
+  "dark_theme": true
+}

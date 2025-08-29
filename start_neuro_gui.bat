@@ -61,7 +61,7 @@ echo   - Controle du bot Discord integre
 echo.
 
 REM Lancement de l'interface GUI améliorée (nouveau)
-python launch_enhanced_gui.py
+python launch_gui.py
 
 REM Gestion des erreurs
 if errorlevel 1 (

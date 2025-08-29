@@ -780,13 +780,140 @@ class MainInterface(QMainWindow):
     
     def open_log_viewer(self):
         """Ouverture du visualiseur de logs avancé"""
+        import subprocess
+        import os
+        
+        # Déterminer le chemin racine du projet
+        current_file = os.path.abspath(__file__)
+        project_root = os.path.dirname(os.path.dirname(current_file))
+        
+        self.append_log("[INFO] 🔍 Ouverture du visualiseur de logs...")
+        
         try:
-            import subprocess
-            subprocess.Popen([sys.executable, "gui/tools/log_viewer_gui.py"], 
-                           cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            self.append_log("[INFO] Visualiseur de logs ouvert")
+            # Utiliser VOTRE log viewer existant
+            self.append_log("[INFO] 🚀 Lancement de votre visualiseur de logs...")
+            original_viewer_path = os.path.join(project_root, "gui", "tools", "log_viewer_gui.py")
+            
+            if os.path.exists(original_viewer_path):
+                self.append_log(f"[INFO] 📄 Utilisation de votre log viewer: {original_viewer_path}")
+                
+                # Utiliser l'environnement virtuel approprié
+                python_exe = sys.executable
+                if "llama-venv" not in python_exe:
+                    venv_python = os.path.join(project_root, "llama-venv", "Scripts", "python.exe")
+                    if os.path.exists(venv_python):
+                        python_exe = venv_python
+                
+                process = subprocess.Popen([
+                    python_exe, original_viewer_path
+                ], cwd=project_root, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                
+                self.append_log("[INFO] ✅ Votre visualiseur de logs démarré avec succès!")
+                return
+            else:
+                self.append_log(f"[ERREUR] ❌ Votre log viewer non trouvé: {original_viewer_path}")
+                
         except Exception as e:
-            self.append_log(f"[ERREUR] Erreur ouverture visualiseur: {e}")
+            self.append_log(f"[ERREUR] ❌ Erreur avec visionneur avancé: {e}")
+            import traceback
+            self.append_log(f"[DEBUG] 🐛 {traceback.format_exc()}")
+        
+        # Fallback 1: Visionneur simple (fiable)
+        try:
+            simple_viewer_path = os.path.join(project_root, "simple_log_viewer.py")
+            
+            if os.path.exists(simple_viewer_path):
+                self.append_log(f"[INFO] 🔄 Tentative avec visionneur simple: {simple_viewer_path}")
+                
+                python_exe = sys.executable
+                if "llama-venv" not in python_exe:
+                    venv_python = os.path.join(project_root, "llama-venv", "Scripts", "python.exe")
+                    if os.path.exists(venv_python):
+                        python_exe = venv_python
+                
+                process = subprocess.Popen([
+                    python_exe, simple_viewer_path
+                ], cwd=project_root, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                
+                self.append_log("[INFO] 🚀 Visualiseur de logs simple démarré avec succès!")
+                return
+            else:
+                self.append_log(f"[ERREUR] ❌ Visionneur simple non trouvé: {simple_viewer_path}")
+                
+        except Exception as e:
+            self.append_log(f"[ERREUR] ❌ Erreur avec visionneur simple: {e}")
+        
+        # Fallback 2: Script de lancement dédié
+        try:
+            launch_script_path = os.path.join(project_root, "launch_log_viewer.py")
+            
+            if os.path.exists(launch_script_path):
+                self.append_log(f"[INFO] 🔄 Tentative avec script de lancement: {launch_script_path}")
+                
+                process = subprocess.Popen([
+                    sys.executable, launch_script_path
+                ], cwd=project_root)
+                
+                self.append_log("[INFO] 🚀 Visualiseur de logs démarré via script de lancement!")
+                return
+            else:
+                self.append_log(f"[ERREUR] ❌ Script de lancement non trouvé: {launch_script_path}")
+                
+        except Exception as e:
+            self.append_log(f"[ERREUR] ❌ Erreur avec script de lancement: {e}")
+        
+        # Fallback 2: Mode démo
+        try:
+            demo_script_path = os.path.join(project_root, "demo_log_viewer.py")
+            
+            if os.path.exists(demo_script_path):
+                self.append_log(f"[INFO] 🎭 Tentative avec mode démo: {demo_script_path}")
+                
+                process = subprocess.Popen([
+                    sys.executable, demo_script_path
+                ], cwd=project_root)
+                
+                self.append_log("[INFO] 🎭 Visualiseur de logs démo démarré!")
+                return
+            else:
+                self.append_log(f"[ERREUR] ❌ Script démo non trouvé: {demo_script_path}")
+                
+        except Exception as e:
+            self.append_log(f"[ERREUR] ❌ Erreur avec mode démo: {e}")
+        
+        # Fallback 3: Ancien visionneur
+        try:
+            old_viewer_path = os.path.join(project_root, "gui", "tools", "log_viewer_gui.py")
+            
+            if os.path.exists(old_viewer_path):
+                self.append_log(f"[INFO] 📋 Tentative avec ancien visionneur: {old_viewer_path}")
+                
+                process = subprocess.Popen([
+                    sys.executable, old_viewer_path
+                ], cwd=project_root)
+                
+                self.append_log("[INFO] 📋 Ancien visualiseur de logs démarré!")
+                return
+            else:
+                self.append_log(f"[ERREUR] ❌ Ancien visionneur non trouvé: {old_viewer_path}")
+                
+        except Exception as e:
+            self.append_log(f"[ERREUR] ❌ Erreur avec ancien visionneur: {e}")
+        
+        # Dernier recours: ouvrir la base de données directement
+        try:
+            db_path = os.path.join(project_root, "data", "logs.db")
+            if os.path.exists(db_path):
+                self.append_log(f"[INFO] 💾 Base de logs disponible: {db_path}")
+                self.append_log("[INFO] 💡 Utilisez 'python launch_log_viewer.py' depuis le terminal")
+            else:
+                self.append_log("[ERREUR] ❌ Aucune base de logs trouvée")
+                
+        except Exception as e:
+            self.append_log(f"[ERREUR] ❌ Impossible de localiser la base: {e}")
+        
+        self.append_log("[ERREUR] ❌ Impossible d'ouvrir le visualiseur de logs")
+        self.append_log("[INFO] 💡 Essayez: python launch_log_viewer.py dans un terminal")
     
     def toggle_bot_shortcut(self):
         """Basculer le statut du bot via raccourci clavier"""

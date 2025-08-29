@@ -500,8 +500,21 @@ class LogViewerMainWindow(QMainWindow):
         self.auto_scroll_enabled = True
         
         if not self.log_manager:
-            QMessageBox.critical(self, "Erreur", "Le gestionnaire de logs n'est pas initialisé!")
-            sys.exit(1)
+            # Initialiser le LogManager si nécessaire
+            try:
+                from tools.advanced_logging import LogManager
+                
+                # Déterminer les chemins appropriés
+                project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                db_path = os.path.join(project_root, "data", "logs.db")
+                config_path = os.path.join(project_root, "JSON", "log_config.json")
+                
+                self.log_manager = LogManager(db_path, config_path)
+                print(f"✅ LogManager initialisé: {db_path}")
+                
+            except Exception as e:
+                QMessageBox.critical(self, "Erreur", f"Impossible d'initialiser le gestionnaire de logs:\n{e}")
+                sys.exit(1)
         
         self.setup_ui()
         self.setup_connections()
@@ -912,7 +925,13 @@ class LogViewerMainWindow(QMainWindow):
 
 def main():
     """Fonction principale"""
-    app = QApplication(sys.argv)
+    # Vérifier si une application Qt existe déjà
+    app = QApplication.instance()
+    if app is None:
+        app = QApplication(sys.argv)
+        need_exec = True
+    else:
+        need_exec = False
     
     # Applique le thème sombre
     DarkTheme.apply(app)
@@ -921,7 +940,12 @@ def main():
     window = LogViewerMainWindow()
     window.show()
     
-    sys.exit(app.exec())
+    # Seule l'application principale doit contrôler la boucle d'événements
+    if need_exec:
+        sys.exit(app.exec())
+    
+    # Retourner la fenêtre pour que l'app principale puisse la gérer
+    return window
 
 if __name__ == "__main__":
     main()
