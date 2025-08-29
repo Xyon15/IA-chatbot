@@ -33,7 +33,7 @@ Idée principale de vedal (https://vedal.ai).
 ## 🏗️ Architecture
 
 ```
-neuro-bot/
+c:\Dev\IA-chatbot\
 ├── 📝 README.md           # Documentation du projet
 ├── 🚀 start_neuro.py      # Script de démarrage principal
 ├── 🖥️ launch_gui.py       # Lanceur GUI principal (recommandé)
@@ -46,7 +46,17 @@ neuro-bot/
 ├── 🔒 auth_decorators.py  # Authentification 2FA 
 ├── 🛠️ utils.py            # Utilitaires divers 
 ├── 📦 requirements.txt    # Dépendances du projet
-├── 🔧 setup.bat           # Script d'installation Windows
+├── 📁 batch/              # Scripts de lancement batch
+│   ├── launch_neuro.bat  # Menu principal (RECOMMANDÉ)
+│   ├── start_bot.bat     # Lancement rapide bot Discord
+│   ├── start_gui.bat     # Interface graphique PySide6
+│   ├── dev_start.bat     # Mode développeur
+│   ├── setup.bat         # Configuration initiale
+│   ├── final_diagnostic.bat # Diagnostic système complet
+│   ├── rebuild_env.bat   # Reconstruction environnement
+│   ├── README.md         # Documentation scripts batch
+│   ├── LANCEMENT.md      # Guide de lancement rapide
+│   └── STATUS.md         # État des scripts
 ├── 📁 gui/                # Interface graphique modulaire
 │   ├── neuro_gui.py      # Interface GUI moderne (principale)
 │   ├── launch_neuro_gui.py # Lanceur GUI moderne
@@ -94,6 +104,8 @@ neuro-bot/
 │   └── neuro_bot_advanced.log # Logs avancés
 ├── 📁 logs/               # Logs système
 │   └── neuro_bot.log     # Logging standard
+├── 📁 llama-venv/         # Environnement virtuel Python
+├── 🔧 launch.bat          # Raccourci vers batch/launch_neuro.bat
 ```
 
 ## 🚀 Installation
@@ -107,13 +119,22 @@ neuro-bot/
 ### 1. Cloner le projet
 ```bash
 git clone <votre-repo>
-cd neuro-bot
+cd IA-chatbot
 ```
 
-### 2. Installation automatique (Windows)
+### 2. Installation automatique (Windows) - RECOMMANDÉE
 ```bash
-# Exécutez le script d'installation
-setup.bat
+# Exécutez le script d'installation batch
+batch\setup.bat
+```
+
+### 2bis. Diagnostic en cas de problème
+```bash
+# Diagnostic complet de l'environnement
+batch\final_diagnostic.bat
+
+# Réparation automatique si nécessaire
+batch\rebuild_env.bat
 ```
 
 ### 3. Installation manuelle
@@ -141,12 +162,54 @@ Placez vos modèles GGUF dans le dossier `models/`. Les modèles supportés :
 
 ## 🎯 Utilisation
 
-### Démarrage du bot Discord (RECOMMANDÉ)
+## 🚀 Démarrage Rapide - Scripts Batch (RECOMMANDÉ)
+
+### Option 1: Menu Principal (Simple & Efficace)
+```bash
+# Double-cliquez sur le fichier ou dans un terminal :
+launch.bat
+
+# Ou directement :
+batch\launch_neuro.bat
+```
+
+### Option 2: Accès Direct aux Scripts
+```bash
+# Bot Discord uniquement (optimal)
+batch\start_bot.bat
+
+# Interface graphique
+batch\start_gui.bat
+
+# Mode développeur (avec création auto de l'environnement)
+batch\dev_start.bat
+```
+
+## 📊 État des Scripts Batch
+
+### ✅ Scripts Fonctionnels
+- **`batch\final_diagnostic.bat`** - **PARFAIT** : Diagnostic complet de l'environnement
+- **`batch\start_bot.bat`** - **PARFAIT** : Lance le bot Discord avec optimisation GPU
+- **`batch\launch_neuro.bat`** - **FONCTIONNEL** : Menu interactif de lancement
+
+### 🔧 Scripts de Maintenance
+- **`batch\start_gui.bat`** - Interface graphique (nécessite PySide6)
+- **`batch\rebuild_env.bat`** - Reconstruction complète de l'environnement
+- **`batch\setup.bat`** - Configuration initiale du projet
+
+### 🆘 En cas de Problème
+1. **Diagnostic** : `batch\final_diagnostic.bat`
+2. **Réparation automatique** : `batch\rebuild_env.bat`
+3. **Documentation** : `batch\README.md`
+
+## 📋 Méthodes de Lancement Alternatives
+
+### Démarrage du bot Discord (Python direct)
 ```bash
 python start_neuro.py
 ```
 
-### Démarrage avec interface graphique
+### Démarrage avec interface graphique (Python direct)
 ```bash
 # Méthode 1 : Lanceur principal (recommandé)
 python launch_gui.py
@@ -249,6 +312,109 @@ python "zen tests/integration_test.py"
 - `DISCORD_TOKEN` : Token du bot Discord
 - `AUTH_SECRET` : Secret pour l'authentification 2FA
 
+## 🚨 Scripts Batch - Documentation Détaillée
+
+### 📋 Scripts Disponibles
+
+#### 🎯 `launch_neuro.bat` - **RECOMMANDÉ**
+- **Menu interactif** avec choix du mode de lancement
+- Options : Bot automatique, Bot interactif, Interface graphique, Configuration
+- Gestion d'erreur complète et messages explicites
+- Parfait pour tous les utilisateurs
+
+#### ⚡ `start_bot.bat` - Démarrage Rapide
+- Lance directement le bot Discord
+- Optimisation GPU automatique (`--auto`)
+- Activation automatique de l'environnement virtuel `llama-venv`
+- Messages d'erreur clairs avec codes de retour
+
+#### 🎨 `start_gui.bat` - Interface Graphique
+- Lance l'interface graphique PySide6
+- Optimisation GPU automatique
+- Vérification automatique des dépendances GUI
+- Création d'environnement si absent
+
+#### 🧪 `dev_start.bat` - Mode Développeur
+- Création automatique de l'environnement virtuel si absent
+- Installation automatique des dépendances manquantes
+- Logs détaillés pour le développement
+- Configuration optimisée pour le développement
+
+#### 🔍 `final_diagnostic.bat` - Diagnostic Système
+- Diagnostic complet de l'environnement Windows/Python
+- Vérification de tous les modules installés
+- Détection automatique des problèmes de configuration
+- Recommandations de réparation précises
+- Vérification de la base de données et des modèles LLM
+
+#### 🛠️ `rebuild_env.bat` - Reconstruction Environnement
+- Suppression et reconstruction complète de l'environnement virtuel
+- Installation fraîche de toutes les dépendances
+- Correction des références de chemins obsolètes
+- Utile en cas de corruption d'environnement
+
+#### ⚙️ Fonctionnalités Automatiques de tous les Scripts
+- ✅ **Vérification de l'environnement virtuel** `llama-venv`
+- ✅ **Activation automatique** de l'environnement Python
+- ✅ **Optimisation GPU automatique** (avec paramètre `--auto`)
+- ✅ **Gestion d'erreurs** avec messages explicites et codes de retour
+- ✅ **Chemins relatifs corrigés** (`%~dp0..` pour compatibilité)
+
+### 🚨 Résolution de Problèmes avec Scripts Batch
+
+#### Erreur "No module named 'dotenv'" ou modules manquants
+```bash
+cd batch
+final_diagnostic.bat    # Voir le problème exact
+rebuild_env.bat         # Réparation automatique
+```
+
+#### Environnement virtuel corrompu ou chemins obsolètes
+```bash
+cd batch
+rebuild_env.bat    # Reconstruction complète
+```
+
+#### Interface graphique "Aucune interface disponible"
+```bash
+cd batch
+rebuild_env.bat    # Réinstalle PySide6 correctement
+```
+
+#### Bot Discord ne se connecte pas
+```bash
+cd batch
+final_diagnostic.bat    # Vérifie DISCORD_TOKEN et configuration
+```
+
+### 🎮 Utilisation Recommandée des Scripts
+
+#### Pour les Utilisateurs Finaux
+1. **Démarrage quotidien** : Double-cliquez sur `launch.bat`
+2. **Bot uniquement** : `batch\start_bot.bat`
+3. **Interface graphique** : `batch\start_gui.bat`
+
+#### En Cas de Problème
+1. **Diagnostic d'abord** : `batch\final_diagnostic.bat`
+2. **Réparation si nécessaire** : `batch\rebuild_env.bat`
+3. **Documentation complète** : `batch\README.md`
+
+#### Pour le Développement
+1. **Première fois** : `batch\dev_start.bat`
+2. **Tests réguliers** : `batch\final_diagnostic.bat`
+3. **Problèmes persistants** : `batch\rebuild_env.bat`
+
+### 🔍 Structure Attendue pour les Scripts
+```
+c:\Dev\IA-chatbot\
+├── batch\               # 📁 Scripts batch de lancement
+├── llama-venv\          # Environnement virtuel Python (auto-créé)
+├── models\              # Modèles LLM .gguf (à télécharger)
+├── .env                 # Variables d'environnement (DISCORD_TOKEN)
+├── start_neuro.py       # Script principal de démarrage
+└── requirements.txt     # Dépendances Python
+```
+
 ## 🔧 Développement
 
 ### Structure du code
@@ -272,9 +438,12 @@ python "zen tests/integration_test.py"
 4. L'événement sera automatiquement enregistré
 
 ### Tests et validation
+- **Diagnostic automatique** : `batch\final_diagnostic.bat` (recommandé avant tests)
 - Exécutez `python test_improvements.py` après chaque modification
+- Tests d'intégration : `python "zen tests/test_start_neuro.py"`
+- Tests avancés : `python "zen tests/integration_test.py"`
 - Vérifiez les logs dans le dossier `logs/`
-- Utilisez le script de démarrage sécurisé `start_bot.py`
+- Utilisez les scripts batch pour démarrage sécurisé : `batch\start_bot.bat`
 
 ## 📊 Monitoring
 
@@ -409,3 +578,19 @@ gui/
 - **Structure modulaire** : Séparation claire des responsabilités  
 - **Tests intégrés** : Validation automatique des composants
 - **Logging détaillé** : Débogage et monitoring facilités
+- **Scripts batch automatisés** : Démarrage, diagnostic et maintenance simplifiés
+
+---
+
+## 📚 Documentation Supplémentaire
+
+- **Scripts Batch** : `batch/README.md` - Documentation complète des scripts de lancement
+- **Lancement Rapide** : `batch/LANCEMENT.md` - Guide de démarrage simplifié
+- **État des Scripts** : `batch/STATUS.md` - État et diagnostic des scripts batch
+- **Thèmes GUI** : `gui/THEME_GUIDE.md` - Guide des thèmes d'interface graphique
+
+---
+
+**Dernière mise à jour du README.md** : 29 août 2025 - 12:30  
+**Version** : v2.0 avec scripts batch intégrés  
+**Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)
