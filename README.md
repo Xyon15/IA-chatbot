@@ -558,42 +558,6 @@ python -m flake8 . --max-line-length=120
 
 ---
 
-## 🎯 Roadmap et Évolutions
-
-### 🚀 Prochaines Fonctionnalités
-- [ ] Support multi-GPU (NVIDIA SLI/NVLink)
-- [ ] Modèles LLM plus larges (13B, 33B parameters)
-- [ ] API REST pour intégration externe
-- [ ] Support Linux/Docker
-- [ ] Traduction multi-langues
-- [ ] Voice-to-Text Discord intégration
-
-### 🔮 Vision Long Terme  
-- **IA Multimodale** : Support images, audio, vidéo
-- **Federated Learning** : Apprentissage distribué multi-serveur
-- **Auto-scaling** : Scaling automatique selon la charge
-- **Edge Computing** : Déploiement optimisé edge/mobile
-
----
-
-## 📝 Changelog et Versions
-
-### v2.0.0 - Révision Majeure *(ACTUEL)*
-- ✅ **Optimisation GPU RTX 4050** avec profils adaptatifs
-- ✅ **Authentification 2FA TOTP** sécurisée
-- ✅ **Interface GUI moderne** unifiée avec plugins
-- ✅ **Système de logs avancé** avec rotation et base de données
-- ✅ **Architecture modulaire** complètement refactorisée
-- ✅ **Mémoire optimisée** avec indexation et pool de connexions
-
-### v1.x.x - Version Legacy
-- Base fonctionnelle Discord + LLM
-- Interface GUI basique
-- Scripts batch Windows
-- Mémoire conversationnelle simple
-
----
-
-*Documentation mise à jour - Neuro-Bot v2.0.0 | Dernière révision: 2024*
+*Documentation mise à jour - Neuro-Bot 
 
 **Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)
