@@ -187,7 +187,7 @@ python "zen tests/integration_test.py"
 | `!limits [valeur]` | Définit la longueur max des réponses | ✅ |
 | `!resetlimits` | Restaure la limite par défaut (1900 caractères) | ✅ |
 | `!reset` | Réinitialise la mémoire | 🔒 2FA |
-| `!bye` | Arrêt propre du bot | 🔒 2FA |
+| `!bye` | Arrêt propre du bot | ✅ |
 
 ## 🧠 Système de Mémoire 
 
