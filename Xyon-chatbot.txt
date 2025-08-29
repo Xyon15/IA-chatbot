@@ -20,12 +20,6 @@ A faire :
 Améliorer le système de recherche web (trop de texte et aussi en anglais)
 
 
-
-
-demander quels param pour gpu-cpu use 
-
-
-
 --------------------------------------------------
 ajouter l'app pour voir les logs
 
