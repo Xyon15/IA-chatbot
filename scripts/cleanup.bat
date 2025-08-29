@@ -21,5 +21,5 @@ echo Suppression des anciens backups...
 del /q data\*.backup_* 2>nul
 
 echo.
-echo ✅ Nettoyage terminé !
+echo [OK] Nettoyage termine !
 pause

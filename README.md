@@ -181,26 +181,27 @@ batch\start_bot.bat
 # Interface graphique
 batch\start_gui.bat
 
-# Mode développeur (avec création auto de l'environnement)
-batch\dev_start.bat
+# Menu principal interactif (recommandé)
+batch\launch_neuro.bat
 ```
 
 ## 📊 État des Scripts Batch
 
 ### ✅ Scripts Fonctionnels
 - **`batch\final_diagnostic.bat`** - **PARFAIT** : Diagnostic complet de l'environnement
-- **`batch\start_bot.bat`** - **PARFAIT** : Lance le bot Discord avec optimisation GPU
-- **`batch\launch_neuro.bat`** - **FONCTIONNEL** : Menu interactif de lancement
+- **`batch\launch_neuro.bat`** - **PARFAIT** : Menu interactif principal avec toutes les options
+- **`batch\start_gui.bat`** - **FONCTIONNEL** : Lance l'interface graphique
 
 ### 🔧 Scripts de Maintenance
-- **`batch\start_gui.bat`** - Interface graphique (nécessite PySide6)
 - **`batch\rebuild_env.bat`** - Reconstruction complète de l'environnement
+- **`batch\repair.bat`** - Réparation automatique des dépendances
 - **`batch\setup.bat`** - Configuration initiale du projet
 
 ### 🆘 En cas de Problème
 1. **Diagnostic** : `batch\final_diagnostic.bat`
-2. **Réparation automatique** : `batch\rebuild_env.bat`
-3. **Documentation** : `batch\README.md`
+2. **Réparation automatique** : `batch\repair.bat`
+3. **Reconstruction complète** : `batch\rebuild_env.bat`
+4. **Documentation** : `batch\README.md`
 
 ## 📋 Méthodes de Lancement Alternatives
 
@@ -322,23 +323,11 @@ python "zen tests/integration_test.py"
 - Gestion d'erreur complète et messages explicites
 - Parfait pour tous les utilisateurs
 
-#### ⚡ `start_bot.bat` - Démarrage Rapide
-- Lance directement le bot Discord
-- Optimisation GPU automatique (`--auto`)
-- Activation automatique de l'environnement virtuel `llama-venv`
-- Messages d'erreur clairs avec codes de retour
-
 #### 🎨 `start_gui.bat` - Interface Graphique
 - Lance l'interface graphique PySide6
 - Optimisation GPU automatique
 - Vérification automatique des dépendances GUI
 - Création d'environnement si absent
-
-#### 🧪 `dev_start.bat` - Mode Développeur
-- Création automatique de l'environnement virtuel si absent
-- Installation automatique des dépendances manquantes
-- Logs détaillés pour le développement
-- Configuration optimisée pour le développement
 
 #### 🔍 `final_diagnostic.bat` - Diagnostic Système
 - Diagnostic complet de l'environnement Windows/Python
@@ -391,17 +380,18 @@ final_diagnostic.bat    # Vérifie DISCORD_TOKEN et configuration
 
 #### Pour les Utilisateurs Finaux
 1. **Démarrage quotidien** : Double-cliquez sur `launch.bat`
-2. **Bot uniquement** : `batch\start_bot.bat`
+2. **Menu complet** : `batch\launch_neuro.bat`
 3. **Interface graphique** : `batch\start_gui.bat`
 
 #### En Cas de Problème
 1. **Diagnostic d'abord** : `batch\final_diagnostic.bat`
-2. **Réparation si nécessaire** : `batch\rebuild_env.bat`
-3. **Documentation complète** : `batch\README.md`
+2. **Réparation automatique** : `batch\repair.bat`
+3. **Reconstruction complète** : `batch\rebuild_env.bat`
+4. **Documentation complète** : `batch\README.md`
 
 #### Pour le Développement
-1. **Première fois** : `batch\dev_start.bat`
-2. **Tests réguliers** : `batch\final_diagnostic.bat`
+1. **Menu développeur** : `batch\launch_neuro.bat` (choix mode interactif)
+2. **Tests et diagnostic** : `batch\final_diagnostic.bat`
 3. **Problèmes persistants** : `batch\rebuild_env.bat`
 
 ### 🔍 Structure Attendue pour les Scripts

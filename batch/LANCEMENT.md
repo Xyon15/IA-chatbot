@@ -13,13 +13,14 @@ launch_neuro.bat
 
 ## 📁 Organisation des Scripts
 
-Tous les scripts de lancement sont organisés dans le dossier **`batch/`** :
+Scripts essentiels dans le dossier **`batch/`** :
 
-- **`batch/launch_neuro.bat`** - Menu principal interactif
-- **`batch/start_bot.bat`** - Lancement rapide du bot Discord  
-- **`batch/start_gui.bat`** - Interface graphique
-- **`batch/dev_start.bat`** - Mode développeur
-- **`batch/setup.bat`** - Configuration initiale
+- **`batch/launch_neuro.bat`** - 🎯 Menu principal interactif (RECOMMANDÉ)
+- **`batch/start_gui.bat`** - Interface graphique PySide6
+- **`batch/final_diagnostic.bat`** - Diagnostic complet du système
+- **`batch/repair.bat`** - Réparation automatique des dépendances
+- **`batch/rebuild_env.bat`** - Reconstruction complète de l'environnement
+- **`batch/setup.bat`** - Configuration initiale du projet
 
 ## 📖 Documentation Complète
 

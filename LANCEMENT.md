@@ -22,7 +22,7 @@ launch_neuro.bat
 
 ## 🛠️ Outils de Maintenance
 
-- **`batch/diagnostic.bat`** - Vérifier l'état du système
+- **`batch/final_diagnostic.bat`** - Diagnostic complet de l'état du système
 - **`batch/repair.bat`** - Réparer automatiquement l'environnement
 - **`batch/setup.bat`** - Configuration initiale propre
 
@@ -31,15 +31,14 @@ launch_neuro.bat
 Tous les scripts de lancement sont organisés dans le dossier **`batch/`** :
 
 - **`batch/launch_neuro.bat`** - Menu principal interactif
-- **`batch/start_bot.bat`** - Lancement rapide du bot Discord  
 - **`batch/start_gui.bat`** - Interface graphique
-- **`batch/dev_start.bat`** - Mode développeur
-- **`batch/diagnostic.bat`** - 🆕 Diagnostic complet
+- **`batch/final_diagnostic.bat`** - 🆕 Diagnostic complet et détaillé
 - **`batch/repair.bat`** - 🆕 Réparation automatique
+- **`batch/rebuild_env.bat`** - Reconstruction complète de l'environnement
 
 ## 📖 Documentation Complète
 
 Voir **`batch/README.md`** pour tous les détails.
 
 ---
-💡 **Astuce**: En cas de problème, toujours commencer par `batch/repair.bat` !
+💡 **Astuce**: En cas de problème, toujours commencer par `batch/final_diagnostic.bat` puis `batch/repair.bat` si nécessaire !

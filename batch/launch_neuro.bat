@@ -9,13 +9,13 @@ echo =======================================================
 echo                NEURO-BOT - LANCEUR
 echo =======================================================
 echo.
-echo Choisissez le mode de démarrage:
+echo Choisissez le mode de demarrage:
 echo.
 echo [1] Bot Discord (mode automatique)
 echo [2] Interface Graphique 
 echo [3] Bot Discord (mode interactif)
 echo [4] Configuration et tests
-echo [5] Diagnostic et réparation
+echo [5] Diagnostic et reparation
 echo [6] Quitter
 echo.
 
@@ -43,16 +43,16 @@ echo.
 cd /d "%~dp0.."
 
 if not exist "llama-venv\Scripts\activate.bat" (
-    echo ❌ Environnement virtuel non trouvé!
+    echo [ERREUR] Environnement virtuel non trouve!
     call :SHOW_SETUP_HELP
     goto MENU
 )
 
-echo 🔄 Activation de l'environnement virtuel...
+echo [*] Activation de l'environnement virtuel...
 call llama-venv\Scripts\activate.bat
 
 echo.
-echo 🚀 Démarrage automatique avec optimisation GPU...
+echo [*] Demarrage automatique avec optimisation GPU...
 python start_neuro.py --auto
 
 if %errorlevel% neq 0 (
@@ -75,16 +75,16 @@ echo.
 cd /d "%~dp0.."
 
 if not exist "llama-venv\Scripts\activate.bat" (
-    echo ❌ Environnement virtuel non trouvé!
+    echo [ERREUR] Environnement virtuel non trouve!
     call :SHOW_SETUP_HELP
     goto MENU
 )
 
-echo 🔄 Activation de l'environnement virtuel...
+echo [*] Activation de l'environnement virtuel...
 call llama-venv\Scripts\activate.bat
 
 echo.
-echo 🚀 Démarrage interactif (vous pourrez choisir les options GPU)...
+echo [*] Demarrage interactif (vous pourrez choisir les options GPU)...
 python start_neuro.py
 
 if %errorlevel% neq 0 (
@@ -107,25 +107,25 @@ echo.
 cd /d "%~dp0.."
 
 if not exist "llama-venv\Scripts\activate.bat" (
-    echo ❌ Environnement virtuel non trouvé!
+    echo [ERREUR] Environnement virtuel non trouve!
     call :SHOW_SETUP_HELP
     goto MENU
 )
 
-echo 🔄 Activation de l'environnement virtuel...
+echo [*] Activation de l'environnement virtuel...
 call llama-venv\Scripts\activate.bat
 
 echo.
-echo 🎨 Démarrage de l'interface graphique...
+echo [*] Demarrage de l'interface graphique...
 python start_neuro.py --gui --auto
 
 if %errorlevel% neq 0 (
     echo.
-    echo ❌ Erreur lors du démarrage de l'interface graphique
+    echo [ERREUR] Erreur lors du demarrage de l'interface graphique
     echo.
     echo Solutions:
     echo   - Installez PySide6: pip install PySide6
-    echo   - Vérifiez les logs d'erreur
+    echo   - Verifiez les logs d'erreur
 )
 
 echo.
@@ -144,12 +144,12 @@ echo.
 cd /d "%~dp0.."
 
 if exist "batch\setup.bat" (
-    echo 🔧 Lancement de la configuration...
+    echo [*] Lancement de la configuration...
     call batch\setup.bat
 ) else (
-    echo ❌ Fichier setup.bat non trouvé!
+    echo [ERREUR] Fichier setup.bat non trouve!
     echo.
-    echo Assurez-vous d'être dans le bon dossier et que tous les fichiers sont présents.
+    echo Assurez-vous d'etre dans le bon dossier et que tous les fichiers sont presents.
 )
 
 echo.
@@ -159,10 +159,10 @@ goto MENU
 
 :SHOW_SETUP_HELP
 echo.
-echo Pour configurer le projet, exécutez d'abord:
+echo Pour configurer le projet, executez d'abord:
 echo   setup.bat
 echo.
-echo Ou créez l'environnement virtuel manuellement:
+echo Ou creez l'environnement virtuel manuellement:
 echo   python -m venv llama-venv
 echo   llama-venv\Scripts\activate.bat
 echo   pip install -r requirements.txt
@@ -170,11 +170,11 @@ goto :eof
 
 :SHOW_ERROR
 echo.
-echo ❌ Le programme s'est arrêté avec une erreur (code: %1)
+echo [ERREUR] Le programme s'est arrete avec une erreur (code: %1)
 echo.
 echo Solutions possibles:
-echo   1. Vérifiez le fichier .env (DISCORD_TOKEN, AUTH_SECRET)
-echo   2. Vérifiez votre connexion internet
+echo   1. Verifiez le fichier .env (DISCORD_TOKEN, AUTH_SECRET)
+echo   2. Verifiez votre connexion internet
 echo   3. Consultez les logs dans le dossier 'logs'
 echo   4. Relancez en mode interactif pour plus d'informations
 goto :eof
@@ -189,9 +189,9 @@ echo.
 
 echo Choisissez une option:
 echo.
-echo [1] Diagnostic rapide
-echo [2] Réparation automatique 
-echo [3] Reconstruction complète de l'environnement
+echo [1] Diagnostic final
+echo [2] Reparation automatique 
+echo [3] Reconstruction complete de l'environnement
 echo [4] Retour au menu principal
 echo.
 
@@ -200,13 +200,13 @@ set /p diag_choix="Votre choix (1-4): "
 cd /d "%~dp0.."
 
 if "%diag_choix%"=="1" (
-    echo 🔍 Diagnostic en cours...
-    call batch\diagnostic.bat
+    echo [*] Diagnostic en cours...
+    call batch\final_diagnostic.bat
 ) else if "%diag_choix%"=="2" (
-    echo 🛠️ Réparation en cours...
+    echo [*] Reparation en cours...
     call batch\repair.bat
 ) else if "%diag_choix%"=="3" (
-    echo 🏗️ Reconstruction complète...
+    echo [*] Reconstruction complete...
     call batch\rebuild_env.bat
 ) else if "%diag_choix%"=="4" (
     goto MENU
@@ -228,7 +228,7 @@ echo =======================================================
 echo                    AU REVOIR!
 echo =======================================================
 echo.
-echo Merci d'avoir utilisé Neuro-Bot!
+echo Merci d'avoir utilise Neuro-Bot!
 echo.
 timeout /t 2 >nul
 exit /b 0

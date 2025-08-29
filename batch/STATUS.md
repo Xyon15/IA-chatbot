@@ -8,16 +8,11 @@
 - ✅ Vérifie la base de données
 - ✅ Donne des recommandations précises
 
-### 🚀 `start_bot.bat` - **PARFAIT**
-- ✅ Active l'environnement virtuel correctement
-- ✅ Lance le bot Discord sans erreur
-- ✅ Optimisation GPU fonctionnelle
-- ✅ Se connecte à Discord Gateway
-
-### 🎯 `launch_neuro.bat` - **FONCTIONNEL**
-- ✅ Menu interactif
-- ✅ Navigation entre options
-- ✅ Appels vers autres scripts
+### 🎯 `launch_neuro.bat` - **PARFAIT**
+- ✅ Menu interactif complet avec toutes les options
+- ✅ Navigation fluide entre les différents modes
+- ✅ Appels corrects vers les scripts existants
+- ✅ Gestion d'erreurs et aide contextuelle
 
 ## ⚠️ Scripts avec Problèmes Identifiés
 
@@ -63,14 +58,15 @@
 ## 🎯 Recommandations d'Usage
 
 ### Pour les Utilisateurs
-1. **Diagnostic** : `batch\final_diagnostic.bat`
-2. **Bot Discord** : `batch\start_bot.bat` ✅
-3. **Interface graphique** : Attendre fin de `rebuild_env.bat`
+1. **Menu principal** : `batch\launch_neuro.bat` ✅
+2. **Diagnostic** : `batch\final_diagnostic.bat` ✅
+3. **Interface graphique** : `batch\start_gui.bat` ✅
 
 ### En cas de Problème
 1. **Diagnostic** : `batch\final_diagnostic.bat` 
-2. **Reconstruction complète** : `batch\rebuild_env.bat`
-3. **Consultation** : `batch\README.md`
+2. **Réparation** : `batch\repair.bat`
+3. **Reconstruction complète** : `batch\rebuild_env.bat`
+4. **Consultation** : `batch\README.md`
 
 ## 🔮 Prochaines Actions
 
