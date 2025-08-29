@@ -72,14 +72,14 @@ c:\Dev\IA-chatbot\
 │   ├── 📖 THEME_GUIDE.md  # Guide des thèmes GUI
 │   ├── 📖 GUI_USAGE.md    # Guide d'utilisation des interfaces
 │   └── 📖 REORGANISATION_GUI.md # Documentation réorganisation
-├── 📁 commands/           # Commandes Discord avec sécurité 2FA
-│   ├── 🔒 auto.py         # Gestion réponses automatiques + 2FA
-│   ├── 🔒 bye.py          # Arrêt du bot + 2FA
+├── 📁 commands/           # Commandes Discord avec sécurité par rôles + 2FA sélectif
+│   ├── ⚙️ auto.py         # Gestion réponses automatiques (rôle seul)
+│   ├── ⚙️ bye.py          # Arrêt du bot (rôle seul)
 │   ├── ⚙️ context.py      # Configuration contexte + logging avancé
 │   ├── ❓ help.py         # Aide et documentation + sécurité renforcée
 │   ├── 📏 limits.py       # Limites de caractères + validation
 │   ├── 🧠 memory.py       # Commandes mémoire + 2FA + indexation
-│   ├── 🚀 optimize.py     # Optimisation GPU avancée et profils adaptatifs (NOUVEAU)
+│   ├── 🚀 optimize.py     # Optimisation GPU avancée et profils adaptatifs (rôle seul)
 │   ├── 📊 stats.py        # Statistiques système + monitoring GPU temps réel
 │   └── 🌐 web_cmd.py      # Commandes web + gestion d'erreurs robuste
 ├── 📁 events/             # Gestionnaires d'événements
@@ -243,25 +243,27 @@ python gui/tools/log_viewer_gui.py
 - Le bot répondra en utilisant son IA et sa mémoire
 
 #### 🔧 Commandes administratives
-*(Nécessite le rôle "NeuroMaster" + Authentification 2FA pour certaines commandes)*
+*(Nécessite le rôle "NeuroMaster" - Authentification 2FA uniquement pour commandes critiques)*
 
 | Commande | Description | Sécurité |
 |----------|-------------|----------|
+| | | *✅ = Rôle "NeuroMaster" requis* |
+| | | *🔒 2FA = Rôle + Code 2FA* |
 | `!helpme` | Affiche l'aide complète | ✅ |
 | `!stats` | Statistiques système et GPU temps réel | ✅ |
 | **🚀 OPTIMISATION GPU (NOUVEAU)** |
-| `!optimize` | Menu d'optimisation GPU avec profils adaptatifs | 🔒 2FA |
-| `!optimize analyze` | Analyse VRAM et recommandations | 🔒 2FA |
-| `!optimize apply` | Applique l'optimisation recommandée | 🔒 2FA |
-| `!optimize profiles` | Liste tous les profils disponibles | 🔒 2FA |
-| `!optimize current` | Affiche le profil actuellement actif | 🔒 2FA |
-| `!optimize set <profil>` | Change le profil d'optimisation | 🔒 2FA |
-| `!optimize report` | Rapport d'optimisation détaillé | 🔒 2FA |
-| `!optimize metrics` | Métriques de performance temps réel | 🔒 2FA |
-| `!optimize auto on/off` | Optimisation automatique adaptative | 🔒 2FA |
-| `!optimize task <type>` | Optimise pour un type de tâche spécifique | 🔒 2FA |
+| `!optimize` | Menu d'optimisation GPU avec profils adaptatifs | ✅ |
+| `!optimize analyze` | Analyse VRAM et recommandations | ✅ |
+| `!optimize apply` | Applique l'optimisation recommandée | ✅ |
+| `!optimize profiles` | Liste tous les profils disponibles | ✅ |
+| `!optimize current` | Affiche le profil actuellement actif | ✅ |
+| `!optimize set <profil>` | Change le profil d'optimisation | ✅ |
+| `!optimize report` | Rapport d'optimisation détaillé | ✅ |
+| `!optimize metrics` | Métriques de performance temps réel | ✅ |
+| `!optimize auto on/off` | Optimisation automatique adaptative | ✅ |
+| `!optimize task <type>` | Optimise pour un type de tâche spécifique | ✅ |
 | **💬 CONVERSATION & MÉMOIRE** |
-| `!auto on/off` | Active/désactive les réponses automatiques | 🔒 2FA |
+| `!auto on/off` | Active/désactive les réponses automatiques | ✅ |
 | `!context <1-50>` | Définit le nombre d'échanges mémorisés | ✅ |
 | `!remember [texte]` | Ajoute un fait à la mémoire long terme | ✅ |
 | `!facts [@user]` | Affiche les faits connus avec indexation | ✅ |
@@ -273,7 +275,7 @@ python gui/tools/log_viewer_gui.py
 | **⚙️ CONFIGURATION** |
 | `!limits [valeur]` | Définit la longueur max des réponses | ✅ |
 | `!resetlimits` | Restaure la limite par défaut (1900 caractères) | ✅ |
-| `!bye` | Arrêt propre du bot avec sauvegarde | 🔒 2FA |
+| `!bye` | Arrêt propre du bot avec sauvegarde | ✅ |
 
 ## 🚀 Optimisation GPU Avancée *(NOUVEAU)*
 
@@ -323,11 +325,8 @@ python gui/tools/log_viewer_gui.py
 - **Timeout sécurisé** : Codes TOTP avec expiration automatique
 
 ### Commandes Protégées par 2FA
-- `!auto on/off` - Réponses automatiques
 - `!forget` - Effacement mémoire
-- `!reset` - Réinitialisation système  
-- `!bye` - Arrêt du bot
-- `!optimize` (toutes variantes) - Optimisation GPU
+- `!reset` - Réinitialisation système
 
 ### Configuration 2FA
 ```bash

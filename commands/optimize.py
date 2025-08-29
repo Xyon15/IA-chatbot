@@ -1,13 +1,11 @@
-from discord.ext.commands import has_role
-from config import AUTHORIZED_ROLE
-from auth_decorators import require_2fa
+from auth_decorators import require_authorized_role
 from model import model_manager, LLM_PROFILES
 import pynvml
 import os
 
 def setup(bot):
     @bot.command()
-    @has_role(AUTHORIZED_ROLE)
+    @require_authorized_role
     async def optimize(ctx, action: str = None, profile: str = None):
         """
         Commande d'optimisation du contexte LLM
