@@ -35,13 +35,13 @@ def check_dependencies():
     
     return True
 
-def launch_modern_gui():
-    """Lance l'interface graphique moderne (neuro_gui)"""
+def launch_legacy_gui():
+    """Lance l'ancienne interface graphique (neuro_gui) - Legacy"""
     if not check_dependencies():
         return False
     
     try:
-        print("🚀 Lancement de NeuroBot GUI Moderne...")
+        print("🚀 Lancement de NeuroBot GUI Legacy...")
         
         # Créer l'application Qt d'abord pour éviter les conflits
         from PySide6.QtWidgets import QApplication
@@ -69,7 +69,7 @@ def launch_modern_gui():
         window = MainWindow()
         window.show()
         
-        print("✅ Interface moderne lancée avec succès !")
+        print("✅ Interface legacy lancée avec succès !")
         
         # Exécuter l'application seulement si elle a été créée ici
         if app_created:
@@ -79,18 +79,18 @@ def launch_modern_gui():
             return True
         
     except Exception as e:
-        print(f"❌ Erreur lors du lancement de l'interface moderne : {e}")
+        print(f"❌ Erreur lors du lancement de l'interface legacy : {e}")
         import traceback
         traceback.print_exc()
         return False
 
-def launch_enhanced_gui():
-    """Lance l'interface graphique améliorée (enhanced_main_gui)"""
+def launch_main_gui():
+    """Lance l'interface graphique principale moderne (enhanced_main_gui)"""
     if not check_dependencies():
         return False
     
     try:
-        print("🚀 Lancement de NeuroBot GUI Améliorée...")
+        print("🚀 Lancement de NeuroBot GUI Moderne...")
         
         # Ajout du répertoire parent au path
         parent_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -105,7 +105,7 @@ def launch_enhanced_gui():
         print("💡 Vérifiez que PySide6 est installé: pip install PySide6")
         return 1
     except Exception as e:
-        print(f"❌ Erreur lors du lancement de l'interface améliorée: {e}")
+        print(f"❌ Erreur lors du lancement de l'interface moderne: {e}")
         import traceback
         traceback.print_exc()
         return 1
@@ -118,15 +118,18 @@ def show_banner():
     ║                   Lanceur Unifié                         ║
     ╠══════════════════════════════════════════════════════════╣
     ║                                                          ║
-    ║  📋 Interfaces disponibles :                            ║
-    ║     🎨 Moderne    : Interface neuro_gui avec dashboard  ║
-    ║     ⚡ Améliorée  : Interface enhanced_main_gui          ║
+    ║  📋 Interface Principale (Nouvelle) :                   ║
+    ║     🚀 Moderne    : Interface enhanced_main_gui          ║
+    ║                     avec indicateurs circulaires        ║
     ║                                                          ║
-    ║  ✨ Fonctionnalités communes :                           ║
+    ║  📋 Interface Alternative :                              ║
+    ║     🎨 Legacy     : Ancienne interface neuro_gui        ║
+    ║                                                          ║
+    ║  ✨ Fonctionnalités :                                    ║
     ║     📊 Monitoring temps réel (CPU, RAM, GPU, VRAM)      ║
     ║     🎮 Contrôle complet du bot Discord                  ║
     ║     🧠 Gestionnaire de mémoire conversationnelle        ║
-    ║     📈 Dashboard avec graphiques animés                 ║
+    ║     📈 Dashboard avec graphiques modernes               ║
     ║     📋 Visualiseur de logs avancé                       ║
     ║     🔔 Système de notifications                         ║
     ║                                                          ║
@@ -141,18 +144,18 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemples d'utilisation:
-  python launch_gui.py                    # Interface moderne (défaut)
-  python launch_gui.py --enhanced         # Interface améliorée
-  python launch_gui.py --modern           # Interface moderne (explicite)
+  python launch_gui.py                    # Nouvelle interface moderne (défaut)
+  python launch_gui.py --modern           # Nouvelle interface moderne (explicite)
+  python launch_gui.py --legacy           # Ancienne interface legacy
   python launch_gui.py --select           # Sélection interactive
         """
     )
     
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--modern', action='store_true', 
-                      help='Lance l\'interface moderne (défaut)')
-    group.add_argument('--enhanced', action='store_true', 
-                      help='Lance l\'interface améliorée')
+                      help='Lance la nouvelle interface moderne (défaut)')
+    group.add_argument('--legacy', action='store_true', 
+                      help='Lance l\'ancienne interface legacy')
     group.add_argument('--select', action='store_true', 
                       help='Sélection interactive de l\'interface')
     
@@ -172,12 +175,12 @@ Exemples d'utilisation:
             print(f"⚠️  Impossible de générer les icônes : {e}")
     
     # Déterminer quelle interface lancer
-    if args.enhanced:
-        interface_type = 'enhanced'
+    if args.legacy:
+        interface_type = 'legacy'
     elif args.select:
         print("\n🎯 Sélection de l'interface :")
-        print("  1. Interface Moderne (neuro_gui)")
-        print("  2. Interface Améliorée (enhanced_main_gui)")
+        print("  1. Interface Moderne (enhanced_main_gui) - RECOMMANDÉE")
+        print("  2. Interface Legacy (neuro_gui)")
         
         while True:
             try:
@@ -186,7 +189,7 @@ Exemples d'utilisation:
                     interface_type = 'modern'
                     break
                 elif choice == '2':
-                    interface_type = 'enhanced'
+                    interface_type = 'legacy'
                     break
                 else:
                     print("❌ Choix invalide. Veuillez choisir 1 ou 2.")
@@ -194,7 +197,7 @@ Exemples d'utilisation:
                 print("\n\n👋 Annulé par l'utilisateur.")
                 return 0
     else:
-        # Défaut : interface moderne
+        # Défaut : nouvelle interface moderne
         interface_type = 'modern'
     
     print(f"\n🔍 Vérification des dépendances...")
@@ -206,12 +209,12 @@ Exemples d'utilisation:
     print("✅ Toutes les dépendances sont présentes.")
     
     # Lancer l'interface appropriée
-    if interface_type == 'enhanced':
-        print("\n🎉 Lancement de l'interface améliorée...")
-        success = launch_enhanced_gui()
+    if interface_type == 'legacy':
+        print("\n🎉 Lancement de l'interface legacy...")
+        success = launch_legacy_gui()
     else:  # modern
-        print("\n🎉 Lancement de l'interface moderne...")
-        success = launch_modern_gui()
+        print("\n🎉 Lancement de la nouvelle interface moderne...")
+        success = launch_main_gui()
     
     if success:
         print("✅ Interface fermée proprement.")

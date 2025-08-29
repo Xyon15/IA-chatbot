@@ -125,6 +125,124 @@ class CircularIndicator(QWidget):
         title_rect = QRect(center.x() - radius, center.y() + 15, radius * 2, 20)
         painter.drawText(title_rect, Qt.AlignCenter, self.title)
 
+class TemperatureCircularIndicator(QWidget):
+    """Widget indicateur circulaire pour la température GPU"""
+    
+    def __init__(self, title: str, max_temp: float = 90.0, size: int = 120):
+        super().__init__()
+        self.title = title
+        self.max_temp = max_temp  # Température maximale pour la progression (90°C)
+        self.temperature = 0.0
+        self.utilization = 0.0
+        self.text_value = "N/A"
+        self.setFixedSize(size, size)
+        
+        # Seuils de température
+        self.temp_thresholds = {
+            'cool': 40,      # < 40°C : vert
+            'warm': 65,      # 40-65°C : orange  
+            'hot': 80,       # 65-80°C : rouge
+            'critical': 85   # > 80°C : rouge clignotant
+        }
+        
+    def setValue(self, utilization: float, temp_text: str):
+        """Met à jour l'utilisation GPU et la température"""
+        self.utilization = max(0, min(utilization, 100))
+        self.text_value = temp_text
+        
+        # Extraire la température du texte (format: "75°C")
+        try:
+            if "°C" in temp_text:
+                self.temperature = float(temp_text.replace("°C", ""))
+            else:
+                self.temperature = 0.0
+        except:
+            self.temperature = 0.0
+            
+        self.update()
+        
+    def get_temp_color(self):
+        """Retourne la couleur selon la température"""
+        if self.temperature < self.temp_thresholds['cool']:
+            return QColor(COLOR_PALETTE['success'])      # Vert
+        elif self.temperature < self.temp_thresholds['warm']:
+            return QColor(COLOR_PALETTE['accent_blue'])  # Bleu
+        elif self.temperature < self.temp_thresholds['hot']:
+            return QColor(COLOR_PALETTE['warning'])      # Orange
+        else:
+            return QColor(COLOR_PALETTE['error'])        # Rouge
+        
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        
+        # Configuration
+        rect = self.rect()
+        center = rect.center()
+        radius = min(rect.width(), rect.height()) // 2 - 10
+        
+        # Fond du cercle
+        painter.setPen(QPen(QColor(COLOR_PALETTE['bg_tertiary']), 6))
+        painter.drawEllipse(center.x() - radius, center.y() - radius, radius * 2, radius * 2)
+        
+        # Arc de progression basé sur la température
+        if self.temperature > 0:
+            # Calcul de l'angle basé sur la température (départ à 12h)
+            start_angle = 90 * 16  # 90 degrés en unités Qt
+            # Progression basée sur la température avec une échelle adaptée
+            temp_ratio = min(self.temperature / self.max_temp, 1.0)
+            span_angle = int(-temp_ratio * 360 * 16)
+            
+            # Couleur dynamique selon la température
+            pen_color = self.get_temp_color()
+            
+            # Effet de clignotement pour températures critiques
+            if self.temperature > self.temp_thresholds['critical']:
+                import time
+                # Modulation de l'alpha pour effet de clignotement
+                alpha = int(155 + 100 * abs(time.time() * 2 % 1 - 0.5))
+                pen_color.setAlpha(alpha)
+            
+            painter.setPen(QPen(pen_color, 8, Qt.SolidLine, Qt.RoundCap))
+            painter.drawArc(center.x() - radius, center.y() - radius, 
+                          radius * 2, radius * 2, start_angle, span_angle)
+            
+            # Arc secondaire pour l'utilisation (plus fin)
+            if self.utilization > 0:
+                util_ratio = self.utilization / 100.0
+                util_span = int(-util_ratio * 360 * 16)
+                
+                # Couleur plus discrète pour l'utilisation
+                util_color = QColor(COLOR_PALETTE['text_secondary'])
+                util_color.setAlpha(120)
+                painter.setPen(QPen(util_color, 3, Qt.SolidLine, Qt.RoundCap))
+                painter.drawArc(center.x() - radius + 6, center.y() - radius + 6, 
+                              (radius - 6) * 2, (radius - 6) * 2, start_angle, util_span)
+        
+        # Texte central - température
+        painter.setPen(QColor(COLOR_PALETTE['text_primary']))
+        font = QFont("Segoe UI", 11, QFont.Bold)
+        painter.setFont(font)
+        
+        text_rect = QRect(center.x() - radius//2, center.y() - 15, radius, 20)
+        painter.drawText(text_rect, Qt.AlignCenter, self.text_value)
+        
+        # Utilisation en petit texte
+        if self.utilization > 0:
+            painter.setPen(QColor(COLOR_PALETTE['text_secondary']))
+            font = QFont("Segoe UI", 8)
+            painter.setFont(font)
+            util_rect = QRect(center.x() - radius//2, center.y() + 2, radius, 15)
+            painter.drawText(util_rect, Qt.AlignCenter, f"{self.utilization:.0f}%")
+        
+        # Titre en bas
+        painter.setPen(QColor(COLOR_PALETTE['text_secondary']))
+        font = QFont("Segoe UI", 9)
+        painter.setFont(font)
+        
+        title_rect = QRect(center.x() - radius, center.y() + 20, radius * 2, 20)
+        painter.drawText(title_rect, Qt.AlignCenter, self.title)
+
 class StatusCard(QFrame):
     """Widget carte de statut"""
     
@@ -267,7 +385,7 @@ class MainInterface(QMainWindow):
         # Indicateurs principaux
         self.cpu_indicator = CircularIndicator("CPU", COLOR_PALETTE['accent_blue'])
         self.ram_indicator = CircularIndicator("RAM", COLOR_PALETTE['accent_green'])
-        self.gpu_indicator = CircularIndicator("GPU", COLOR_PALETTE['accent_orange'])
+        self.gpu_indicator = TemperatureCircularIndicator("GPU", max_temp=90.0)
         self.vram_indicator = CircularIndicator("VRAM", COLOR_PALETTE['accent_purple'])
         
         indicators_layout.addWidget(self.cpu_indicator, 0, 0)
