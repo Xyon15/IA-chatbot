@@ -1,18 +1,20 @@
-# 🤖 IA-ChatBot
+# 🤖 IA-ChatBot (Neuro-Bot)
 
 Développé par Xyon
 
 Idée principale de vedal (https://vedal.ai).
 
-**Neuro-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, et une interface graphique intuitive.
+**Neuro-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, optimisation GPU automatique, et une interface graphique moderne avec système de plugins extensible.
 
 ## ✨ Fonctionnalités
 
 ### 🧠 Intelligence Artificielle
 - **Modèles LLM locaux** : Utilise des modèles quantifiés GGUF pour des performances optimales
-- **Accélération GPU** : Support NVIDIA CUDA pour des réponses rapides
-- **Mémoire conversationnelle** : Se souvient des échanges précédents avec chaque utilisateur
-- **Mémoire à long terme** : Stockage persistant de faits importants sur les utilisateurs
+- **Accélération GPU** : Support NVIDIA CUDA avec optimisation automatique RTX 4050
+- **Profils adaptatifs** : 6+ profils d'optimisation GPU (Performance, Balanced, Emergency, etc.)
+- **Monitoring temps réel** : Surveillance VRAM, température GPU et performances système
+- **Mémoire conversationnelle** : Se souvient des échanges précédents avec chaque utilisateur (SQLite optimisé)
+- **Mémoire à long terme** : Stockage persistant de faits importants avec indexation avancée
 
 ### 🌐 Capacités Web
 - **Recherche DuckDuckGo** : Accès aux informations en temps réel
@@ -20,15 +22,17 @@ Idée principale de vedal (https://vedal.ai).
 
 ### 🎮 Interface Discord
 - **Réponses automatiques** : Peut répondre automatiquement dans certains canaux
-- **Commandes avancées** : Gestion complète via commandes slash
-- **Système d'autorisation** : Contrôle d'accès basé sur les rôles Discord
+- **Commandes avancées** : 15+ commandes avec sécurité 2FA (TOTP)
+- **Système d'autorisation** : Contrôle d'accès basé sur les rôles Discord avec authentification renforcée
+- **Optimisation GPU** : Commandes `!optimize` avec profils adaptatifs en temps réel
 
 ### 🖥️ Interface Graphique
-- **GUI PySide6** : Interface de bureau moderne pour la gestion du bot
-- **Monitoring en temps réel** : Surveillance des performances GPU et système
-- **Architecture modulaire** : Tous les composants GUI organisés dans le dossier `gui/`
-- **Interface moderne** : Design sombre avec notifications toast et graphiques animés
-- **Interface legacy** : Interface basique pour compatibilité
+- **GUI PySide6** : Interface de bureau moderne avec lancement unifié et multi-options
+- **Monitoring avancé** : Graphiques temps réel GPU/CPU, métriques de performance
+- **Architecture modulaire** : Tous les composants GUI organisés dans le dossier `gui/` avec système de plugins
+- **Interface moderne** : Design sombre avec notifications toast, graphiques animés et générateur d'icônes SVG
+- **Interface enhanced** : Interface améliorée avec contrôles avancés
+- **Visualiseur de logs** : GUI intégré pour la supervision des logs système
 
 ## 🏗️ Architecture
 
@@ -36,76 +40,73 @@ Idée principale de vedal (https://vedal.ai).
 c:\Dev\IA-chatbot\
 ├── 📝 README.md           # Documentation du projet
 ├── 🚀 start_neuro.py      # Script de démarrage principal
-├── 🖥️ launch_gui.py       # Lanceur GUI principal (recommandé)
+├── 🖥️ launch_gui.py       # Lanceur GUI principal unifié (recommandé)
+├── 🖥️ launch_enhanced_gui.py # Lanceur GUI enhanced
+├── 🖥️ select_gui.py       # Sélecteur d'interface GUI
 ├── 🤖 bot.py              # Bot Discord principal 
-├── 🧠 model.py            # Gestion des modèles LLM 
-├── 💾 memory.py           # Système de mémoire SQLite 
+├── 🧠 model.py            # Gestion des modèles LLM avec optimisation GPU
+├── 💾 memory.py           # Système de mémoire SQLite avec indexation avancée
 ├── 🌐 web.py              # Fonctionnalités de recherche web 
 ├── ⚙️ config.py           # Configuration centralisée 
-├── 🗄️ database.py         # Gestionnaire de base de données 
-├── 🔒 auth_decorators.py  # Authentification 2FA 
+├── 🗄️ database.py         # Gestionnaire de base de données thread-safe
+├── 🔒 auth_decorators.py  # Authentification 2FA TOTP sécurisée
 ├── 🛠️ utils.py            # Utilitaires divers 
 ├── 📦 requirements.txt    # Dépendances du projet
-├── 📁 batch/              # Scripts de lancement batch
-│   ├── launch_neuro.bat  # Menu principal (RECOMMANDÉ)
-│   ├── start_bot.bat     # Lancement rapide bot Discord
-│   ├── start_gui.bat     # Interface graphique PySide6
-│   ├── dev_start.bat     # Mode développeur
-│   ├── setup.bat         # Configuration initiale
-│   ├── final_diagnostic.bat # Diagnostic système complet
-│   ├── rebuild_env.bat   # Reconstruction environnement
-│   ├── README.md         # Documentation scripts batch
-│   ├── LANCEMENT.md      # Guide de lancement rapide
-│   └── STATUS.md         # État des scripts
+├── 📁 scripts/            # Scripts de lancement et utilitaires
+├── 📁 zen tests/          # Tests unitaires et d'intégration
+├── 📁 zen rapports/       # Rapports techniques et documentation avancée
 ├── 📁 gui/                # Interface graphique modulaire
-│   ├── neuro_gui.py      # Interface GUI moderne (principale)
-│   ├── launch_neuro_gui.py # Lanceur GUI moderne
-│   ├── bot_gui.py        # Interface GUI legacy
-│   ├── chart_widgets.py  # Widgets de graphiques temps réel
-│   ├── theme_manager.py  # Gestionnaire de thèmes
-│   ├── notification_system.py # Notifications toast modernes
-│   ├── advanced_controls.py # Contrôles avancés
-│   ├── plugin_system.py  # Système de plugins extensible
-│   ├── icons_generator.py # Générateur d'icônes SVG
-│   ├── dark_theme_helper.py # Helper thème sombre
-│   ├── THEME_GUIDE.md    # Guide des thèmes GUI
-│   ├── assets/           # Ressources (icônes SVG)
-│   └── tools/            # Outils GUI
-│       └── log_viewer_gui.py # Visualiseur de logs GUI
-├── 📁 commands/           # Commandes Discord 
-│   ├── auto.py           # Gestion réponses automatiques + 2FA
-│   ├── bye.py            # Arrêt du bot + 2FA
-│   ├── context.py        # Configuration contexte + logging
-│   ├── help.py           # Aide et documentation + sécurité
-│   ├── limits.py         # Limites de caractères + validation
-│   ├── memory.py         # Commandes mémoire + 2FA
-│   ├── optimize.py       # Optimisation GPU et profils
-│   ├── stats.py          # Statistiques système + monitoring
-│   └── web_cmd.py        # Commandes web + gestion d'erreurs
+│   ├── 🎯 launch_gui.py   # Lanceur GUI unifié (PRINCIPAL)
+│   ├── 🎨 neuro_gui.py    # Interface GUI moderne
+│   ├── 🔧 enhanced_main_gui.py # Interface GUI enhanced avec contrôles avancés
+│   ├── 📊 chart_widgets.py # Widgets de graphiques temps réel
+│   ├── 🎨 theme_manager.py # Gestionnaire de thèmes dynamiques
+│   ├── 🔔 notification_system.py # Notifications toast modernes
+│   ├── ⚙️ advanced_controls.py # Contrôles avancés et monitoring
+│   ├── 🔌 plugin_system.py # Système de plugins extensible
+│   ├── 🎨 icons_generator.py # Générateur d'icônes SVG
+│   ├── 🌙 dark_theme_helper.py # Helper thème sombre
+│   ├── 📁 assets/         # Ressources (icônes SVG)
+│   ├── 📁 tools/          # Outils GUI
+│   │   └── 📄 log_viewer_gui.py # Visualiseur de logs GUI
+│   ├── 📖 THEME_GUIDE.md  # Guide des thèmes GUI
+│   ├── 📖 GUI_USAGE.md    # Guide d'utilisation des interfaces
+│   └── 📖 REORGANISATION_GUI.md # Documentation réorganisation
+├── 📁 commands/           # Commandes Discord avec sécurité 2FA
+│   ├── 🔒 auto.py         # Gestion réponses automatiques + 2FA
+│   ├── 🔒 bye.py          # Arrêt du bot + 2FA
+│   ├── ⚙️ context.py      # Configuration contexte + logging avancé
+│   ├── ❓ help.py         # Aide et documentation + sécurité renforcée
+│   ├── 📏 limits.py       # Limites de caractères + validation
+│   ├── 🧠 memory.py       # Commandes mémoire + 2FA + indexation
+│   ├── 🚀 optimize.py     # Optimisation GPU avancée et profils adaptatifs (NOUVEAU)
+│   ├── 📊 stats.py        # Statistiques système + monitoring GPU temps réel
+│   └── 🌐 web_cmd.py      # Commandes web + gestion d'erreurs robuste
 ├── 📁 events/             # Gestionnaires d'événements
-│   └── on_message.py     # Traitement des messages (recherche intelligente)
-├── 📁 tools/              # Utilitaires et outils
-│   ├── gpu_optimizer.py  # Optimiseur GPU RTX 4050
-│   └── advanced_logging.py # Système de logs avancé
+│   └── 💬 on_message.py   # Traitement des messages avec recherche intelligente
+├── 📁 tools/              # Utilitaires et outils avancés
+│   ├── 🚀 gpu_optimizer.py # Optimiseur GPU RTX 4050 avec monitoring temps réel
+│   ├── 📊 advanced_logging.py # Système de logs avancé avec rotation
+│   └── 🎮 demo_logs.py    # Démonstration système de logs
 ├── 📁 JSON/               # Fichiers de configuration
-│   ├── autoreply.json    # Config réponses auto
-│   ├── character_limits.json # Limites caractères
-│   ├── config.json       # Configuration générale
-│   ├── context.json      # Paramètres contexte
-│   ├── log_config.json   # Configuration système de logs
-│   └── web.json          # État recherche web
+│   ├── 🔄 autoreply.json  # Config réponses auto
+│   ├── 📏 character_limits.json # Limites caractères
+│   ├── ⚙️ config.json     # Configuration générale (OBSOLÈTE - supprimé)
+│   ├── 💬 context.json    # Paramètres contexte conversationnel
+│   ├── 📊 log_config.json # Configuration système de logs avancé (NOUVEAU)
+│   └── 🌐 web.json        # État recherche web
 ├── 📁 models/             # Modèles LLM quantifiés
 │   ├── zephyr-7b-beta.Q5_K_M.gguf
 │   ├── mistral-7b-instruct-v0.2.Q5_K_M.gguf
 │   └── phi-2.Q5_K_M.gguf
 ├── 📁 data/               # Base de données et logs
-│   ├── neuro.db          # SQLite avec index optimisés
-│   ├── logs.db           # Base de données des logs
-│   └── neuro_bot_advanced.log # Logs avancés
-├── 📁 logs/               # Logs système
-│   └── neuro_bot.log     # Logging standard
-├── 📁 llama-venv/         # Environnement virtuel Python
-├── 🔧 launch.bat          # Raccourci vers batch/launch_neuro.bat
+│   ├── 🗄️ neuro.db        # SQLite avec index optimisés et pool de connexions
+│   ├── 📊 logs.db         # Base de données des logs avancés (NOUVEAU)
+│   └── 📄 neuro_bot_advanced.log # Logs avancés avec rotation (NOUVEAU)
+├── 📁 logs/               # Logs système legacy
+│   └── 📄 neuro_bot.log   # Logging standard (legacy)
+├── 📁 llama-venv/         # Environnement virtuel Python optimisé
+├── 🔧 start_neuro_gui.bat # Script de lancement GUI rapide (NOUVEAU)
 ```
 
 ## 🚀 Installation
@@ -162,46 +163,43 @@ Placez vos modèles GGUF dans le dossier `models/`. Les modèles supportés :
 
 ## 🎯 Utilisation
 
-## 🚀 Démarrage Rapide - Scripts Batch (RECOMMANDÉ)
+## 🚀 Démarrage Rapide - Méthodes Recommandées
 
-### Option 1: Menu Principal (Simple & Efficace)
+### Option 1: Interface Graphique Unifiée (RECOMMANDÉE)
 ```bash
-# Double-cliquez sur le fichier ou dans un terminal :
-launch.bat
+# Lanceur GUI principal avec sélection d'interface
+python launch_gui.py
 
-# Ou directement :
-batch\launch_neuro.bat
+# Ou lancement rapide via script batch
+start_neuro_gui.bat
+
+# Interface enhanced avec contrôles avancés
+python launch_enhanced_gui.py
+
+# Sélecteur d'interface manuel
+python select_gui.py
 ```
 
-### Option 2: Accès Direct aux Scripts
+### Option 2: Bot Discord Direct
 ```bash
-# Bot Discord uniquement (optimal)
-batch\start_bot.bat
+# Démarrage du bot Discord avec optimisation automatique
+python start_neuro.py
 
-# Interface graphique
-batch\start_gui.bat
-
-# Menu principal interactif (recommandé)
-batch\launch_neuro.bat
+# Démarrage avec interface graphique intégrée
+python start_neuro.py --gui
 ```
 
-## 📊 État des Scripts Batch
+### Option 3: Interfaces Spécialisées
+```bash
+# Interface GUI moderne principale
+python gui/neuro_gui.py
 
-### ✅ Scripts Fonctionnels
-- **`batch\final_diagnostic.bat`** - **PARFAIT** : Diagnostic complet de l'environnement
-- **`batch\launch_neuro.bat`** - **PARFAIT** : Menu interactif principal avec toutes les options
-- **`batch\start_gui.bat`** - **FONCTIONNEL** : Lance l'interface graphique
+# Interface GUI enhanced avec monitoring avancé
+python gui/enhanced_main_gui.py
 
-### 🔧 Scripts de Maintenance
-- **`batch\rebuild_env.bat`** - Reconstruction complète de l'environnement
-- **`batch\repair.bat`** - Réparation automatique des dépendances
-- **`batch\setup.bat`** - Configuration initiale du projet
-
-### 🆘 En cas de Problème
-1. **Diagnostic** : `batch\final_diagnostic.bat`
-2. **Réparation automatique** : `batch\repair.bat`
-3. **Reconstruction complète** : `batch\rebuild_env.bat`
-4. **Documentation** : `batch\README.md`
+# Visualiseur de logs intégré
+python gui/tools/log_viewer_gui.py
+```
 
 ## 📋 Méthodes de Lancement Alternatives
 
@@ -222,10 +220,20 @@ python start_neuro.py --gui
 python gui/launch_neuro_gui.py
 ```
 
-### Tests de validation
+### Tests et Validation
 ```bash
+# Tests unitaires et d'intégration
 python "zen tests/test_start_neuro.py"
 python "zen tests/integration_test.py"
+
+# Tests avec pytest (recommandé)
+pytest "zen tests/"
+
+# Démonstration du système de logs avancé
+python tools/demo_logs.py
+
+# Visualiseur de logs avec interface GUI
+python gui/tools/log_viewer_gui.py
 ```
 
 ### Commandes Discord
@@ -235,47 +243,107 @@ python "zen tests/integration_test.py"
 - Le bot répondra en utilisant son IA et sa mémoire
 
 #### 🔧 Commandes administratives
-*(Nécessite le rôle "NeuroMaster")*
+*(Nécessite le rôle "NeuroMaster" + Authentification 2FA pour certaines commandes)*
 
 | Commande | Description | Sécurité |
 |----------|-------------|----------|
 | `!helpme` | Affiche l'aide complète | ✅ |
-| `!stats` | Statistiques système et GPU | ✅ |
+| `!stats` | Statistiques système et GPU temps réel | ✅ |
+| **🚀 OPTIMISATION GPU (NOUVEAU)** |
+| `!optimize` | Menu d'optimisation GPU avec profils adaptatifs | 🔒 2FA |
+| `!optimize analyze` | Analyse VRAM et recommandations | 🔒 2FA |
+| `!optimize apply` | Applique l'optimisation recommandée | 🔒 2FA |
+| `!optimize profiles` | Liste tous les profils disponibles | 🔒 2FA |
+| `!optimize current` | Affiche le profil actuellement actif | 🔒 2FA |
+| `!optimize set <profil>` | Change le profil d'optimisation | 🔒 2FA |
+| `!optimize report` | Rapport d'optimisation détaillé | 🔒 2FA |
+| `!optimize metrics` | Métriques de performance temps réel | 🔒 2FA |
+| `!optimize auto on/off` | Optimisation automatique adaptative | 🔒 2FA |
+| `!optimize task <type>` | Optimise pour un type de tâche spécifique | 🔒 2FA |
+| **💬 CONVERSATION & MÉMOIRE** |
 | `!auto on/off` | Active/désactive les réponses automatiques | 🔒 2FA |
 | `!context <1-50>` | Définit le nombre d'échanges mémorisés | ✅ |
-| `!web on/off` | Active/désactive la recherche web | ✅ |
-| `!web test <texte>` | Test de recherche web | ✅ |
 | `!remember [texte]` | Ajoute un fait à la mémoire long terme | ✅ |
-| `!facts [@user]` | Affiche les faits connus | ✅ |
+| `!facts [@user]` | Affiche les faits connus avec indexation | ✅ |
 | `!forget me/@user/all` | Efface les faits mémorisés | 🔒 2FA |
+| `!reset` | Réinitialise la mémoire conversationnelle | 🔒 2FA |
+| **🌐 RECHERCHE WEB** |
+| `!web on/off` | Active/désactive la recherche web | ✅ |
+| `!web test <texte>` | Test de recherche web avec diagnostics | ✅ |
+| **⚙️ CONFIGURATION** |
 | `!limits [valeur]` | Définit la longueur max des réponses | ✅ |
 | `!resetlimits` | Restaure la limite par défaut (1900 caractères) | ✅ |
-| `!reset` | Réinitialise la mémoire | 🔒 2FA |
-| `!bye` | Arrêt propre du bot | ✅ |
+| `!bye` | Arrêt propre du bot avec sauvegarde | 🔒 2FA |
 
-## 🧠 Système de Mémoire 
+## 🚀 Optimisation GPU Avancée *(NOUVEAU)*
+
+### Profils Adaptatifs Intelligents
+- **🚀 Turbo Max** : Performance maximale (RTX 4050 optimisé)
+- **⚡ Performance Optimized** : Équilibre performance/stabilité 
+- **⚖️ Balanced Adaptive** : Adaptatif selon l'usage VRAM
+- **💾 Conservative Stable** : Utilisation conservatrice stable
+- **🆘 Emergency Safe** : Mode secours pour VRAM limitée
+- **🖥️ CPU Fallback** : Fallback CPU si GPU indisponible
+
+### Monitoring Temps Réel
+- **VRAM Usage** : Surveillance continue de l'utilisation mémoire GPU
+- **Température GPU** : Monitoring thermique avec alertes
+- **Performance Metrics** : FPS, latence, efficacité contexte
+- **Auto-optimisation** : Changement automatique de profil selon les conditions
+
+### Commandes d'Optimisation
+```bash
+!optimize analyze     # Analyse VRAM et recommandations
+!optimize apply       # Application automatique du profil optimal
+!optimize set turbo   # Change vers profil Turbo Max
+!optimize auto on     # Active l'optimisation automatique
+!optimize metrics     # Métriques temps réel détaillées
+```
+
+## 🧠 Système de Mémoire Avancé
 
 ### Mémoire Conversationnelle
 - **Base de données optimisée** : SQLite avec index pour de meilleures performances
-- **Pool de connexions** : Gestion thread-safe des connexions
-- **Contexte configurable** : 1-50 échanges par utilisateur
-- **Logging détaillé** : Traçabilité de toutes les opérations
+- **Pool de connexions** : Gestion thread-safe des connexions multi-utilisateurs
+- **Contexte configurable** : 1-50 échanges par utilisateur avec validation
+- **Logging détaillé** : Traçabilité complète de toutes les opérations
 
 ### Mémoire Long Terme
-- **Stockage persistant** : Faits importants sur les utilisateurs
-- **Gestion sécurisée** : Commandes `!remember` et `!facts`
-- **Effacement protégé** : Authentification 2FA pour `!forget` et `!reset`
-- **Performance optimisée** : Index automatiques sur les requêtes fréquentes
+- **Stockage persistant** : Faits importants sur les utilisateurs avec indexation avancée
+- **Gestion sécurisée** : Commandes `!remember` et `!facts` avec validation
+- **Effacement protégé** : Authentification 2FA obligatoire pour `!forget` et `!reset`
+- **Performance optimisée** : Index automatiques sur les requêtes fréquentes + mise en cache
 
-## 🌐 Recherche Web 
+## 🔒 Sécurité et Authentification 2FA *(NOUVEAU)*
 
-- **Moteur** : DuckDuckGo avec fallback HTML robuste
-- **Activation** : Commande `!web on/off`
-- **Test** : `!web test <requête>`
-- **Détection intelligente** : Reconnaissance automatique des besoins de recherche
-- **Mots-clés configurables** : Patterns regex pour déclencher la recherche
-- **Gestion d'erreurs** : Messages informatifs et récupération gracieuse
-- **Logging détaillé** : Traçabilité de toutes les recherches
+### Authentification TOTP (Time-based One-Time Password)
+- **Sécurité renforcée** : Protection des commandes critiques par 2FA obligatoire
+- **Compatible Google Authenticator** : Support des apps d'authentification standard
+- **Secret personnalisable** : Variable d'environnement `AUTH_SECRET`
+- **Timeout sécurisé** : Codes TOTP avec expiration automatique
+
+### Commandes Protégées par 2FA
+- `!auto on/off` - Réponses automatiques
+- `!forget` - Effacement mémoire
+- `!reset` - Réinitialisation système  
+- `!bye` - Arrêt du bot
+- `!optimize` (toutes variantes) - Optimisation GPU
+
+### Configuration 2FA
+```bash
+# Dans votre fichier .env
+AUTH_SECRET=votre_secret_totp_personnalise
+```
+
+## 🌐 Recherche Web Intelligente
+
+- **Moteur** : DuckDuckGo avec fallback HTML robuste et récupération gracieuse
+- **Activation** : Commande `!web on/off` avec persistance
+- **Test** : `!web test <requête>` avec diagnostics détaillés
+- **Détection intelligente** : Reconnaissance automatique des besoins de recherche contextuelle
+- **Mots-clés configurables** : Patterns regex avancés pour déclencher la recherche
+- **Gestion d'erreurs** : Messages informatifs et récupération automatique
+- **Logging détaillé** : Traçabilité complète de toutes les recherches avec métriques
 
 ## ⚙️ Configuration
 
@@ -309,269 +377,223 @@ python "zen tests/integration_test.py"
 }
 ```
 
+#### `JSON/log_config.json` *(NOUVEAU)*
+```json
+{
+  "version": 1,
+  "formatters": {
+    "detailed": {
+      "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    }
+  },
+  "handlers": {
+    "file": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "filename": "data/neuro_bot_advanced.log",
+      "maxBytes": 10485760,
+      "backupCount": 5,
+      "formatter": "detailed"
+    }
+  }
+}
+```
+
 ### Variables d'environnement
-- `DISCORD_TOKEN` : Token du bot Discord
-- `AUTH_SECRET` : Secret pour l'authentification 2FA
+- `DISCORD_TOKEN` : Token du bot Discord (obligatoire)
+- `AUTH_SECRET` : Secret pour l'authentification 2FA TOTP (obligatoire)
+- `DB_PATH` : Chemin vers la base de données SQLite (optionnel, défaut: data/neuro.db)
+- `LOG_LEVEL` : Niveau de logging (optionnel, défaut: INFO)
 
-## 🚨 Scripts Batch - Documentation Détaillée
+## 🖥️ Interfaces Graphiques Modernes
 
-### 📋 Scripts Disponibles
+### 🎯 Lanceur GUI Unifié (PRINCIPAL)
+**Commande** : `python launch_gui.py`
+- **Menu de sélection** d'interface avec prévisualisation
+- **Détection automatique** des dépendances et compatibilité
+- **Messages d'erreur** explicites avec solutions
+- **Lancement sécurisé** avec gestion d'exceptions
 
-#### 🎯 `launch_neuro.bat` - **RECOMMANDÉ**
-- **Menu interactif** avec choix du mode de lancement
-- Options : Bot automatique, Bot interactif, Interface graphique, Configuration
-- Gestion d'erreur complète et messages explicites
-- Parfait pour tous les utilisateurs
+### 🎨 Interface GUI Moderne 
+**Commande** : `python gui/neuro_gui.py`
+- **Design moderne** avec thème sombre adaptatif
+- **Notifications toast** animées et non-intrusives
+- **Graphiques temps réel** GPU/CPU/Mémoire
+- **Générateur d'icônes SVG** intégré
 
-#### 🎨 `start_gui.bat` - Interface Graphique
-- Lance l'interface graphique PySide6
-- Optimisation GPU automatique
-- Vérification automatique des dépendances GUI
-- Création d'environnement si absent
+### 🔧 Interface GUI Enhanced
+**Commande** : `python gui/enhanced_main_gui.py`
+- **Contrôles avancés** pour utilisateurs experts  
+- **Monitoring détaillé** VRAM, température, performances
+- **Configuration en temps réel** des profils GPU
+- **Debug et diagnostics** intégrés
 
-#### 🔍 `final_diagnostic.bat` - Diagnostic Système
-- Diagnostic complet de l'environnement Windows/Python
-- Vérification de tous les modules installés
-- Détection automatique des problèmes de configuration
-- Recommandations de réparation précises
-- Vérification de la base de données et des modèles LLM
+### 🔌 Système de Plugins GUI
+- **Architecture modulaire** extensible
+- **Widgets personnalisés** réutilisables
+- **Thèmes dynamiques** avec préférences utilisateur
+- **API unifiée** pour le développement d'extensions
 
-#### 🛠️ `rebuild_env.bat` - Reconstruction Environnement
-- Suppression et reconstruction complète de l'environnement virtuel
-- Installation fraîche de toutes les dépendances
-- Correction des références de chemins obsolètes
-- Utile en cas de corruption d'environnement
+## 📊 Système de Logs Avancé *(NOUVEAU)*
 
-#### ⚙️ Fonctionnalités Automatiques de tous les Scripts
-- ✅ **Vérification de l'environnement virtuel** `llama-venv`
-- ✅ **Activation automatique** de l'environnement Python
-- ✅ **Optimisation GPU automatique** (avec paramètre `--auto`)
-- ✅ **Gestion d'erreurs** avec messages explicites et codes de retour
-- ✅ **Chemins relatifs corrigés** (`%~dp0..` pour compatibilité)
+### 🔍 Visualiseur de Logs GUI
+**Commande** : `python gui/tools/log_viewer_gui.py`
+- **Interface moderne** pour consultation des logs
+- **Filtrage en temps réel** par niveau/module/date
+- **Recherche textuelle** avec regex
+- **Export** vers fichiers ou clipboard
 
-### 🚨 Résolution de Problèmes avec Scripts Batch
+### 🎮 Démonstration Interactive
+**Commande** : `python tools/demo_logs.py`
+- **Tests automatisés** de tous les niveaux de logging
+- **Simulation d'erreurs** pour validation
+- **Métriques de performance** système
+- **Rotation automatique** des fichiers de logs
 
-#### Erreur "No module named 'dotenv'" ou modules manquants
+### 📈 Logging Multi-niveaux
 ```bash
-cd batch
-final_diagnostic.bat    # Voir le problème exact
-rebuild_env.bat         # Réparation automatique
+# Configuration automatique avec rotation
+data/neuro_bot_advanced.log      # Log principal avec rotation 10MB
+data/logs.db                     # Base de données logs structurés  
+logs/neuro_bot.log              # Legacy logging (compatibilité)
 ```
 
-#### Environnement virtuel corrompu ou chemins obsolètes
+## 🚨 Résolution de Problèmes Modernes
+
+### ❌ Erreurs de Dépendances
 ```bash
-cd batch
-rebuild_env.bat    # Reconstruction complète
+# Vérification et installation automatique
+pip install -r requirements.txt
+
+# Test des imports critiques
+python -c "import discord, llama_cpp, PySide6; print('✅ Dépendances OK')"
 ```
 
-#### Interface graphique "Aucune interface disponible"
+### ⚡ Problèmes de Performance GPU
 ```bash
-cd batch
-rebuild_env.bat    # Réinstalle PySide6 correctement
+# Diagnostic GPU détaillé
+python -c "from tools.gpu_optimizer import GPUOptimizer; GPUOptimizer().get_gpu_info()"
+
+# Optimisation automatique
+python start_neuro.py --optimize-gpu
 ```
 
-#### Bot Discord ne se connecte pas
+### 🔒 Erreurs d'Authentification
 ```bash
-cd batch
-final_diagnostic.bat    # Vérifie DISCORD_TOKEN et configuration
+# Vérification du fichier .env
+python -c "from config import DISCORD_TOKEN, AUTH_SECRET; print('✅ Tokens OK')"
+
+# Test 2FA
+python -c "import pyotp; print('✅ 2FA disponible')"
 ```
 
-### 🎮 Utilisation Recommandée des Scripts
+## 🔧 Développement Avancé
 
-#### Pour les Utilisateurs Finaux
-1. **Démarrage quotidien** : Double-cliquez sur `launch.bat`
-2. **Menu complet** : `batch\launch_neuro.bat`
-3. **Interface graphique** : `batch\start_gui.bat`
+### 🏗️ Architecture Moderne
+- **Modularité** : Séparation claire des responsabilités avec inversion de dépendances
+- **Extensibilité** : Système de commandes, événements et GUI modulaires
+- **Configuration centralisée** : Système unifié thread-safe avec `config.py`
+- **Gestion d'erreurs robuste** : Logging structuré et récupération gracieuse
+- **Sécurité intégrée** : Décorateurs 2FA TOTP et validation avancée des entrées
 
-#### En Cas de Problème
-1. **Diagnostic d'abord** : `batch\final_diagnostic.bat`
-2. **Réparation automatique** : `batch\repair.bat`
-3. **Reconstruction complète** : `batch\rebuild_env.bat`
-4. **Documentation complète** : `batch\README.md`
+### 🔌 Ajout de Nouvelles Commandes
+```python
+# commands/ma_commande.py
+from discord.ext.commands import has_role
+from config import AUTHORIZED_ROLE, logger
+from auth_decorators import require_2fa
 
-#### Pour le Développement
-1. **Menu développeur** : `batch\launch_neuro.bat` (choix mode interactif)
-2. **Tests et diagnostic** : `batch\final_diagnostic.bat`
-3. **Problèmes persistants** : `batch\rebuild_env.bat`
-
-### 🔍 Structure Attendue pour les Scripts
-```
-c:\Dev\IA-chatbot\
-├── batch\               # 📁 Scripts batch de lancement
-├── llama-venv\          # Environnement virtuel Python (auto-créé)
-├── models\              # Modèles LLM .gguf (à télécharger)
-├── .env                 # Variables d'environnement (DISCORD_TOKEN)
-├── start_neuro.py       # Script principal de démarrage
-└── requirements.txt     # Dépendances Python
+def setup(bot):
+    @bot.command()
+    @has_role(AUTHORIZED_ROLE)
+    @require_2fa  # Optionnel pour commandes critiques
+    async def ma_commande(ctx, param: str = None):
+        """Description de ma commande"""
+        logger.info(f"Commande exécutée par {ctx.author}")
+        # Votre logique ici
+        await ctx.send("✅ Commande exécutée")
 ```
 
-## 🔧 Développement
+### 🎮 Extension du Système GUI
+```python
+# gui/plugins/mon_plugin.py
+from PySide6.QtWidgets import QWidget
+from gui.plugin_system import PluginBase
 
-### Structure du code
-- **Modularité** : Séparation claire des responsabilités
-- **Extensibilité** : Système de commandes et d'événements modulaire
-- **Configuration centralisée** : Système unifié avec `config.py`
-- **Gestion d'erreurs robuste** : Logging et récupération gracieuse
-- **Sécurité intégrée** : Décorateurs 2FA et validation des entrées
+class MonPlugin(PluginBase):
+    def __init__(self):
+        super().__init__("Mon Plugin", "1.0.0")
+    
+    def create_widget(self) -> QWidget:
+        # Retourner votre widget personnalisé
+        pass
+```
 
-### Ajout de nouvelles commandes
-1. Créez un fichier dans `commands/`
-2. Implémentez la fonction `setup(bot)`
-3. Utilisez les décorateurs de sécurité (`@require_2fa`, `@require_authorized_role`)
-4. Ajoutez le logging avec `from config import logger`
-5. La commande sera automatiquement chargée
-
-### Ajout de nouveaux événements
-1. Créez un fichier dans `events/`
-2. Implémentez la fonction `setup(bot)`
-3. Ajoutez la gestion d'erreurs et le logging
-4. L'événement sera automatiquement enregistré
-
-### Tests et validation
-- **Diagnostic automatique** : `batch\final_diagnostic.bat` (recommandé avant tests)
-- Exécutez `python test_improvements.py` après chaque modification
-- Tests d'intégration : `python "zen tests/test_start_neuro.py"`
-- Tests avancés : `python "zen tests/integration_test.py"`
-- Vérifiez les logs dans le dossier `logs/`
-- Utilisez les scripts batch pour démarrage sécurisé : `batch\start_bot.bat`
-
-## 📊 Monitoring
-
-### Statistiques disponibles
-- **GPU** : Utilisation, mémoire, température
-- **Mémoire** : Nombre d'échanges stockés par utilisateur
-- **Base de données** : Performances et statistiques des requêtes
-- **Système** : Performances générales et utilisation des ressources
-
-### Logging avancé
-- **Logs rotatifs** : Conservation automatique de 7 jours
-- **Niveaux configurables** : DEBUG, INFO, WARNING, ERROR
-- **Formatage structuré** : Timestamps et contexte détaillé
-- **Fichiers séparés** : Logs dans le dossier `logs/`
-
-### Interface graphique
-- **Interface moderne** (`neuro_gui.py`) : Design sombre avec animations
-- **Monitoring temps réel** : CPU, RAM, GPU avec graphiques animés
-- **Notifications toast** : Alertes visuelles modernes
-- **Système de thèmes** : Couleurs personnalisables
-- **Contrôles intuitifs** : Interface utilisateur simplifiée
-- **Logs détaillés** : Visualiseur avancé avec filtrage (`log_viewer_gui.py`)
-- **Système de plugins** : Architecture extensible
-
-## 🖥️ Interface Graphique Complète
-
-### 🎨 Interfaces disponibles
-
-#### Interface Moderne (`neuro_gui.py`)
-- **Design moderne** : Thème sombre avec palette de couleurs personnalisée
-- **Monitoring temps réel** : CPU, RAM, GPU avec graphiques animés
-- **Notifications toast** : Alertes visuelles avec animations fluides
-- **Système de thèmes** : Gestionnaire de thèmes intégré
-- **Plugins extensibles** : Architecture modulaire pour fonctionnalités custom
-
-#### Interface Legacy (`bot_gui.py`)
-- **Interface simple** : Contrôles basiques de démarrage/arrêt
-- **Monitoring basique** : Informations système essentielles  
-- **Compatibilité** : Maintenue pour rétrocompatibilité
-
-### 🧩 Composants GUI
-
-#### Widgets Spécialisés
-- **`chart_widgets.py`** : Graphiques temps réel avec animations
-- **`notification_system.py`** : Système de notifications toast
-- **`advanced_controls.py`** : Contrôles de performance avancés
-- **`plugin_system.py`** : Framework de plugins extensible
-
-#### Personnalisation
-- **`theme_manager.py`** : Gestion de thèmes dynamique
-- **`icons_generator.py`** : Générateur d'icônes SVG
-- **`dark_theme_helper.py`** : Helper pour thème sombre
-
-#### Outils Avancés
-- **`tools/log_viewer_gui.py`** : Visualiseur de logs avancé
-- **`assets/`** : Bibliothèque d'icônes SVG
-
-### 🚀 Lancement de l'interface
-
+### 🧪 Tests et Validation
 ```bash
-# Recommandé : Lanceur principal
-python launch_gui.py
+# Tests unitaires complets
+pytest "zen tests/" -v --cov
 
-# Alternative : Lancement direct
-python gui/launch_neuro_gui.py
+# Tests d'intégration système
+python "zen tests/test_start_neuro.py"
+python "zen tests/integration_test.py"
 
-# Via start_neuro.py
-python start_neuro.py --gui
+# Validation du code
+python -m flake8 . --max-line-length=120
 ```
 
-### 📁 Organisation modulaire
+## 📊 Monitoring et Métriques
 
-```
-gui/
-├── neuro_gui.py              # Interface principale moderne
-├── launch_neuro_gui.py       # Lanceur GUI moderne
-├── bot_gui.py                # Interface legacy
-├── chart_widgets.py          # Widgets de graphiques
-├── theme_manager.py          # Gestionnaire de thèmes
-├── notification_system.py    # Notifications toast
-├── advanced_controls.py      # Contrôles avancés
-├── plugin_system.py          # Système de plugins
-├── icons_generator.py        # Générateur d'icônes
-├── dark_theme_helper.py      # Helper thème sombre
-├── THEME_GUIDE.md           # Guide des thèmes
-├── assets/                   # Ressources (icônes)
-└── tools/
-    └── log_viewer_gui.py     # Visualiseur de logs
-```
+### 🖥️ Statistiques Système Temps Réel
+- **GPU** : Utilisation VRAM, température, puissance, efficacité
+- **CPU** : Utilisation, threads actifs, température 
+- **Mémoire** : RAM système, swap, cache
+- **Base de données** : Requêtes/sec, temps de réponse, index usage
+- **Réseau** : Latence Discord, recherches web, débit
 
-## 🛡️ Sécurité 
-
-### Authentification 2FA
-- **TOTP (Time-based One-Time Password)** avec pyotp
-- **Protection des commandes sensibles** : `!reset`, `!forget`, `!bye`, `!auto`
-- **Codes temporaires** : Expiration automatique après 30 secondes
-- **Logging de sécurité** : Traçabilité de toutes les tentatives d'authentification
-
-### Contrôle d'accès
-- **Système de rôles Discord** : Rôle "NeuroMaster" requis
-- **Décorateurs de sécurité** : `@require_authorized_role` et `@require_2fa`
-- **Validation des entrées** : Sanitisation et vérification des paramètres
-- **Gestion des sessions** : Timeout automatique des sessions 2FA
-
-### Sécurité des données
-- **Base de données chiffrée** : Protection des données sensibles
-- **Logs sécurisés** : Pas de stockage des tokens ou secrets
-- **Isolation** : Environnement virtuel et permissions restreintes
-- **Audit trail** : Traçabilité complète des actions administratives
-
-## 🚀 Nouvelles Fonctionnalités (v2.0)
-
-### ✨ Améliorations majeures
-- 🔒 **Système d'authentification 2FA** complet
-- 🗄️ **Base de données optimisée** avec index et pool de connexions
-- 📊 **Logging avancé** avec rotation et niveaux configurables
-- 🌐 **Recherche web intelligente** avec détection automatique
-- ⚙️ **Configuration centralisée** pour une maintenance simplifiée
-- 🧪 **Tests automatisés** pour valider les fonctionnalités
-- 🚀 **Script de démarrage sécurisé** avec vérifications préalables
-- 🖥️ **Interface GUI modulaire** : Architecture organisée dans le dossier `gui/`
-- 🎨 **Design moderne** : Interface sombre avec notifications toast et graphiques animés
-
-### 📈 Performances améliorées
-- **+300% plus rapide** : Index automatiques sur les requêtes fréquentes
-- **Thread-safe** : Pool de connexions pour la concurrence
-- **Mémoire optimisée** : Gestion efficace des ressources
-- **Récupération gracieuse** : Gestion robuste des erreurs
-
-### 🔧 Maintenabilité
-- **Code documenté** : Docstrings pour toutes les fonctions
-- **Structure modulaire** : Séparation claire des responsabilités  
-- **Tests intégrés** : Validation automatique des composants
-- **Logging détaillé** : Débogage et monitoring facilités
-- **Scripts batch automatisés** : Démarrage, diagnostic et maintenance simplifiés
+### 📈 Métriques de Performance
+- **LLM** : Tokens/sec, temps de génération, efficacité contexte
+- **Discord** : Messages traités/min, commandes exécutées, erreurs
+- **Mémoire conversationnelle** : Rappels réussis, faits stockés/utilisateur
+- **Interface GUI** : FPS, temps de réponse, utilisation CPU
 
 ---
 
-**Dernière mise à jour du README.md** : 29 août 2025 - 12:30  
-**Version** : v2.0 avec scripts batch intégrés  
+## 🎯 Roadmap et Évolutions
+
+### 🚀 Prochaines Fonctionnalités
+- [ ] Support multi-GPU (NVIDIA SLI/NVLink)
+- [ ] Modèles LLM plus larges (13B, 33B parameters)
+- [ ] API REST pour intégration externe
+- [ ] Support Linux/Docker
+- [ ] Traduction multi-langues
+- [ ] Voice-to-Text Discord intégration
+
+### 🔮 Vision Long Terme  
+- **IA Multimodale** : Support images, audio, vidéo
+- **Federated Learning** : Apprentissage distribué multi-serveur
+- **Auto-scaling** : Scaling automatique selon la charge
+- **Edge Computing** : Déploiement optimisé edge/mobile
+
+---
+
+## 📝 Changelog et Versions
+
+### v2.0.0 - Révision Majeure *(ACTUEL)*
+- ✅ **Optimisation GPU RTX 4050** avec profils adaptatifs
+- ✅ **Authentification 2FA TOTP** sécurisée
+- ✅ **Interface GUI moderne** unifiée avec plugins
+- ✅ **Système de logs avancé** avec rotation et base de données
+- ✅ **Architecture modulaire** complètement refactorisée
+- ✅ **Mémoire optimisée** avec indexation et pool de connexions
+
+### v1.x.x - Version Legacy
+- Base fonctionnelle Discord + LLM
+- Interface GUI basique
+- Scripts batch Windows
+- Mémoire conversationnelle simple
+
+---
+
+*Documentation mise à jour - Neuro-Bot v2.0.0 | Dernière révision: 2024*
+
 **Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)
