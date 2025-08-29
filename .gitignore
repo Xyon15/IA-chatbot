@@ -15,6 +15,8 @@ zen tests/
 zen rapports/
 .zencoder
 .zencoder/rules
+data/neuro.db-shm
+data/neuro.db-wal
 
 
 # User-specific files
@@ -430,4 +432,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
 
