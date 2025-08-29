@@ -361,26 +361,39 @@ def start_gui():
         print("💡 Installez avec: pip install PySide6")
         return False
     
-    # Essayer les différents modules GUI disponibles
+    # Essayer les différents modules GUI disponibles dans le bon ordre
     gui_modules = [
-        ("bot_gui", "Interface graphique")
+        ("gui.launch_neuro_gui", "Interface moderne", "launch_gui"),
+        ("gui.bot_gui", "Interface graphique", "main"),
+        ("launch_gui", "Interface de redirection", "main")
     ]
     
-    for module_name, description in gui_modules:
+    for module_name, description, function_name in gui_modules:
         try:
             print(f"🎨 {description}...")
-            module = __import__(module_name)
-            if hasattr(module, 'main'):
-                return module.main()
+            module = __import__(module_name, fromlist=[function_name])
+            if hasattr(module, function_name):
+                gui_function = getattr(module, function_name)
+                result = gui_function()
+                # Si c'est launch_gui qui retourne un booléen, vérifier le résultat
+                if result is False:
+                    continue
+                return True
             else:
-                print(f"⚠️  Fonction main non trouvée dans {module_name}")
-        except ImportError:
+                print(f"⚠️  Fonction {function_name} non trouvée dans {module_name}")
+        except ImportError as e:
+            print(f"⚠️  Module {module_name} non trouvé: {e}")
             continue
         except Exception as e:
             print(f"❌ Erreur {module_name}: {e}")
+            import traceback
+            traceback.print_exc()
             continue
     
     print("❌ Aucune interface graphique disponible")
+    print("Solutions:")
+    print("  - Installez PySide6: pip install PySide6")
+    print("  - Vérifiez les logs d'erreur")
     return False
 
 def main():
