@@ -17,6 +17,7 @@ zen rapports/
 .zencoder/rules
 data/neuro.db-shm
 data/neuro.db-wal
+.pytest_cache/
 
 
 # User-specific files

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
-<svg viewBox="0 0 24 24" fill="none">
-        <ellipse cx="12" cy="6" rx="8" ry="3" stroke="#034C36" stroke-width="2" fill="#F2E0DF"/>
-        <path d="M4 6v12c0 1.657 3.582 3 8 3s8-1.343 8-3V6" stroke="#034C36" stroke-width="2" fill="#F2E0DF"/>
-        <ellipse cx="12" cy="12" rx="8" ry="3" stroke="#FF8128" stroke-width="1.5"/>
-        <ellipse cx="12" cy="18" rx="8" ry="3" stroke="#FF8128" stroke-width="1.5"/>
-    </svg>
-</svg>

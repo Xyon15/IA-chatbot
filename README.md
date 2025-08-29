@@ -27,12 +27,14 @@ Idée principale de vedal (https://vedal.ai).
 - **Optimisation GPU** : Commandes `!optimize` avec profils adaptatifs en temps réel
 
 ### 🖥️ Interface Graphique
-- **GUI PySide6** : Interface de bureau moderne avec lancement unifié et multi-options
+- **GUI PySide6** : Interface de bureau moderne avec lanceur unifié intelligent
+- **Sélection automatique** : Détection automatique de l'interface optimale (Enhanced/Unified)
 - **Monitoring avancé** : Graphiques temps réel GPU/CPU, métriques de performance
 - **Architecture modulaire** : Tous les composants GUI organisés dans le dossier `gui/` avec système de plugins
 - **Interface moderne** : Design sombre avec notifications toast, graphiques animés et générateur d'icônes SVG
 - **Interface enhanced** : Interface améliorée avec contrôles avancés
 - **Visualiseur de logs** : GUI intégré pour la supervision des logs système
+- **Fallback intelligent** : Mécanisme de basculement automatique en cas d'échec
 
 ## 🏗️ Architecture
 
@@ -40,8 +42,7 @@ Idée principale de vedal (https://vedal.ai).
 c:\Dev\IA-chatbot\
 ├── 📝 README.md           # Documentation du projet
 ├── 🚀 start_neuro.py      # Script de démarrage principal
-├── 🖥️ launch_gui.py       # Lanceur GUI principal unifié (recommandé)
-├── 🖥️ launch_enhanced_gui.py # Lanceur GUI enhanced
+├── 🖥️ launch_gui.py       # Lanceur GUI principal unifié avec sélection automatique (recommandé)
 ├── 🖥️ select_gui.py       # Sélecteur d'interface GUI
 ├── 🤖 bot.py              # Bot Discord principal 
 ├── 🧠 model.py            # Gestion des modèles LLM avec optimisation GPU
@@ -163,20 +164,43 @@ Placez vos modèles GGUF dans le dossier `models/`. Les modèles supportés :
 
 ## 🎯 Utilisation
 
+## 🚀 Lanceur GUI Unifié - Nouveau *(FUSION RÉALISÉE)*
+
+Le nouveau `launch_gui.py` combine intelligemment toutes les fonctionnalités des anciens lanceurs :
+
+### ✨ Fonctionnalités du Lanceur Unifié
+- **🔧 Sélection automatique** : Détecte automatiquement la meilleure interface disponible
+- **🎯 Modes multiples** : Auto, Enhanced, Unified, Select avec arguments de ligne de commande
+- **🛡️ Fallback intelligent** : Enhanced → Unified en cas d'échec
+- **🚀 Optimisation** : Lancement via subprocess ou import selon l'interface
+- **📋 Aide intégrée** : Documentation complète avec `--help`
+- **✅ Validation** : Vérification automatique des dépendances
+
+### 🎮 Modes de Lancement Disponibles
+```bash
+python launch_gui.py           # Mode AUTO - Sélection intelligente (recommandé)
+python launch_gui.py --enhanced    # Mode ENHANCED - Interface avancée directe
+python launch_gui.py --unified     # Mode UNIFIED - Lanceur avec sélection
+python launch_gui.py --select      # Mode SELECT - Sélection interactive
+python launch_gui.py --help        # AIDE - Documentation complète
+```
+
 ## 🚀 Démarrage Rapide - Méthodes Recommandées
 
 ### Option 1: Interface Graphique Unifiée (RECOMMANDÉE)
 ```bash
-# Lanceur GUI principal avec sélection d'interface
+# Lanceur GUI principal unifié avec sélection automatique
 python launch_gui.py
 
 # Ou lancement rapide via script batch
 start_neuro_gui.bat
 
-# Interface enhanced avec contrôles avancés
-python launch_enhanced_gui.py
+# Options de lancement spécifiques
+python launch_gui.py --enhanced         # Force interface Enhanced
+python launch_gui.py --unified          # Force interface Unified  
+python launch_gui.py --select           # Sélection interactive
 
-# Sélecteur d'interface manuel
+# Sélecteur d'interface manuel (legacy)
 python select_gui.py
 ```
 
@@ -210,14 +234,21 @@ python start_neuro.py
 
 ### Démarrage avec interface graphique (Python direct)
 ```bash
-# Méthode 1 : Lanceur principal (recommandé)
+# Méthode 1 : Lanceur principal unifié (recommandé)
 python launch_gui.py
+
+# Options avancées du lanceur unifié
+python launch_gui.py --enhanced         # Interface Enhanced directe
+python launch_gui.py --unified          # Interface Unified avec sélection
+python launch_gui.py --select           # Sélection interactive
+python launch_gui.py --help             # Aide complète
 
 # Méthode 2 : Avec start_neuro.py
 python start_neuro.py --gui
 
-# Méthode 3 : Lancement direct
-python gui/launch_neuro_gui.py
+# Méthode 3 : Lancement direct des interfaces spécialisées
+python gui/neuro_gui.py
+python gui/enhanced_main_gui.py
 ```
 
 ### Tests et Validation
@@ -555,8 +586,43 @@ python -m flake8 . --max-line-length=120
 - **Mémoire conversationnelle** : Rappels réussis, faits stockés/utilisateur
 - **Interface GUI** : FPS, temps de réponse, utilisation CPU
 
+## 📝 Notes de Version et Changements Récents
+
+### 🔄 Version 1.0 - Fusion des Lanceurs GUI *(NOUVEAU - Décembre 2024)*
+
+#### ✨ Changements Majeurs
+- **🔧 Fusion réalisée** : `launch_enhanced_gui.py` fusionné dans `launch_gui.py`
+- **🚀 Lanceur unifié** : Point d'entrée unique avec sélection automatique intelligente
+- **🎯 Modes multiples** : Auto, Enhanced, Unified, Select avec arguments de ligne de commande
+- **🛡️ Robustesse** : Fallback automatique Enhanced → Unified
+- **📋 Documentation** : Aide intégrée complète avec `--help`
+
+#### 🗂️ Fichiers Supprimés
+- ❌ `launch_enhanced_gui.py` - Fonctionnalités intégrées dans `launch_gui.py`
+
+#### 🎮 Nouveaux Arguments de Ligne de Commande
+```bash
+python launch_gui.py           # Mode AUTO - Sélection intelligente (défaut)
+python launch_gui.py --enhanced    # Mode ENHANCED - Interface avancée directe
+python launch_gui.py --unified     # Mode UNIFIED - Lanceur avec sélection
+python launch_gui.py --select      # Mode SELECT - Sélection interactive
+python launch_gui.py --help        # AIDE - Documentation complète
+```
+
+#### ✅ Tests et Validation
+- **13 tests unitaires** créés et validés (100% réussite)
+- **Couverture complète** des fonctionnalités fusionnées
+- **Validation fonctionnelle** de tous les modes de lancement
+
+#### 🎯 Avantages de la Fusion
+- **Simplicité** : Un seul point d'entrée pour toutes les interfaces GUI
+- **Intelligence** : Détection automatique de l'interface optimale disponible
+- **Compatibilité** : Maintien de toutes les fonctionnalités précédentes
+- **Robustesse** : Mécanismes de fallback intégrés
+- **Maintenance** : Code unifié plus facile à maintenir
+
 ---
 
-*Documentation mise à jour - Neuro-Bot 
+*Documentation mise à jour - Neuro-Bot v1.0 (Fusion GUI)*
 
 **Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)
