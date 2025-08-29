@@ -38,9 +38,6 @@ faire un commit et en faire souvent
 
 
 
-vérifier si launch_gui fonctionne vraiment
-
-modifier le gui car il est nul
 
 
 
