@@ -572,15 +572,6 @@ gui/
 
 ---
 
-## 📚 Documentation Supplémentaire
-
-- **Scripts Batch** : `batch/README.md` - Documentation complète des scripts de lancement
-- **Lancement Rapide** : `batch/LANCEMENT.md` - Guide de démarrage simplifié
-- **État des Scripts** : `batch/STATUS.md` - État et diagnostic des scripts batch
-- **Thèmes GUI** : `gui/THEME_GUIDE.md` - Guide des thèmes d'interface graphique
-
----
-
 **Dernière mise à jour du README.md** : 29 août 2025 - 12:30  
 **Version** : v2.0 avec scripts batch intégrés  
 **Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)
