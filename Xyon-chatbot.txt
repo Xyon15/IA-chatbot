@@ -24,16 +24,12 @@ Améliorer le système de recherche web (trop de texte et aussi en anglais)
 
 demander quels param pour gpu-cpu use 
 
-faire une app au lieu de 2fa actuel
+
 
 --------------------------------------------------
-Effacer les logs sur l'app log ne fonctionne pas
+ajouter l'app pour voir les logs
 
-problèmes de crop sur le gui ( logs et stats)
-améliorer le design 
-voir dans command prompt le prble sur la gene context tokens
 
-faire un commit et en faire souvent
 
 
 
