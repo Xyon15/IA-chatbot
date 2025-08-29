@@ -275,16 +275,16 @@ class MainWindow(QWidget):
             import subprocess
             import sys
             
-            # Lance l'interface améliorée dans un nouveau processus
+            # Lance la nouvelle interface améliorée
             subprocess.Popen([
                 sys.executable, 
-                "bot_gui.py"  # Redirection vers le même GUI (pas d'interface "enhanced" séparée)
-            ], cwd=os.path.dirname(os.path.abspath(__file__)))
+                "launch_enhanced_gui.py"  # Lance la nouvelle interface améliorée
+            ], cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             
-            self.append_log("[INFO] Interface graphique lancée")
+            self.append_log("[INFO] Interface graphique améliorée lancée")
             
         except Exception as e:
-            self.append_log(f"[ERROR] Erreur lors du lancement de l'interface: {e}")
+            self.append_log(f"[ERROR] Erreur lors du lancement de l'interface améliorée: {e}")
     
     def open_log_viewer(self):
         """Ouvre le visualiseur de logs"""
