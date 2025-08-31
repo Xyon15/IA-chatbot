@@ -25,7 +25,13 @@ ajouter l'app pour voir les logs
 
 
 
+le gui se lance en plein écran mais pas le log viewer.
 
+
+Faire un petit projet sur un trucs pour les performances systèmes
+
+
+fermer les cmd quand fenêtres pythons fermées
 
 
 
