@@ -1,10 +1,10 @@
-# 🤖 IA-ChatBot (Neuro-Bot)
+# 🤖 IA-ChatBot (Kita-Bot)
 
 Développé par Xyon
 
 Idée principale de vedal (https://vedal.ai).
 
-**Neuro-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, optimisation GPU automatique, et une interface graphique moderne avec système de plugins extensible.
+**Kita-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, optimisation GPU automatique, et une interface graphique moderne avec système de plugins extensible.
 
 ## ✨ Fonctionnalités
 
