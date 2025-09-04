@@ -1,10 +1,10 @@
-# 🤖 IA-ChatBot (Kita-Bot)
+# 🤖 IA-ChatBot (Kira-Bot)
 
 Développé par Xyon
 
 Idée principale de vedal (https://vedal.ai).
 
-**Kita-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, optimisation GPU automatique, et une interface graphique moderne avec système de plugins extensible.
+**Kira-Bot** est un chatbot Discord intelligent alimenté par des modèles de langage locaux (LLM). Il offre des capacités de conversation avancées avec mémoire persistante, recherche web, optimisation GPU automatique, et une interface graphique moderne avec système de plugins extensible.
 
 ## ✨ Fonctionnalités
 
