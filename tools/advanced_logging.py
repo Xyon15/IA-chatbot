@@ -1,5 +1,5 @@
 """
-Module de logging avancé pour Neuro-Bot
+Module de logging avancé pour Kira-Bot
 Fournit un système de logs structuré avec interface graphique
 """
 
@@ -298,7 +298,7 @@ class AdvancedLogHandler(logging.Handler):
                 module=record.module if hasattr(record, 'module') else "",
                 function=record.funcName if hasattr(record, 'funcName') else "",
                 line_number=record.lineno if hasattr(record, 'lineno') else 0,
-                thread_id=record.thread if hasattr(record, 'thread') else 0,
+                thread_id=getattr(record, 'thread', 0) or 0,
                 user_id=getattr(record, 'user_id', None),
                 session_id=self.session_id
             )
@@ -316,7 +316,7 @@ class AdvancedLogHandler(logging.Handler):
 class LogManager:
     """Gestionnaire principal du système de logs avancé"""
     
-    def __init__(self, db_path: str, config_path: str = None):
+    def __init__(self, db_path: str, config_path: Optional[str] = None):
         self.db_path = db_path
         self.config_path = config_path or os.path.join(os.path.dirname(db_path), "log_config.json")
         
@@ -362,7 +362,7 @@ class LogManager:
         
         return default_config
     
-    def save_config(self, config: Dict = None):
+    def save_config(self, config: Optional[Dict] = None):
         """Sauvegarde la configuration"""
         try:
             config_to_save = config or self.config
@@ -391,7 +391,7 @@ class LogManager:
         from logging.handlers import RotatingFileHandler
         
         log_dir = os.path.dirname(self.db_path)
-        log_file = os.path.join(log_dir, "neuro_bot_advanced.log")
+        log_file = os.path.join(log_dir, "kira_bot_advanced.log")
         
         file_handler = RotatingFileHandler(
             log_file,
@@ -434,10 +434,17 @@ class LogManager:
         """Récupère les statistiques"""
         return self.log_db.get_log_stats(days)
     
-    def cleanup_logs(self, days_to_keep: int = None, cutoff_iso: str = None) -> int:
+    def cleanup_logs(self, days_to_keep: Optional[int] = None, cutoff_iso: Optional[str] = None) -> int:
         """Nettoie les anciens logs. Si cutoff_iso est fourni, utilise la date exacte."""
         if cutoff_iso:
-            return self.log_db.cleanup_before(cutoff_iso)
+            # Convertir cutoff_iso en nombre de jours depuis maintenant
+            try:
+                cutoff_date = datetime.fromisoformat(cutoff_iso)
+                days = (datetime.now() - cutoff_date).days
+                return self.log_db.cleanup_old_logs(max(1, days))
+            except ValueError:
+                # Si la date est invalide, utilise days_to_keep par défaut
+                pass
         days = days_to_keep or self.config.get("cleanup_days", 30)
         return self.log_db.cleanup_old_logs(days)
 
@@ -514,7 +521,7 @@ class LogManager:
 # Instance globale (sera initialisée par config.py)
 log_manager: Optional[LogManager] = None
 
-def init_advanced_logging(db_path: str, config_path: str = None) -> LogManager:
+def init_advanced_logging(db_path: str, config_path: Optional[str] = None) -> LogManager:
     """Initialise le système de logs avancé"""
     global log_manager
     log_manager = LogManager(db_path, config_path)

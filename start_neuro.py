@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script de démarrage unifié pour Neuro-Bot
+Script de démarrage unifié pour Kira-Bot
 Combine validation, optimisation GPU et démarrage sécurisé
 """
 
@@ -138,9 +138,9 @@ def check_vram_availability():
             gpu_name = gpu_name.decode()
         
         mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-        vram_total = mem_info.total // (1024**2)  # MB
-        vram_free = mem_info.free // (1024**2)   # MB
-        vram_used = mem_info.used // (1024**2)   # MB
+        vram_total = int(mem_info.total) // (1024**2)  # MB
+        vram_free = int(mem_info.free) // (1024**2)   # MB
+        vram_used = int(mem_info.used) // (1024**2)   # MB
         
         pynvml.nvmlShutdown()
         
@@ -337,7 +337,7 @@ async def start_bot_safe():
         from bot import start_bot
         from config import logger
         
-        logger.info("Démarrage du bot Neuro...")
+        logger.info("Démarrage du bot Kira...")
         print("🚀 Démarrage du bot Discord...")
         
         await start_bot()
@@ -363,8 +363,8 @@ def start_gui():
     
     # Essayer les différents modules GUI disponibles dans le bon ordre
     gui_modules = [
-        ("gui.launch_neuro_gui", "Interface moderne", "launch_gui"),
-        ("gui.bot_gui", "Interface graphique", "main"),
+        ("gui.launch_kira_gui", "Interface moderne", "launch_gui"),
+        ("gui.kira_gui", "Interface graphique", "main"),
         ("launch_gui", "Interface de redirection", "main")
     ]
     
@@ -398,7 +398,7 @@ def start_gui():
 
 def main():
     """Fonction principale"""
-    print("🤖 Neuro-Bot - Démarrage Unifié")
+    print("🤖 Kira-Bot - Démarrage Unifié")
     print("=" * 50)
     
     # Mode de fonctionnement

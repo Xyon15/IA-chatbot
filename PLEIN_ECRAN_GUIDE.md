@@ -1,8 +1,8 @@
-# 🖥️ Guide Plein Écran - Neuro-Bot
+# 🖥️ Guide Plein Écran - Kira-Bot
 
 ## 🎯 **Modifications apportées**
 
-### ✅ **1. Interface principale Neuro-Bot**
+### ✅ **1. Interface principale Kira-Bot**
 **Fichier modifié :** `gui/enhanced_main_gui.py`
 
 #### Améliorations :
@@ -14,7 +14,7 @@
 ```python
 # Lancement automatique en plein écran
 self.showMaximized()
-print("🖥️ Interface Neuro-Bot lancée en plein écran")
+print("🖥️ Interface Kira-Bot lancée en plein écran")
 ```
 
 ### ✅ **2. Log Viewer**
@@ -35,36 +35,36 @@ print("🖥️ Log Viewer lancé en plein écran")
 ### ✅ **3. Nouveaux lanceurs rapides**
 
 #### **Lanceurs Python :**
-- 📄 `launch_neuro_fullscreen.py` - Interface principale
+- 📄 `launch_kira_fullscreen.py` - Interface principale
 - 📄 `launch_logs_fullscreen.py` - Visualiseur de logs
 
 #### **Lanceurs Windows (.bat) :**
-- 🖱️ `START_NEURO_FULLSCREEN.bat` - Double-clic pour Neuro-Bot
+- 🖱️ `START_KIRA_FULLSCREEN.bat` - Double-clic pour Kira-Bot
 - 🖱️ `START_LOGS_FULLSCREEN.bat` - Double-clic pour Log Viewer
 
 ## 🚀 **Comment utiliser**
 
 ### **🎮 Méthode 1 : Double-clic (Windows)**
 ```
-Double-clic sur START_NEURO_FULLSCREEN.bat     → Interface Neuro-Bot
+Double-clic sur START_KIRA_FULLSCREEN.bat     → Interface Kira-Bot
 Double-clic sur START_LOGS_FULLSCREEN.bat      → Log Viewer
 ```
 
 ### **🐍 Méthode 2 : Python direct**
 ```bash
-python launch_neuro_fullscreen.py              # Interface principale
+python launch_kira_fullscreen.py              # Interface principale
 python launch_logs_fullscreen.py               # Log Viewer
 ```
 
 ### **⌨️ Méthode 3 : Lanceurs existants**
 ```bash
-python launch_gui.py                            # Interface Neuro-Bot normale
+python launch_gui.py                            # Interface Kira-Bot normale
 python gui/tools/log_viewer_gui.py              # Log Viewer normal
 ```
 
 ## ⌨️ **Raccourcis clavier**
 
-### **Interface Neuro-Bot :**
+### **Interface Kira-Bot :**
 | Raccourci | Action |
 |-----------|---------|
 | **F5** | Démarrer/Arrêter le bot |
@@ -92,9 +92,9 @@ python gui/tools/log_viewer_gui.py              # Log Viewer normal
 
 ## 📊 **Tests réussis**
 
-### ✅ **Interface Neuro-Bot :**
+### ✅ **Interface Kira-Bot :**
 ```
-🚀 Lancement de Neuro-Bot en plein écran...
+🚀 Lancement de Kira-Bot en plein écran...
 📍 Interface principale avec monitoring avancé
 🔧 Raccourcis: F11=Plein écran, F5=Bot ON/OFF, F1=Aide
 ✅ Modèle chargé correctement
@@ -137,4 +137,4 @@ Vous disposez maintenant de :
 - ✅ **Raccourcis F11** pour basculer facilement
 - ✅ **Optimisation complète** pour l'usage plein écran
 
-**🎯 Mission accomplie !** Vos interfaces Neuro-Bot sont maintenant parfaitement adaptées au plein écran avec un contrôle total via les raccourcis clavier.
+**🎯 Mission accomplie !** Vos interfaces Kira-Bot sont maintenant parfaitement adaptées au plein écran avec un contrôle total via les raccourcis clavier.

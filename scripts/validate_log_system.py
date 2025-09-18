@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script de validation complète du système de logs Neuro-Bot
+Script de validation complète du système de logs Kira-Bot
 """
 
 import sys
@@ -100,7 +100,7 @@ def check_log_viewer():
     
     try:
         # Test d'import sans affichage
-        from gui.tools.enhanced_log_viewer import EnhancedLogViewer, NeuroTheme, FilterPanel
+        from gui.tools.log_viewer_gui import LogViewerMainWindow, KiraTheme, LogTableWidget
         print("  ✅ Modules visionneur importés")
         
         # Test d'import des dépendances PySide6
@@ -195,7 +195,7 @@ def generate_report():
     
     report = {
         "timestamp": datetime.now().isoformat(),
-        "system": "Neuro-Bot Log Viewer System",
+    "system": "Kira-Bot Log Viewer System",
         "version": "1.0.0",
         "validation_results": {}
     }
@@ -243,7 +243,7 @@ def generate_report():
 
 def main():
     """Fonction principale de validation"""
-    print("🚀 Validation Complète du Système de Logs Neuro-Bot")
+    print("🚀 Validation Complète du Système de Logs Kira-Bot")
     print("=" * 70)
     print(f"📅 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"📁 Répertoire: {project_root}")

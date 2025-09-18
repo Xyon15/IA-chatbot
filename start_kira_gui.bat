@@ -1,10 +1,10 @@
 @echo off
-title Neuro-Bot - Interface Graphique Principale
+title Kira-Bot - Interface Graphique Principale
 color 0B
 
 echo.
 echo ===============================================
-echo       NEURO-BOT - INTERFACE GRAPHIQUE
+echo       KIRA-BOT - INTERFACE GRAPHIQUE
 echo               Version Consolidee
 echo ===============================================
 echo.
@@ -86,7 +86,7 @@ if errorlevel 1 (
 ) else (
     echo.
     echo [OK] Interface graphique fermee proprement
-    echo Merci d'avoir utilise Neuro-Bot!
+    echo Merci d'avoir utilise Kira-Bot!
 )
 
 echo.

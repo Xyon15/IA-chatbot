@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Système de plugins pour NeuroBot GUI
+Système de plugins pour KiraBot GUI
 Permet d'ajouter facilement des fonctionnalités personnalisées
 """
 
 import os
 import sys
 import importlib
+import importlib.util
 import inspect
 from typing import Dict, List, Any, Optional, Callable
 from abc import ABC, abstractmethod
@@ -21,7 +22,7 @@ class PluginBase(ABC):
         self.name = "Plugin de base"
         self.version = "1.0.0"
         self.description = "Plugin de base"
-        self.author = "NeuroBot"
+        self.author = "KiraBot"
         self.enabled = True
         
     @abstractmethod
@@ -57,7 +58,7 @@ class SystemInfoPlugin(PluginBase):
         self.name = "Infos Système"
         self.version = "1.0.0"
         self.description = "Affiche des informations détaillées sur le système"
-        self.author = "NeuroBot Team"
+        self.author = "KiraBot Team"
         self.widget = None
         
     def initialize(self) -> bool:
@@ -131,7 +132,7 @@ class NetworkMonitorPlugin(PluginBase):
         self.name = "Monitor Réseau"
         self.version = "1.0.0"
         self.description = "Surveillance du trafic réseau en temps réel"
-        self.author = "NeuroBot Team"
+        self.author = "KiraBot Team"
         self.widget = None
         
     def initialize(self) -> bool:
@@ -240,24 +241,25 @@ class PluginManager(QObject):
             # Import du module
             module_name = os.path.splitext(os.path.basename(filepath))[0]
             spec = importlib.util.spec_from_file_location(module_name, filepath)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
+            if spec is not None and spec.loader is not None:
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
             
-            # Recherche des classes de plugins dans le module
-            for name, obj in inspect.getmembers(module):
-                if (inspect.isclass(obj) and 
-                    issubclass(obj, PluginBase) and 
-                    obj != PluginBase):
-                    
-                    plugin = obj()
-                    if plugin.initialize():
-                        plugin_id = f"file_{module_name}"
-                        self.plugins[plugin_id] = plugin
-                        self.plugin_loaded.emit(plugin_id)
-                        return True
-                    else:
-                        self.plugin_error.emit(module_name, "Échec de l'initialisation")
-                        return False
+                # Recherche des classes de plugins dans le module
+                for name, obj in inspect.getmembers(module):
+                    if (inspect.isclass(obj) and 
+                        issubclass(obj, PluginBase) and 
+                        obj != PluginBase):
+                        
+                        plugin = obj()
+                        if plugin.initialize():
+                            plugin_id = f"file_{module_name}"
+                            self.plugins[plugin_id] = plugin
+                            self.plugin_loaded.emit(plugin_id)
+                            return True
+                        else:
+                            self.plugin_error.emit(module_name, "Échec de l'initialisation")
+                            return False
                         
         except Exception as e:
             self.plugin_error.emit(filepath, str(e))

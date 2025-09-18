@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Démonstration du système de logs avancé de Neuro-Bot
+Démonstration du système de logs avancé de Kira-Bot
 """
 
 import sys
@@ -188,15 +188,15 @@ def demo_gui_integration():
     
     try:
         # Test d'import des composants GUI
-        from tools.log_viewer_gui import (
+        from gui.tools.log_viewer_gui import (
             LogTableWidget, LogStatsWidget, 
-            LogFilterWidget, NotificationWidget
+            LogFilterWidget, LogViewerMainWindow
         )
         
         print("✅ Composants GUI importés avec succès")
         
         # Test de l'interface principale
-        from bot_gui_enhanced import EnhancedMainWindow
+        from gui.enhanced_main_gui import MainInterface
         print("✅ Interface principale disponible")
         
         print("🎨 Interfaces disponibles:")
@@ -275,7 +275,7 @@ def main():
     print("🎬 DÉMONSTRATION DU SYSTÈME DE LOGS AVANCÉ")
     print("=" * 60)
     print("Cette démonstration présente toutes les fonctionnalités")
-    print("du nouveau système de logs de Neuro-Bot")
+    print("du nouveau système de logs de Kira-Bot")
     print("=" * 60)
     
     try:

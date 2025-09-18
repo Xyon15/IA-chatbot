@@ -1,4 +1,4 @@
-# 🚀 Lanceurs du Système de Logs Neuro-Bot
+# 🚀 Lanceurs du Système de Logs Kira-Bot
 
 ## 📋 Fichiers disponibles
 
@@ -46,7 +46,7 @@ Les deux lanceurs vérifient automatiquement :
 ## 🎨 Fonctionnalités
 
 ### Interface Console
-- ✅ **Couleurs modernes** : Vert/Cyan pour Neuro-Bot
+- ✅ **Couleurs modernes** : Vert/Cyan pour Kira-Bot
 - ✅ **Messages clairs** : Emojis et statuts explicites
 - ✅ **Gestion d'erreurs** : Messages d'aide en cas de problème
 - ✅ **Pause intelligente** : Attend une action utilisateur en cas d'erreur
@@ -102,4 +102,4 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ---
 
-*🤖 Créé pour Neuro-Bot - Système de logs unifié*
+*🤖 Créé pour Kira-Bot - Système de logs unifié*

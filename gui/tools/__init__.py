@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Outils GUI pour NeuroBot
+Outils GUI pour KiraBot
 """

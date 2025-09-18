@@ -1,8 +1,8 @@
-# 🚀 Visionneur de Logs Avancé Neuro-Bot
+# 🚀 Visionneur de Logs Avancé Kira-Bot
 
 ## 📋 Vue d'ensemble
 
-Le **Visionneur de Logs Avancé** est une interface moderne et intuitive pour analyser les logs de Neuro-Bot. Il reprend le thème visuel du GUI principal avec des couleurs néon et une interface sombre futuriste.
+Le **Visionneur de Logs Avancé** est une interface moderne et intuitive pour analyser les logs de Kira-Bot. Il reprend le thème visuel du GUI principal avec des couleurs néon et une interface sombre futuriste.
 
 ## ✨ Fonctionnalités
 
@@ -169,4 +169,4 @@ Le visionneur log ses propres actions dans le système. En cas de problème, con
 
 ---
 
-**Développé pour Neuro-Bot** 🤖 | **Thème moderne** avec couleurs néon | **Interface intuitive** et performante
+**Développé pour Kira-Bot** 🤖 | **Thème moderne** avec couleurs néon | **Interface intuitive** et performante

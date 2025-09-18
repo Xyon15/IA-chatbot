@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Lanceur GUI principal unifié pour Neuro-Bot
+Lanceur GUI principal unifié pour Kira-Bot
 Fusion intelligente des lanceurs avec sélection automatique de l'interface optimale
 """
 
@@ -93,7 +93,7 @@ def show_main_banner():
     """Affiche la bannière principale fusionnée"""
     banner = """
     ╔══════════════════════════════════════════════════════════╗
-    ║                    🤖 NEUROBOT GUI                       ║
+    ║                    🤖 KIRABOT GUI                       ║
     ║                  Lanceur Principal                       ║
     ╠══════════════════════════════════════════════════════════╣
     ║                                                          ║
@@ -136,7 +136,7 @@ def auto_select_best_method():
 def main():
     """Fonction principale fusionnée avec sélection intelligente"""
     parser = argparse.ArgumentParser(
-        description="Lanceur GUI principal unifié pour Neuro-Bot",
+        description="Lanceur GUI principal unifié pour Kira-Bot",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemples d'utilisation:

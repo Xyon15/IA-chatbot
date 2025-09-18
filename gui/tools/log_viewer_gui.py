@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Visionneur de Logs Unifié pour Neuro-Bot
+Visionneur de Logs Unifié pour Kira-Bot
 Fusion optimisée : fonctionnalités complètes + thème moderne
 """
 
@@ -36,7 +36,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from tools.advanced_logging import LogManager, LogEntry, LogLevel, get_log_manager
 
-# Configuration des couleurs - thème moderne Neuro-Bot
+# Configuration des couleurs - thème moderne Kira-Bot
 COLOR_PALETTE = {
     'bg_primary': '#0f0f0f',       # Noir très profond
     'bg_secondary': '#1a1a1a',     # Noir profond
@@ -54,29 +54,29 @@ COLOR_PALETTE = {
     'neutral': '#666666'           # Gris neutre
 }
 
-class NeuroTheme:
-    """Thème moderne unifié pour Neuro-Bot"""
+class KiraTheme:
+    """Thème moderne unifié pour Kira-Bot"""
     
     @staticmethod
     def apply(app: QApplication):
-        """Applique le thème Neuro-Bot"""
+        """Applique le thème Kira-Bot"""
         app.setStyle('Fusion')
         
         # Palette de couleurs
         palette = QPalette()
-        palette.setColor(QPalette.Window, QColor(COLOR_PALETTE['bg_primary']))
-        palette.setColor(QPalette.WindowText, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.Base, QColor(COLOR_PALETTE['bg_secondary']))
-        palette.setColor(QPalette.AlternateBase, QColor(COLOR_PALETTE['bg_tertiary']))
-        palette.setColor(QPalette.ToolTipBase, QColor(COLOR_PALETTE['bg_secondary']))
-        palette.setColor(QPalette.ToolTipText, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.Text, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.Button, QColor(COLOR_PALETTE['bg_tertiary']))
-        palette.setColor(QPalette.ButtonText, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.BrightText, QColor(COLOR_PALETTE['error']))
-        palette.setColor(QPalette.Link, QColor(COLOR_PALETTE['accent_blue']))
-        palette.setColor(QPalette.Highlight, QColor(COLOR_PALETTE['accent_blue']))
-        palette.setColor(QPalette.HighlightedText, QColor(COLOR_PALETTE['bg_primary']))
+        palette.setColor(QPalette.ColorRole.Window, QColor(COLOR_PALETTE['bg_primary']))
+        palette.setColor(QPalette.ColorRole.WindowText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.Base, QColor(COLOR_PALETTE['bg_secondary']))
+        palette.setColor(QPalette.ColorRole.AlternateBase, QColor(COLOR_PALETTE['bg_tertiary']))
+        palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(COLOR_PALETTE['bg_secondary']))
+        palette.setColor(QPalette.ColorRole.ToolTipText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.Text, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.Button, QColor(COLOR_PALETTE['bg_tertiary']))
+        palette.setColor(QPalette.ColorRole.ButtonText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.BrightText, QColor(COLOR_PALETTE['error']))
+        palette.setColor(QPalette.ColorRole.Link, QColor(COLOR_PALETTE['accent_blue']))
+        palette.setColor(QPalette.ColorRole.Highlight, QColor(COLOR_PALETTE['accent_blue']))
+        palette.setColor(QPalette.ColorRole.HighlightedText, QColor(COLOR_PALETTE['bg_primary']))
         
         app.setPalette(palette)
         
@@ -298,7 +298,7 @@ class StatsCard(QFrame):
     def __init__(self, title: str, icon: str, value: str = "0"):
         super().__init__()
         self.setFixedHeight(75)  # Plus compact
-        self.setFrameStyle(QFrame.Box)
+        self.setFrameStyle(QFrame.Shape.Box)
         
         layout = QVBoxLayout(self)
         layout.setContentsMargins(12, 8, 12, 8)
@@ -323,7 +323,7 @@ class StatsCard(QFrame):
         # Valeur
         self.value_label = QLabel(value)
         self.value_label.setStyleSheet(f"color: {COLOR_PALETTE['text_primary']}; font-size: 14px; font-weight: bold;")
-        self.value_label.setAlignment(Qt.AlignCenter)
+        self.value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.value_label)
         
         # Style de la carte
@@ -356,17 +356,17 @@ class LogTableWidget(QTableWidget):
         
         # Configuration
         self.setAlternatingRowColors(True)
-        self.setSelectionBehavior(QTableWidget.SelectRows)
+        self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setSortingEnabled(True)
         
         # Redimensionnement des colonnes
         header = self.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)  # Timestamp
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)  # Level
-        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)  # Logger
-        header.setSectionResizeMode(3, QHeaderView.Stretch)           # Message
-        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)  # Module
-        header.setSectionResizeMode(5, QHeaderView.ResizeToContents)  # Function
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # Timestamp
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Level
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Logger
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)           # Message
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)  # Module
+        header.setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)  # Function
         
     def add_log_entry(self, entry: LogEntry):
         """Ajoute une entrée de log à la table"""
@@ -375,14 +375,14 @@ class LogTableWidget(QTableWidget):
         
         # Timestamp
         timestamp_item = QTableWidgetItem(entry.timestamp.strftime("%Y-%m-%d %H:%M:%S"))
-        timestamp_item.setData(Qt.UserRole, entry.timestamp)
+        timestamp_item.setData(Qt.ItemDataRole.UserRole, entry.timestamp)
         self.setItem(row, 0, timestamp_item)
         
         # Level avec couleur
         level_item = QTableWidgetItem(entry.level.value[0])
         level_color = QColor(entry.level.value[1])
         level_item.setForeground(level_color)
-        level_item.setData(Qt.UserRole, entry.level.value[0])
+        level_item.setData(Qt.ItemDataRole.UserRole, entry.level.value[0])
         self.setItem(row, 1, level_item)
         
         # Logger
@@ -431,8 +431,8 @@ class LogStatsWidget(QWidget):
         
         # Titre plus compact
         title = QLabel("📊 Statistiques")
-        title.setFont(QFont("Arial", 12, QFont.Bold))
-        title.setAlignment(Qt.AlignCenter)
+        title.setFont(QFont("Arial", 12, QFont.Weight.Bold))
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet(f"color: {COLOR_PALETTE['accent_blue']}; margin-bottom: 5px;")
         layout.addWidget(title)
         
@@ -671,7 +671,7 @@ class LogViewerMainWindow(QMainWindow):
         
     def setup_ui(self):
         """Configure l'interface utilisateur"""
-        self.setWindowTitle("🤖 Neuro-Bot - Visionneur de Logs Unifié")
+        self.setWindowTitle("🤖 Kira-Bot - Visionneur de Logs Unifié")
         self.setGeometry(100, 100, 1200, 700)
         
         # Lancement automatique en plein écran
@@ -688,7 +688,7 @@ class LogViewerMainWindow(QMainWindow):
         main_layout.setSpacing(8)
         
         # Splitter principal
-        main_splitter = QSplitter(Qt.Horizontal)
+        main_splitter = QSplitter(Qt.Orientation.Horizontal)
         main_layout.addWidget(main_splitter)
         
         # Panel gauche - Filtres et statistiques
@@ -717,7 +717,7 @@ class LogViewerMainWindow(QMainWindow):
         # En-tête
         header_layout = QHBoxLayout()
         title_label = QLabel("📋 Logs en Temps Réel")
-        title_label.setFont(QFont("Arial", 14, QFont.Bold))
+        title_label.setFont(QFont("Arial", 14, QFont.Weight.Bold))
         title_label.setStyleSheet(f"color: {COLOR_PALETTE['accent_blue']};")
         header_layout.addWidget(title_label)
         
@@ -875,7 +875,7 @@ class LogViewerMainWindow(QMainWindow):
         file_path, selected_filter = QFileDialog.getSaveFileName(
             self,
             "Exporter les logs",
-            f"neuro_logs_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            f"kira_logs_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             "JSON (*.json);;CSV (*.csv);;Texte (*.txt)"
         )
         
@@ -917,10 +917,10 @@ class LogViewerMainWindow(QMainWindow):
             "Confirmation",
             f"Voulez-vous vraiment supprimer tous les logs de plus de {days} jours?\n"
             f"Cette action est irréversible.",
-            QMessageBox.Yes | QMessageBox.No
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         
-        if reply == QMessageBox.Yes:
+        if reply == QMessageBox.StandardButton.Yes:
             try:
                 deleted_count = self.log_manager.cleanup_old_logs(days)
                 QMessageBox.information(
@@ -951,8 +951,8 @@ def main():
     else:
         need_exec = False
     
-    # Applique le thème Neuro-Bot unifié
-    NeuroTheme.apply(app)
+    # Applique le thème Kira-Bot unifié
+    KiraTheme.apply(app)
     
     # Crée la fenêtre principale
     window = LogViewerMainWindow()

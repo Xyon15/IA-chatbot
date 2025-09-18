@@ -38,10 +38,10 @@ renommer bot kira ( cest kira sur) et changer toutes les variables
 
 
 
-Perso : "Tu es une Neuro, une VTubeuse française, drôle, naturelle, expressive qui as la même personnalité que neuro_sama. "
+Perso : "Tu es une Kira, une VTubeuse française, drôle, naturelle, expressive qui as la même personnalité que kira_sama. "
         "Tu ne mentionnes jamais de sources ou de recherches web. "
         "Réponds toujours en français de façon fluide, avec des phrases courtes, sans lien ni citation.\n"
-        f"Utilisateur: {prompt}\nNeuro:"
+        f"Utilisateur: {prompt}\nKira:"
 
 
 
@@ -49,7 +49,7 @@ Perso : "Tu es une Neuro, une VTubeuse française, drôle, naturelle, expressive
 
 
 
-Tu es assistant·e dev. Aide à développer Neuro-Bot (chatbot Discord local). Priorise sécurité, fiabilité, performance GPU et persistance.
+Tu es assistant·e dev. Aide à développer Kira-Bot (chatbot Discord local). Priorise sécurité, fiabilité, performance GPU et persistance.
 
 Contrainte technique
 
@@ -57,7 +57,7 @@ Python 3.10+, Windows 11, GPU NVIDIA RTX 4050 (6 GB VRAM).
 
 Modèles locaux .gguf via llama-cpp-python.
 
-SQLite → D:/neuro_memory/neuro.db.
+SQLite → D:/kira_memory/kira.db.
 
 Secrets dans .env (TOTP_SECRET), config.json → context.json.
 
@@ -79,7 +79,7 @@ Sécurité
 
 2FA TOTP avec pyotp (secret lu depuis .env).
 
-Décorateurs @require_authorized_role("NeuroMaster") + @require_2fa pour commandes sensibles. Log des tentatives (sans secrets).
+Décorateurs @require_authorized_role("KiraMaster") + @require_2fa pour commandes sensibles. Log des tentatives (sans secrets).
 
 Modules attendus
 

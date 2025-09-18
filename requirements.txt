@@ -1,4 +1,4 @@
-# Neuro-Bot Dependencies
+# Kira-Bot Dependencies
 # Discord
 discord.py>=2.3.0
 

@@ -41,7 +41,7 @@ Idée principale de vedal (https://vedal.ai).
 ```
 c:\Dev\IA-chatbot\
 ├── 📝 README.md           # Documentation du projet
-├── 🚀 start_neuro.py      # Script de démarrage principal
+├── 🚀 start_kira.py      # Script de démarrage principal
 ├── 🖥️ launch_gui.py       # Lanceur GUI principal unifié avec sélection automatique (recommandé)
 ├── 🖥️ select_gui.py       # Sélecteur d'interface GUI
 ├── 🤖 bot.py              # Bot Discord principal 
@@ -58,7 +58,7 @@ c:\Dev\IA-chatbot\
 ├── 📁 zen rapports/       # Rapports techniques et documentation avancée
 ├── 📁 gui/                # Interface graphique modulaire
 │   ├── 🎯 launch_gui.py   # Lanceur GUI unifié (PRINCIPAL)
-│   ├── 🎨 neuro_gui.py    # Interface GUI moderne
+│   ├── 🎨 kira_gui.py    # Interface GUI moderne
 │   ├── 🔧 enhanced_main_gui.py # Interface GUI enhanced avec contrôles avancés
 │   ├── 📊 chart_widgets.py # Widgets de graphiques temps réel
 │   ├── 🎨 theme_manager.py # Gestionnaire de thèmes dynamiques
@@ -101,13 +101,13 @@ c:\Dev\IA-chatbot\
 │   ├── mistral-7b-instruct-v0.2.Q5_K_M.gguf
 │   └── phi-2.Q5_K_M.gguf
 ├── 📁 data/               # Base de données et logs
-│   ├── 🗄️ neuro.db        # SQLite avec index optimisés et pool de connexions
+│   ├── 🗄️ kira.db        # SQLite avec index optimisés et pool de connexions
 │   ├── 📊 logs.db         # Base de données des logs avancés (NOUVEAU)
-│   └── 📄 neuro_bot_advanced.log # Logs avancés avec rotation (NOUVEAU)
+│   └── 📄 kira_bot_advanced.log # Logs avancés avec rotation (NOUVEAU)
 ├── 📁 logs/               # Logs système legacy
-│   └── 📄 neuro_bot.log   # Logging standard (legacy)
+│   └── 📄 kira_bot.log   # Logging standard (legacy)
 ├── 📁 llama-venv/         # Environnement virtuel Python optimisé
-├── 🔧 start_neuro_gui.bat # Script de lancement GUI rapide (NOUVEAU)
+├── 🔧 start_kira_gui.bat # Script de lancement GUI rapide (NOUVEAU)
 ```
 
 ## 🚀 Installation
@@ -193,7 +193,7 @@ python launch_gui.py --help        # AIDE - Documentation complète
 python launch_gui.py
 
 # Ou lancement rapide via script batch
-start_neuro_gui.bat
+start_kira_gui.bat
 
 # Options de lancement spécifiques
 python launch_gui.py --enhanced         # Force interface Enhanced
@@ -207,16 +207,16 @@ python select_gui.py
 ### Option 2: Bot Discord Direct
 ```bash
 # Démarrage du bot Discord avec optimisation automatique
-python start_neuro.py
+python start_kira.py
 
 # Démarrage avec interface graphique intégrée
-python start_neuro.py --gui
+python start_kira.py --gui
 ```
 
 ### Option 3: Interfaces Spécialisées
 ```bash
 # Interface GUI moderne principale
-python gui/neuro_gui.py
+python gui/kira_gui.py
 
 # Interface GUI enhanced avec monitoring avancé
 python gui/enhanced_main_gui.py
@@ -229,7 +229,7 @@ python gui/tools/log_viewer_gui.py
 
 ### Démarrage du bot Discord (Python direct)
 ```bash
-python start_neuro.py
+python start_kira.py
 ```
 
 ### Démarrage avec interface graphique (Python direct)
@@ -243,18 +243,18 @@ python launch_gui.py --unified          # Interface Unified avec sélection
 python launch_gui.py --select           # Sélection interactive
 python launch_gui.py --help             # Aide complète
 
-# Méthode 2 : Avec start_neuro.py
-python start_neuro.py --gui
+# Méthode 2 : Avec start_kira.py
+python start_kira.py --gui
 
 # Méthode 3 : Lancement direct des interfaces spécialisées
-python gui/neuro_gui.py
+python gui/kira_gui.py
 python gui/enhanced_main_gui.py
 ```
 
 ### Tests et Validation
 ```bash
 # Tests unitaires et d'intégration
-python "zen tests/test_start_neuro.py"
+python "zen tests/test_start_kira.py"
 python "zen tests/integration_test.py"
 
 # Tests avec pytest (recommandé)
@@ -270,15 +270,15 @@ python gui/tools/log_viewer_gui.py
 ### Commandes Discord
 
 #### 💬 Conversation
-- Mentionnez simplement `@Neuro-Bot` ou envoyez un message sans préfixe `!`
+- Mentionnez simplement `@Kira-Bot` ou envoyez un message sans préfixe `!`
 - Le bot répondra en utilisant son IA et sa mémoire
 
 #### 🔧 Commandes administratives
-*(Nécessite le rôle "NeuroMaster" - Authentification 2FA uniquement pour commandes critiques)*
+*(Nécessite le rôle "KiraMaster" - Authentification 2FA uniquement pour commandes critiques)*
 
 | Commande | Description | Sécurité |
 |----------|-------------|----------|
-| | | *✅ = Rôle "NeuroMaster" requis* |
+| | | *✅ = Rôle "KiraMaster" requis* |
 | | | *🔒 2FA = Rôle + Code 2FA* |
 | `!helpme` | Affiche l'aide complète | ✅ |
 | `!stats` | Statistiques système et GPU temps réel | ✅ |
@@ -419,7 +419,7 @@ AUTH_SECRET=votre_secret_totp_personnalise
   "handlers": {
     "file": {
       "class": "logging.handlers.RotatingFileHandler",
-      "filename": "data/neuro_bot_advanced.log",
+      "filename": "data/kira_bot_advanced.log",
       "maxBytes": 10485760,
       "backupCount": 5,
       "formatter": "detailed"
@@ -431,7 +431,7 @@ AUTH_SECRET=votre_secret_totp_personnalise
 ### Variables d'environnement
 - `DISCORD_TOKEN` : Token du bot Discord (obligatoire)
 - `AUTH_SECRET` : Secret pour l'authentification 2FA TOTP (obligatoire)
-- `DB_PATH` : Chemin vers la base de données SQLite (optionnel, défaut: data/neuro.db)
+- `DB_PATH` : Chemin vers la base de données SQLite (optionnel, défaut: data/kira.db)
 - `LOG_LEVEL` : Niveau de logging (optionnel, défaut: INFO)
 
 ## 🖥️ Interfaces Graphiques Modernes
@@ -444,7 +444,7 @@ AUTH_SECRET=votre_secret_totp_personnalise
 - **Lancement sécurisé** avec gestion d'exceptions
 
 ### 🎨 Interface GUI Moderne 
-**Commande** : `python gui/neuro_gui.py`
+**Commande** : `python gui/kira_gui.py`
 - **Design moderne** avec thème sombre adaptatif
 - **Notifications toast** animées et non-intrusives
 - **Graphiques temps réel** GPU/CPU/Mémoire
@@ -482,9 +482,9 @@ AUTH_SECRET=votre_secret_totp_personnalise
 ### 📈 Logging Multi-niveaux
 ```bash
 # Configuration automatique avec rotation
-data/neuro_bot_advanced.log      # Log principal avec rotation 10MB
+data/kira_bot_advanced.log      # Log principal avec rotation 10MB
 data/logs.db                     # Base de données logs structurés  
-logs/neuro_bot.log              # Legacy logging (compatibilité)
+logs/kira_bot.log              # Legacy logging (compatibilité)
 ```
 
 ## 🚨 Résolution de Problèmes Modernes
@@ -504,7 +504,7 @@ python -c "import discord, llama_cpp, PySide6; print('✅ Dépendances OK')"
 python -c "from tools.gpu_optimizer import GPUOptimizer; GPUOptimizer().get_gpu_info()"
 
 # Optimisation automatique
-python start_neuro.py --optimize-gpu
+python start_kira.py --optimize-gpu
 ```
 
 ### 🔒 Erreurs d'Authentification
@@ -564,7 +564,7 @@ class MonPlugin(PluginBase):
 pytest "zen tests/" -v --cov
 
 # Tests d'intégration système
-python "zen tests/test_start_neuro.py"
+python "zen tests/test_start_kira.py"
 python "zen tests/integration_test.py"
 
 # Validation du code
@@ -623,6 +623,6 @@ python launch_gui.py --help        # AIDE - Documentation complète
 
 ---
 
-*Documentation mise à jour - Neuro-Bot v1.0 (Fusion GUI)*
+*Documentation mise à jour - Kira-Bot v1.0 (Fusion GUI)*
 
 **Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)

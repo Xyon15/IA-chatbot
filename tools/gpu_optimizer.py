@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Optimiseur GPU Avancé pour Neuro-Bot
+Optimiseur GPU Avancé pour Kira-Bot
 Optimise automatiquement les performances GPU et gère les profils adaptatifs
 """
 
@@ -330,16 +330,16 @@ class GPUOptimizer:
             
             return GPUMetrics(
                 name=gpu_name,
-                vram_total_mb=mem_info.total // (1024**2),
-                vram_used_mb=mem_info.used // (1024**2),
-                vram_free_mb=mem_info.free // (1024**2),
-                usage_percent=(mem_info.used / mem_info.total) * 100,
+                vram_total_mb=int(mem_info.total) // (1024**2),
+                vram_used_mb=int(mem_info.used) // (1024**2),
+                vram_free_mb=int(mem_info.free) // (1024**2),
+                usage_percent=(int(mem_info.used) / int(mem_info.total)) * 100,
                 temperature_c=temperature,
                 power_usage_w=power_usage,
                 clock_graphics_mhz=clock_info,
                 clock_memory_mhz=memory_clock,
-                utilization_gpu=gpu_util,
-                utilization_memory=mem_util,
+                utilization_gpu=int(gpu_util),
+                utilization_memory=int(mem_util),
                 timestamp=datetime.now()
             )
             
@@ -359,9 +359,11 @@ class GPUOptimizer:
             # Température CPU si disponible
             cpu_temp = None
             try:
-                temps = psutil.sensors_temperatures()
-                if 'coretemp' in temps:
-                    cpu_temp = max(temp.current for temp in temps['coretemp'])
+                sensors_temperatures = getattr(psutil, 'sensors_temperatures', None)
+                if sensors_temperatures:
+                    temps = sensors_temperatures()
+                    if 'coretemp' in temps:
+                        cpu_temp = max(temp.current for temp in temps['coretemp'])
             except:
                 pass
             
@@ -406,12 +408,13 @@ class GPUOptimizer:
                 gpu_metrics = self.get_gpu_metrics()
                 system_metrics = self.get_system_metrics()
                 
+                # Limiter l'historique (dernières 24h avec échantillon toutes les 5s)
+                max_history = int(24 * 3600 / interval)
+                
                 if gpu_metrics:
                     self.current_metrics = gpu_metrics
                     self.metrics_history.append(gpu_metrics)
                     
-                    # Limiter l'historique (dernières 24h avec échantillon toutes les 5s)
-                    max_history = int(24 * 3600 / interval)
                     if len(self.metrics_history) > max_history:
                         self.metrics_history = self.metrics_history[-max_history:]
                 

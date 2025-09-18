@@ -16,9 +16,9 @@ def test_lanceurs():
     
     # Liste des fichiers à vérifier
     files_to_check = [
-        ("launch_neuro_fullscreen.py", "Lanceur Python Neuro-Bot"),
+        ("launch_kira_fullscreen.py", "Lanceur Python Kira-Bot"),
         ("launch_logs_fullscreen.py", "Lanceur Python Log Viewer"), 
-        ("START_NEURO_FULLSCREEN.bat", "Lanceur Windows Neuro-Bot"),
+        ("START_KIRA_FULLSCREEN.bat", "Lanceur Windows Kira-Bot"),
         ("START_LOGS_FULLSCREEN.bat", "Lanceur Windows Log Viewer")
     ]
     
@@ -40,7 +40,7 @@ def test_lanceurs():
     
     # Vérifier le contenu des lanceurs Python
     python_launchers = [
-        "launch_neuro_fullscreen.py",
+        "launch_kira_fullscreen.py",
         "launch_logs_fullscreen.py"
     ]
     
@@ -60,7 +60,7 @@ def test_lanceurs():
     
     # Vérifier le contenu des fichiers .bat
     bat_launchers = [
-        "START_NEURO_FULLSCREEN.bat", 
+    "START_KIRA_FULLSCREEN.bat", 
         "START_LOGS_FULLSCREEN.bat"
     ]
     
@@ -80,13 +80,13 @@ def test_lanceurs():
     
     print("\n3️⃣ Test des imports...")
     
-    # Test import Neuro-Bot
+    # Test import Kira-Bot
     try:
         sys.path.insert(0, "c:\\Dev\\IA-chatbot")
         from gui.enhanced_main_gui import MainInterface
-        print("  ✅ Import Neuro-Bot: gui.enhanced_main_gui.MainInterface")
+        print("  ✅ Import Kira-Bot: gui.enhanced_main_gui.MainInterface")
     except Exception as e:
-        print(f"  ⚠️ Import Neuro-Bot: {e}")
+        print(f"  ⚠️ Import Kira-Bot: {e}")
     
     # Test import Log Viewer
     try:
@@ -121,15 +121,15 @@ def test_lanceurs():
     print("=" * 50)
     
     print("\n🚀 Lanceurs disponibles:")
-    print("  • Double-clic sur START_NEURO_FULLSCREEN.bat")
+    print("  • Double-clic sur START_KIRA_FULLSCREEN.bat")
     print("  • Double-clic sur START_LOGS_FULLSCREEN.bat")
-    print("  • python launch_neuro_fullscreen.py")
+    print("  • python launch_kira_fullscreen.py")
     print("  • python launch_logs_fullscreen.py")
     
     print("\n⌨️ Raccourcis dans les interfaces:")
     print("  • F11: Basculer plein écran/fenêtré")
     print("  • F5: Actions principales (bot/actualiser)")
-    print("  • F1: Aide (Neuro-Bot seulement)")
+    print("  • F1: Aide (Kira-Bot seulement)")
     
     return True
 
