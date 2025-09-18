@@ -15,13 +15,13 @@ def setup_logging():
         level=logging.INFO,
         format=log_format,
         handlers=[
-            logging.FileHandler(os.path.join(log_dir, 'neuro_bot.log'), encoding='utf-8'),
+            logging.FileHandler(os.path.join(log_dir, 'kira_bot.log'), encoding='utf-8'),
             logging.StreamHandler()
         ]
     )
     
     # Logger spécifique pour le bot
-    logger = logging.getLogger('neuro_bot')
+    logger = logging.getLogger('kira_bot')
     return logger
 
 def setup_advanced_logging():
@@ -45,7 +45,7 @@ def setup_advanced_logging():
         return None
 
 class Config:
-    """Classe de configuration centralisée pour le bot Neuro"""
+    """Classe de configuration centralisée pour le bot Kira"""
     
     def __init__(self):
         # Forcer le rechargement du fichier .env pour éviter les problèmes de cache

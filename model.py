@@ -4,7 +4,6 @@ from utils import count_tokens, truncate_text_to_tokens, shorten_response
 from memory import save_interaction, get_history, get_facts
 import time
 import os
-import sys
 import asyncio
 
 # S'assurer que nvml.dll est trouvable (Windows) AVANT d'importer pynvml
@@ -642,7 +641,9 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
                 "Tu ne cites jamais de sources ni de liens externes. Tu réponds toujours en français, même si la question est en anglais.\n"
                 "Tu évites les réponses plates ou génériques.\n"
                 "Si une information t'est donnée, utilise-la naturellement dans ta réponse sans dire que tu l'as trouvée ou recherchée.\n"
-                "Neuro adore plaisanter, poser des questions en retour ou rebondir de manière surprenante.\n\n"
+                "                "Kira adore plaisanter, poser des questions en retour ou rebondir de manière surprenante."
+                "\n\n"
+\n\n"
             )
 
             # Injecte les faits connus sur l'utilisateur
@@ -655,9 +656,9 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
 
             # Ajouter l'historique
             for user_msg, bot_msg in history:
-                full_prompt += f"Utilisateur: {user_msg}\nNeuro: {bot_msg}\n"
+                full_prompt += f"Utilisateur: {user_msg}\nKira: {bot_msg}\n"
 
-            full_prompt += f"Utilisateur: {prompt}\nNeuro:"
+            full_prompt += f"Utilisateur: {prompt}\nKira:"
 
             prompt_tokens = count_tokens(full_prompt)
             if prompt_tokens + max_tokens <= max_total:

@@ -1,17 +1,17 @@
 @echo off
 REM ================================
-REM 🤖 Neuro-Bot - Logs Viewer
+REM 🤖 Kira-Bot - Logs Viewer
 REM Lanceur direct du système de logs
 REM ================================
 
-title Neuro-Bot - Logs Viewer
+title Kira-Bot - Logs Viewer
 
 REM Couleurs pour un affichage moderne
 color 0A
 
 echo.
 echo ================================
-echo 🤖 NEURO-BOT - LOGS VIEWER
+echo 🤖 KIRA-BOT - LOGS VIEWER
 echo ================================
 echo.
 

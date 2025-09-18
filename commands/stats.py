@@ -1,9 +1,9 @@
 from discord.ext.commands import has_role
-from config import AUTHORIZED_ROLE, config
+from config import AUTHORIZED_ROLE
 import psutil
 import time
 import sqlite3
-import pynvml
+from gpu_utils import get_gpu_info, is_gpu_available
 from model import model_manager
 
 def setup(bot):
@@ -35,19 +35,22 @@ def setup(bot):
             disk_total = round(disk.total / (1024**3), 2)
             disk_percent = disk.percent
 
-            pynvml.nvmlInit()
-            handle = pynvml.nvmlDeviceGetHandleByIndex(0)
-            gpu_name = pynvml.nvmlDeviceGetName(handle)
-            if isinstance(gpu_name, bytes):
-                gpu_name = gpu_name.decode()
-            util = pynvml.nvmlDeviceGetUtilizationRates(handle)
-            mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-            temp = pynvml.nvmlDeviceGetTemperature(handle, pynvml.NVML_TEMPERATURE_GPU)
-            gpu_util = util.gpu
-            vram_used = round(mem_info.used / (1024**2), 1)
-            vram_total = round(mem_info.total / (1024**2), 1)
-            vram_percent = round((mem_info.used / mem_info.total) * 100, 1)
-            pynvml.nvmlShutdown()
+            # GPU Info
+            gpu_info = get_gpu_info()
+            if gpu_info:
+                gpu_name = gpu_info.name
+                gpu_util = gpu_info.utilization_gpu
+                vram_used = round(gpu_info.vram_used_mb / 1024, 1)  # GB
+                vram_total = round(gpu_info.vram_total_mb / 1024, 1)  # GB
+                vram_percent = round(gpu_info.vram_usage_percent, 1)
+                temp = gpu_info.temperature_c
+            else:
+                gpu_name = "Non disponible"
+                gpu_util = 0
+                vram_used = 0
+                vram_total = 0
+                vram_percent = 0
+                temp = 0
 
             # Informations sur le modèle LLM
             llm_status = "✅ Initialisé" if model_manager.is_ready() else "❌ Non initialisé"
@@ -106,7 +109,7 @@ def setup(bot):
                 f"🧠 CPU             :{cpu_percent:>5}%\n"
                 f"💾 RAM             : {ram_used:.2f} Go / {ram_total:.2f} Go ({ram_percent}%)\n"
                 f"🕒 Uptime PC       : {uptime_str}\n"
-                f"🤖 Uptime Neuro    : {bot_uptime_str}\n"
+                f"🤖 Uptime Kira      : {bot_uptime_str}\n"
                 f"🌐 Accès Web       : {'Activé ✅' if bot.web_enabled else 'Désactivé ❌'}\n"
                 "\n"
                 f"🖥️ GPU    : {gpu_name}\n"
@@ -143,7 +146,7 @@ def setup(bot):
 
             msg += (
                 "\n"
-                "🧠 MÉMOIRE DE NEURO\n"
+                "🧠 MÉMOIRE DE KIRA\n"
                 "────────────────────────────\n"
                 f"🗂️ Disque mémoire  : {disk_used:.2f} Go / {disk_total:.2f} Go ({disk_percent}%)\n"
                 f"💬 Messages db     : {total_msgs}\n"

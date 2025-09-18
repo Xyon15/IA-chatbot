@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Système de notifications pour NeuroBot GUI
+Système de notifications pour KiraBot GUI
 Notifications toast modernes avec animation
 """
 

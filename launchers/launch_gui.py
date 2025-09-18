@@ -72,19 +72,26 @@ def launch_enhanced_gui_direct():
 
 def launch_unified_gui():
     """Lance l'interface via le lanceur unifié dans gui/"""
-    print("🔄 Redirection vers le lanceur GUI unifié...")
+    print("🔄 Lancement de l'interface GUI optimisée...")
     
-    # Ajouter le répertoire gui au path
-    gui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gui')
-    sys.path.insert(0, gui_path)
+    # Ajouter le répertoire parent au path pour l'importation
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.insert(0, parent_dir)
     
     try:
-        from gui.launch_gui import main as gui_main
+        # Import de la nouvelle architecture GUI modulaire
+        from gui.enhanced_main_gui import main as gui_main
         return gui_main()
     except ImportError as e:
-        print(f"❌ Erreur d'import : {e}")
-        print("💡 Assurez-vous que tous les modules GUI sont présents dans le dossier gui/")
-        return False
+        print(f"❌ Erreur d'import GUI modulaire : {e}")
+        # Fallback vers l'ancien système si nécessaire
+        try:
+            from gui.launch_gui import main as fallback_gui
+            print("🔄 Utilisation du système GUI de fallback...")
+            return fallback_gui()
+        except ImportError:
+            print("💡 Assurez-vous que tous les modules GUI sont présents dans le dossier gui/")
+            return False
     except Exception as e:
         print(f"❌ Erreur inattendue : {e}")
         return False

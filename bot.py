@@ -1,9 +1,8 @@
 # --- Imports ---
 from config import config, logger, advanced_log_manager
-from utils import count_tokens, truncate_text_to_tokens, shorten_response
-from memory import get_history, save_fact, save_interaction, clear_memory, get_facts
 from model import generate_reply
-from web import duckduckgo_search, duckduckgo_html_fallback, load_web_state, save_web_state
+from web import load_web_state
+from gpu_utils import gpu_manager, get_gpu_info
 
 import os
 import json
@@ -15,7 +14,7 @@ from commands import setup_all_commands
 from events import setup_all_events
 
 # Initialisation du logging
-logger.info("Démarrage du bot Neuro...")
+logger.info("Démarrage du bot Kira...")
 
 # Vérification du système de logs avancé
 if advanced_log_manager:
@@ -24,20 +23,6 @@ else:
     logger.warning("Système de logs avancé non disponible - mode standard")
 
 web_enabled = load_web_state()
-
-# GPU Stats
-nvml_path = r"C:\Program Files\NVIDIA Corporation\NVSMI"
-if nvml_path not in os.environ["PATH"]:
-    os.environ["PATH"] += os.pathsep + nvml_path
-
-from pynvml import (
-    nvmlInit, nvmlShutdown, nvmlDeviceGetHandleByIndex,
-    nvmlDeviceGetName, nvmlDeviceGetUtilizationRates,
-    nvmlDeviceGetMemoryInfo, nvmlDeviceGetTemperature,
-    NVML_TEMPERATURE_GPU, NVMLError
-)
-
-
 
 # Configuration déjà chargée via config.py
 

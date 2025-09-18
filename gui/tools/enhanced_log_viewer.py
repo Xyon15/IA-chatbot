@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Visionneur de Logs Avancé pour Neuro-Bot
+Visionneur de Logs Avancé pour Kira-Bot
 Interface moderne reprenant le thème du GUI principal
 """
 
@@ -54,12 +54,12 @@ COLOR_PALETTE = {
     'neutral': '#666666'           # Gris neutre
 }
 
-class NeuroTheme:
+class KiraTheme:
     """Thème moderne reprenant le style du GUI principal"""
     
     @staticmethod
     def apply(app: QApplication):
-        """Applique le thème Neuro-Bot"""
+        """Applique le thème Kira-Bot"""
         app.setStyle('Fusion')
         
         # Palette de couleurs
@@ -663,7 +663,7 @@ class EnhancedLogViewer(QMainWindow):
         
     def setup_ui(self):
         """Configure l'interface utilisateur"""
-        self.setWindowTitle("🤖 Neuro-Bot - Visionneur de Logs Avancé")
+        self.setWindowTitle("🤖 Kira-Bot - Visionneur de Logs Avancé")
         self.setGeometry(100, 100, 1600, 900)
         
         # Widget central
@@ -728,7 +728,7 @@ class EnhancedLogViewer(QMainWindow):
         main_splitter.setSizes([400, 1200])
         
         # Barre de statut
-        self.statusBar().showMessage("✨ Prêt - Neuro-Bot Log Viewer")
+        self.statusBar().showMessage("✨ Prêt - Kira-Bot Log Viewer")
         
         # Menu
         self.create_menu()
@@ -850,7 +850,7 @@ class EnhancedLogViewer(QMainWindow):
         file_path, _ = QFileDialog.getSaveFileName(
             self,
             "Exporter les logs",
-            f"neuro_logs_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+            f"kira_logs_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
             "JSON (*.json);;CSV (*.csv);;Texte (*.txt)"
         )
         
@@ -912,7 +912,7 @@ def main():
         need_exec = False
     
     # Applique le thème
-    NeuroTheme.apply(app)
+    KiraTheme.apply(app)
     
     # Crée et affiche la fenêtre
     viewer = EnhancedLogViewer()
