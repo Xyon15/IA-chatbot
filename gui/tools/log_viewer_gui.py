@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Interface graphique avancée pour visualiser les logs de Neuro-Bot
+Visionneur de Logs Unifié pour Neuro-Bot
+Fusion optimisée : fonctionnalités complètes + thème moderne
 """
 
 import sys
@@ -16,7 +19,7 @@ from PySide6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QSpinBox,
     QDateTimeEdit, QGroupBox, QTabWidget, QProgressBar, QSystemTrayIcon,
     QMenu, QMessageBox, QFileDialog, QFrame, QScrollArea, QGridLayout,
-    QInputDialog
+    QInputDialog, QSpacerItem, QSizePolicy
 )
 from PySide6.QtCore import (
     QTimer, Qt, QThread, Signal, QDateTime, QSize, QPropertyAnimation,
@@ -24,7 +27,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QFont, QColor, QPalette, QIcon, QPixmap, QPainter, QBrush,
-    QTextCharFormat, QTextCursor, QAction
+    QTextCharFormat, QTextCursor, QAction, QLinearGradient
 )
 from PySide6.QtCharts import QChart, QChartView, QPieSeries, QLineSeries, QDateTimeAxis, QValueAxis
 
@@ -33,145 +36,312 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from tools.advanced_logging import LogManager, LogEntry, LogLevel, get_log_manager
 
-class DarkTheme:
-    """Thème sombre pour l'interface"""
+# Configuration des couleurs - thème moderne Neuro-Bot
+COLOR_PALETTE = {
+    'bg_primary': '#0f0f0f',       # Noir très profond
+    'bg_secondary': '#1a1a1a',     # Noir profond
+    'bg_tertiary': '#2a2a2a',      # Gris très sombre
+    'accent_blue': '#00d4ff',      # Bleu néon
+    'accent_green': '#00ff88',     # Vert néon
+    'accent_orange': '#ff6b35',    # Orange vif
+    'accent_purple': '#8b5cf6',    # Violet
+    'text_primary': '#ffffff',     # Blanc pur
+    'text_secondary': '#b0b0b0',   # Gris clair
+    'text_accent': '#00d4ff',      # Bleu pour accents
+    'success': '#00ff88',          # Vert succès
+    'warning': '#ffaa00',          # Orange avertissement
+    'error': '#ff4444',            # Rouge erreur
+    'neutral': '#666666'           # Gris neutre
+}
+
+class NeuroTheme:
+    """Thème moderne unifié pour Neuro-Bot"""
     
     @staticmethod
     def apply(app: QApplication):
-        """Applique le thème sombre"""
-        dark_palette = QPalette()
+        """Applique le thème Neuro-Bot"""
+        app.setStyle('Fusion')
         
-        # Couleurs principales
-        dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
-        dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
-        dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.ToolTipBase, QColor(0, 0, 0))
-        dark_palette.setColor(QPalette.ToolTipText, QColor(255, 255, 255))
-        dark_palette.setColor(QPalette.Text, QColor(255, 255, 255))
-        dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))
-        dark_palette.setColor(QPalette.BrightText, QColor(255, 0, 0))
-        dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
-        dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
-        dark_palette.setColor(QPalette.HighlightedText, QColor(0, 0, 0))
+        # Palette de couleurs
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor(COLOR_PALETTE['bg_primary']))
+        palette.setColor(QPalette.WindowText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.Base, QColor(COLOR_PALETTE['bg_secondary']))
+        palette.setColor(QPalette.AlternateBase, QColor(COLOR_PALETTE['bg_tertiary']))
+        palette.setColor(QPalette.ToolTipBase, QColor(COLOR_PALETTE['bg_secondary']))
+        palette.setColor(QPalette.ToolTipText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.Text, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.Button, QColor(COLOR_PALETTE['bg_tertiary']))
+        palette.setColor(QPalette.ButtonText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.BrightText, QColor(COLOR_PALETTE['error']))
+        palette.setColor(QPalette.Link, QColor(COLOR_PALETTE['accent_blue']))
+        palette.setColor(QPalette.Highlight, QColor(COLOR_PALETTE['accent_blue']))
+        palette.setColor(QPalette.HighlightedText, QColor(COLOR_PALETTE['bg_primary']))
         
-        app.setPalette(dark_palette)
+        app.setPalette(palette)
         
-        # Style CSS pour les widgets spéciaux
-        app.setStyleSheet("""
-            QMainWindow {
-                background-color: #353535;
-            }
-            QTextEdit {
-                background-color: #1e1e1e;
-                border: 1px solid #555;
-                border-radius: 5px;
-                padding: 5px;
-                font-family: 'Consolas', 'Monaco', monospace;
-            }
-            QTableWidget {
-                background-color: #1e1e1e;
-                alternate-background-color: #2a2a2a;
-                border: 1px solid #555;
-                border-radius: 5px;
-                gridline-color: #555;
-            }
-            QTableWidget::item {
-                padding: 5px;
-                border-bottom: 1px solid #444;
-            }
-            QTableWidget::item:selected {
-                background-color: #2a82da;
-            }
-            QPushButton {
-                background-color: #0d7377;
-                border: none;
-                border-radius: 5px;
+        # Style CSS moderne et complet
+        app.setStyleSheet(f"""
+            /* Fenêtre principale */
+            QMainWindow {{
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 {COLOR_PALETTE['bg_primary']}, 
+                    stop:1 {COLOR_PALETTE['bg_secondary']});
+                color: {COLOR_PALETTE['text_primary']};
+                border: 1px solid {COLOR_PALETTE['bg_tertiary']};
+            }}
+            
+            /* Widgets de base */
+            QWidget {{
+                background-color: transparent;
+                color: {COLOR_PALETTE['text_primary']};
+                selection-background-color: {COLOR_PALETTE['accent_blue']};
+                selection-color: {COLOR_PALETTE['bg_primary']};
+            }}
+            
+            /* Boutons */
+            QPushButton {{
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 {COLOR_PALETTE['bg_tertiary']}, 
+                    stop:1 {COLOR_PALETTE['bg_secondary']});
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 8px;
                 padding: 8px 16px;
                 font-weight: bold;
-                color: white;
-            }
-            QPushButton:hover {
-                background-color: #14a085;
-            }
-            QPushButton:pressed {
-                background-color: #0a5d61;
-            }
-            QPushButton:disabled {
-                background-color: #555;
-                color: #888;
-            }
-            QComboBox, QLineEdit, QSpinBox, QDateTimeEdit {
-                background-color: #2a2a2a;
-                border: 1px solid #555;
-                border-radius: 3px;
-                padding: 5px;
-                color: white;
-            }
-            QComboBox::drop-down {
-                border: none;
-                background-color: #0d7377;
-                border-radius: 3px;
-            }
-            QComboBox::down-arrow {
-                image: none;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 5px solid white;
-            }
-            QGroupBox {
-                font-weight: bold;
-                border: 2px solid #555;
-                border-radius: 5px;
-                margin-top: 10px;
-                padding-top: 10px;
-            }
-            QGroupBox::title {
-                subcontrol-origin: margin;
-                left: 10px;
-                padding: 0 5px 0 5px;
-            }
-            QTabWidget::pane {
-                border: 1px solid #555;
-                border-radius: 5px;
-            }
-            QTabBar::tab {
-                background-color: #2a2a2a;
-                border: 1px solid #555;
-                padding: 8px 16px;
-                margin-right: 2px;
-            }
-            QTabBar::tab:selected {
-                background-color: #0d7377;
-            }
-            QProgressBar {
-                border: 1px solid #555;
-                border-radius: 5px;
-                text-align: center;
-                background-color: #2a2a2a;
-            }
-            QProgressBar::chunk {
-                background-color: #0d7377;
-                border-radius: 5px;
-            }
-            QScrollBar:vertical {
-                background-color: #2a2a2a;
-                width: 12px;
-                border-radius: 6px;
-            }
-            QScrollBar::handle:vertical {
-                background-color: #555;
-                border-radius: 6px;
+                color: {COLOR_PALETTE['text_primary']};
                 min-height: 20px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background-color: #777;
-            }
+            }}
+            QPushButton:hover {{
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 {COLOR_PALETTE['accent_blue']}, 
+                    stop:1 rgba(0, 212, 255, 0.7));
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+            }}
+            QPushButton:pressed {{
+                background: {COLOR_PALETTE['accent_blue']};
+            }}
+            QPushButton:disabled {{
+                background: {COLOR_PALETTE['neutral']};
+                border: 2px solid {COLOR_PALETTE['neutral']};
+                color: {COLOR_PALETTE['text_secondary']};
+            }}
+            
+            /* Zone de texte */
+            QTextEdit, QPlainTextEdit {{
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 {COLOR_PALETTE['bg_secondary']}, 
+                    stop:1 {COLOR_PALETTE['bg_primary']});
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 8px;
+                padding: 8px;
+                font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+                font-size: 10pt;
+                color: {COLOR_PALETTE['text_primary']};
+            }}
+            
+            /* Table améliorée */
+            QTableWidget {{
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 {COLOR_PALETTE['bg_secondary']}, 
+                    stop:1 {COLOR_PALETTE['bg_primary']});
+                alternate-background-color: {COLOR_PALETTE['bg_tertiary']};
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 8px;
+                gridline-color: {COLOR_PALETTE['neutral']};
+                selection-background-color: {COLOR_PALETTE['accent_blue']};
+                font-family: 'Consolas', 'Monaco', monospace;
+                font-size: 10pt;
+            }}
+            QTableWidget::item {{
+                padding: 8px;
+                border-bottom: 1px solid {COLOR_PALETTE['neutral']};
+            }}
+            QTableWidget::item:selected {{
+                background: {COLOR_PALETTE['accent_blue']};
+                color: {COLOR_PALETTE['bg_primary']};
+            }}
+            QHeaderView::section {{
+                background: {COLOR_PALETTE['bg_tertiary']};
+                color: {COLOR_PALETTE['text_primary']};
+                padding: 10px;
+                border: 1px solid {COLOR_PALETTE['neutral']};
+                font-weight: bold;
+            }}
+            
+            /* Combobox et Line Edit */
+            QComboBox, QLineEdit, QSpinBox, QDateTimeEdit {{
+                background: {COLOR_PALETTE['bg_tertiary']};
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 6px;
+                padding: 6px;
+                color: {COLOR_PALETTE['text_primary']};
+                font-size: 10pt;
+            }}
+            QComboBox::drop-down {{
+                border: none;
+                background: {COLOR_PALETTE['accent_blue']};
+                border-radius: 4px;
+                width: 20px;
+            }}
+            QComboBox::down-arrow {{
+                image: none;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-top: 6px solid {COLOR_PALETTE['text_primary']};
+            }}
+            QComboBox QAbstractItemView {{
+                background: {COLOR_PALETTE['bg_tertiary']};
+                border: 1px solid {COLOR_PALETTE['accent_blue']};
+                selection-background-color: {COLOR_PALETTE['accent_blue']};
+            }}
+            
+            /* GroupBox moderne */
+            QGroupBox {{
+                font-weight: bold;
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 8px;
+                margin-top: 12px;
+                padding-top: 8px;
+                color: {COLOR_PALETTE['text_primary']};
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 12px;
+                padding: 0 8px 0 8px;
+                color: {COLOR_PALETTE['accent_blue']};
+            }}
+            
+            /* Onglets */
+            QTabWidget::pane {{
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 8px;
+                background: {COLOR_PALETTE['bg_secondary']};
+            }}
+            QTabBar::tab {{
+                background: {COLOR_PALETTE['bg_tertiary']};
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                padding: 10px 20px;
+                margin-right: 4px;
+                border-bottom: none;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }}
+            QTabBar::tab:selected {{
+                background: {COLOR_PALETTE['accent_blue']};
+                color: {COLOR_PALETTE['bg_primary']};
+            }}
+            QTabBar::tab:hover:!selected {{
+                background: rgba(0, 212, 255, 0.3);
+            }}
+            
+            /* Barre de progression */
+            QProgressBar {{
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 6px;
+                text-align: center;
+                background: {COLOR_PALETTE['bg_tertiary']};
+                color: {COLOR_PALETTE['text_primary']};
+            }}
+            QProgressBar::chunk {{
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 {COLOR_PALETTE['accent_blue']}, 
+                    stop:1 {COLOR_PALETTE['accent_green']});
+                border-radius: 4px;
+            }}
+            
+            /* Scrollbars modernes */
+            QScrollBar:vertical {{
+                background: {COLOR_PALETTE['bg_tertiary']};
+                width: 16px;
+                border-radius: 8px;
+                margin: 0;
+            }}
+            QScrollBar::handle:vertical {{
+                background: {COLOR_PALETTE['accent_blue']};
+                border-radius: 8px;
+                min-height: 20px;
+                margin: 2px;
+            }}
+            QScrollBar::handle:vertical:hover {{
+                background: {COLOR_PALETTE['accent_green']};
+            }}
+            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+                border: none;
+                background: none;
+            }}
+            
+            /* Labels et Checkbox */
+            QLabel {{
+                color: {COLOR_PALETTE['text_primary']};
+                font-size: 10pt;
+            }}
+            QCheckBox {{
+                color: {COLOR_PALETTE['text_primary']};
+                font-size: 10pt;
+            }}
+            QCheckBox::indicator {{
+                width: 16px;
+                height: 16px;
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 4px;
+                background: {COLOR_PALETTE['bg_tertiary']};
+            }}
+            QCheckBox::indicator:checked {{
+                background: {COLOR_PALETTE['accent_blue']};
+                image: none;
+            }}
         """)
 
+class StatsCard(QFrame):
+    """Carte de statistiques moderne"""
+    
+    def __init__(self, title: str, icon: str, value: str = "0"):
+        super().__init__()
+        self.setFixedHeight(75)  # Plus compact
+        self.setFrameStyle(QFrame.Box)
+        
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(12, 8, 12, 8)
+        layout.setSpacing(2)
+        
+        # Header avec icône et titre
+        header_layout = QHBoxLayout()
+        header_layout.setSpacing(8)
+        
+        icon_label = QLabel(icon)
+        icon_label.setStyleSheet(f"font-size: 18px; color: {COLOR_PALETTE['accent_blue']};")
+        icon_label.setFixedWidth(24)
+        header_layout.addWidget(icon_label)
+        
+        title_label = QLabel(title)
+        title_label.setStyleSheet(f"color: {COLOR_PALETTE['text_secondary']}; font-size: 10px; font-weight: 600;")
+        header_layout.addWidget(title_label)
+        header_layout.addStretch()
+        
+        layout.addLayout(header_layout)
+        
+        # Valeur
+        self.value_label = QLabel(value)
+        self.value_label.setStyleSheet(f"color: {COLOR_PALETTE['text_primary']}; font-size: 14px; font-weight: bold;")
+        self.value_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.value_label)
+        
+        # Style de la carte
+        self.setStyleSheet(f"""
+            StatsCard {{
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 {COLOR_PALETTE['bg_tertiary']}, 
+                    stop:1 {COLOR_PALETTE['bg_secondary']});
+                border: 2px solid {COLOR_PALETTE['accent_blue']};
+                border-radius: 12px;
+            }}
+        """)
+        
+    def setValue(self, value: str):
+        self.value_label.setText(value)
+
 class LogTableWidget(QTableWidget):
-    """Widget de table personnalisé pour afficher les logs"""
+    """Widget de table personnalisé pour afficher les logs avec thème moderne"""
     
     def __init__(self):
         super().__init__()
@@ -180,7 +350,7 @@ class LogTableWidget(QTableWidget):
     def setup_table(self):
         """Configure la table"""
         # Colonnes
-        headers = ["Timestamp", "Level", "Logger", "Message", "Module", "Function"]
+        headers = ["⏰ Timestamp", "🎯 Level", "📋 Logger", "💬 Message", "📁 Module", "⚙️ Function"]
         self.setColumnCount(len(headers))
         self.setHorizontalHeaderLabels(headers)
         
@@ -247,7 +417,7 @@ class LogTableWidget(QTableWidget):
             self.add_log_entry(log)
 
 class LogStatsWidget(QWidget):
-    """Widget pour afficher les statistiques des logs"""
+    """Widget pour afficher les statistiques des logs avec cartes modernes"""
     
     def __init__(self):
         super().__init__()
@@ -256,60 +426,48 @@ class LogStatsWidget(QWidget):
     def setup_ui(self):
         """Configure l'interface"""
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(4, 4, 4, 4)
+        layout.setSpacing(8)
         
-        # Titre
-        title = QLabel("📊 Statistiques des Logs")
-        title.setFont(QFont("Arial", 14, QFont.Bold))
+        # Titre plus compact
+        title = QLabel("📊 Statistiques")
+        title.setFont(QFont("Arial", 12, QFont.Bold))
         title.setAlignment(Qt.AlignCenter)
+        title.setStyleSheet(f"color: {COLOR_PALETTE['accent_blue']}; margin-bottom: 5px;")
         layout.addWidget(title)
         
-        # Conteneur pour les stats
-        stats_container = QScrollArea()
-        stats_widget = QWidget()
-        self.stats_layout = QGridLayout(stats_widget)
-        stats_container.setWidget(stats_widget)
-        stats_container.setWidgetResizable(True)
-        layout.addWidget(stats_container)
+        # Conteneur pour les cartes de statistiques
+        cards_layout = QGridLayout()
+        cards_layout.setSpacing(6)  # Espacement réduit
         
-        # Labels pour les statistiques
-        self.total_logs_label = QLabel("Total: 0")
-        self.error_count_label = QLabel("Erreurs: 0")
-        self.warning_count_label = QLabel("Warnings: 0")
-        self.info_count_label = QLabel("Info: 0")
+        # Cartes de statistiques modernes
+        self.total_card = StatsCard("Total", "📊", "0")
+        self.error_card = StatsCard("Erreurs", "❌", "0")
+        self.warning_card = StatsCard("Warnings", "⚠️", "0")
+        self.info_card = StatsCard("Info", "ℹ️", "0")
         
-        # Style des labels
-        for label in [self.total_logs_label, self.error_count_label, 
-                     self.warning_count_label, self.info_count_label]:
-            label.setFont(QFont("Arial", 12))
-            label.setAlignment(Qt.AlignCenter)
-            label.setStyleSheet("""
-                QLabel {
-                    background-color: #2a2a2a;
-                    border: 1px solid #555;
-                    border-radius: 5px;
-                    padding: 10px;
-                    margin: 5px;
-                }
-            """)
+        cards_layout.addWidget(self.total_card, 0, 0)
+        cards_layout.addWidget(self.error_card, 0, 1)
+        cards_layout.addWidget(self.warning_card, 1, 0)
+        cards_layout.addWidget(self.info_card, 1, 1)
         
-        # Disposition des labels
-        self.stats_layout.addWidget(self.total_logs_label, 0, 0)
-        self.stats_layout.addWidget(self.error_count_label, 0, 1)
-        self.stats_layout.addWidget(self.warning_count_label, 1, 0)
-        self.stats_layout.addWidget(self.info_count_label, 1, 1)
+        layout.addLayout(cards_layout)
+        
+        # Spacer pour pousser le contenu vers le haut
+        layout.addStretch()
         
     def update_stats(self, stats: Dict):
         """Met à jour les statistiques"""
         level_stats = stats.get('level_stats', {})
         total = stats.get('total_logs', 0)
         
-        self.total_logs_label.setText(f"📊 Total: {total}")
-        self.error_count_label.setText(f"❌ Erreurs: {level_stats.get('ERROR', 0)}")
-        self.warning_count_label.setText(f"⚠️ Warnings: {level_stats.get('WARNING', 0)}")
-        self.info_count_label.setText(f"ℹ️ Info: {level_stats.get('INFO', 0)}")
+        self.total_card.setValue(f"{total:,}")
+        self.error_card.setValue(f"{level_stats.get('ERROR', 0):,}")
+        self.warning_card.setValue(f"{level_stats.get('WARNING', 0):,}")
+        self.info_card.setValue(f"{level_stats.get('INFO', 0):,}")
 
 class LogFilterWidget(QWidget):
-    """Widget pour filtrer les logs"""
+    """Widget pour filtrer les logs avec interface moderne"""
     
     filter_changed = Signal()
     
@@ -320,60 +478,89 @@ class LogFilterWidget(QWidget):
     def setup_ui(self):
         """Configure l'interface de filtrage"""
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(8, 8, 8, 8)
+        layout.setSpacing(12)
         
-        # Groupe de filtres
-        filter_group = QGroupBox("🔍 Filtres")
+        # Groupe de filtres principal
+        filter_group = QGroupBox("🔍 Filtres Avancés")
         filter_layout = QGridLayout(filter_group)
+        filter_layout.setContentsMargins(12, 20, 12, 12)
+        filter_layout.setHorizontalSpacing(8)
+        filter_layout.setVerticalSpacing(10)
+        filter_layout.setColumnStretch(1, 1)  # La colonne des widgets s'étire
         
         # Filtre par niveau
-        filter_layout.addWidget(QLabel("Niveau:"), 0, 0)
+        level_label = QLabel("🎯 Niveau:")
+        level_label.setFixedWidth(80)
+        filter_layout.addWidget(level_label, 0, 0)
         self.level_combo = QComboBox()
+        self.level_combo.setFixedHeight(30)
         self.level_combo.addItems(["Tous", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
-        self.level_combo.currentTextChanged.connect(self.filter_changed.emit)
+        self.level_combo.currentTextChanged.connect(lambda: self.filter_changed.emit())
         filter_layout.addWidget(self.level_combo, 0, 1)
         
         # Filtre par logger
-        filter_layout.addWidget(QLabel("Logger:"), 1, 0)
+        logger_label = QLabel("📋 Logger:")
+        logger_label.setFixedWidth(80)
+        filter_layout.addWidget(logger_label, 1, 0)
         self.logger_combo = QComboBox()
+        self.logger_combo.setFixedHeight(30)
         self.logger_combo.setEditable(True)
         self.logger_combo.addItem("Tous")
-        self.logger_combo.currentTextChanged.connect(self.filter_changed.emit)
+        self.logger_combo.currentTextChanged.connect(lambda: self.filter_changed.emit())
         filter_layout.addWidget(self.logger_combo, 1, 1)
         
         # Recherche dans le message
-        filter_layout.addWidget(QLabel("Recherche:"), 2, 0)
+        search_label = QLabel("🔍 Recherche:")
+        search_label.setFixedWidth(80)
+        filter_layout.addWidget(search_label, 2, 0)
         self.search_edit = QLineEdit()
-        self.search_edit.setPlaceholderText("Rechercher dans les messages...")
-        self.search_edit.textChanged.connect(self.filter_changed.emit)
+        self.search_edit.setFixedHeight(30)
+        self.search_edit.setPlaceholderText("Rechercher...")
+        self.search_edit.textChanged.connect(lambda: self.filter_changed.emit())
         filter_layout.addWidget(self.search_edit, 2, 1)
         
         # Filtre par date
-        filter_layout.addWidget(QLabel("Date début:"), 3, 0)
+        start_label = QLabel("📅 Début:")
+        start_label.setFixedWidth(80)
+        filter_layout.addWidget(start_label, 3, 0)
         self.start_date = QDateTimeEdit()
+        self.start_date.setFixedHeight(30)
         self.start_date.setDateTime(QDateTime.currentDateTime().addDays(-7))
         self.start_date.setCalendarPopup(True)
-        self.start_date.dateTimeChanged.connect(self.filter_changed.emit)
+        self.start_date.setDisplayFormat("dd/MM/yyyy hh:mm")
+        self.start_date.dateTimeChanged.connect(lambda: self.filter_changed.emit())
         filter_layout.addWidget(self.start_date, 3, 1)
         
-        filter_layout.addWidget(QLabel("Date fin:"), 4, 0)
+        end_label = QLabel("📅 Fin:")
+        end_label.setFixedWidth(80)
+        filter_layout.addWidget(end_label, 4, 0)
         self.end_date = QDateTimeEdit()
+        self.end_date.setFixedHeight(30)
         self.end_date.setDateTime(QDateTime.currentDateTime())
         self.end_date.setCalendarPopup(True)
-        self.end_date.dateTimeChanged.connect(self.filter_changed.emit)
+        self.end_date.setDisplayFormat("dd/MM/yyyy hh:mm")
+        self.end_date.dateTimeChanged.connect(lambda: self.filter_changed.emit())
         filter_layout.addWidget(self.end_date, 4, 1)
         
         # Limite d'entrées
-        filter_layout.addWidget(QLabel("Limite:"), 5, 0)
+        limit_label = QLabel("📊 Limite:")
+        limit_label.setFixedWidth(80)
+        filter_layout.addWidget(limit_label, 5, 0)
         self.limit_spin = QSpinBox()
+        self.limit_spin.setFixedHeight(30)
         self.limit_spin.setRange(10, 10000)
         self.limit_spin.setValue(1000)
-        self.limit_spin.setSuffix(" entrées")
-        self.limit_spin.valueChanged.connect(self.filter_changed.emit)
+        self.limit_spin.setSuffix(" logs")
+        self.limit_spin.valueChanged.connect(lambda: self.filter_changed.emit())
         filter_layout.addWidget(self.limit_spin, 5, 1)
         
         # Sélecteur de jours de conservation pour le nettoyage
-        filter_layout.addWidget(QLabel("Garder (jours):"), 6, 0)
+        cleanup_label = QLabel("🗑️ Garder:")
+        cleanup_label.setFixedWidth(80)
+        filter_layout.addWidget(cleanup_label, 6, 0)
         self.cleanup_days_spin = QSpinBox()
+        self.cleanup_days_spin.setFixedHeight(30)
         self.cleanup_days_spin.setRange(1, 3650)
         self.cleanup_days_spin.setValue(30)
         self.cleanup_days_spin.setSuffix(" jours")
@@ -381,25 +568,49 @@ class LogFilterWidget(QWidget):
         
         layout.addWidget(filter_group)
         
-        # Boutons d'action
-        buttons_layout = QHBoxLayout()
+        # Groupe de boutons d'action
+        action_group = QGroupBox("⚙️ Actions")
+        buttons_layout = QGridLayout(action_group)
+        buttons_layout.setContentsMargins(10, 15, 10, 10)
+        buttons_layout.setHorizontalSpacing(8)
+        buttons_layout.setVerticalSpacing(8)
+        buttons_layout.setColumnStretch(0, 1)
+        buttons_layout.setColumnStretch(1, 1)
         
         self.refresh_btn = QPushButton("🔄 Actualiser")
+        self.refresh_btn.setFixedHeight(32)
         self.refresh_btn.clicked.connect(self.filter_changed.emit)
-        buttons_layout.addWidget(self.refresh_btn)
+        buttons_layout.addWidget(self.refresh_btn, 0, 0)
         
         self.clear_btn = QPushButton("🗑️ Effacer")
-        buttons_layout.addWidget(self.clear_btn)
+        self.clear_btn.setFixedHeight(32)
+        buttons_layout.addWidget(self.clear_btn, 0, 1)
         
         self.export_btn = QPushButton("💾 Exporter")
-        buttons_layout.addWidget(self.export_btn)
+        self.export_btn.setFixedHeight(32)
+        buttons_layout.addWidget(self.export_btn, 1, 0)
         
-        layout.addLayout(buttons_layout)
+        self.purge_btn = QPushButton("🧹 Purger")
+        self.purge_btn.setFixedHeight(32)
+        buttons_layout.addWidget(self.purge_btn, 1, 1)
         
-        # Auto-scroll
-        self.auto_scroll_cb = QCheckBox("Auto-scroll")
+        layout.addWidget(action_group)
+        
+        # Options
+        options_group = QGroupBox("⚙️ Options")
+        options_layout = QVBoxLayout(options_group)
+        options_layout.setContentsMargins(10, 15, 10, 10)
+        options_layout.setSpacing(8)
+        
+        self.auto_scroll_cb = QCheckBox("🔄 Auto-scroll activé")
         self.auto_scroll_cb.setChecked(True)
-        layout.addWidget(self.auto_scroll_cb)
+        self.auto_scroll_cb.setFixedHeight(25)
+        options_layout.addWidget(self.auto_scroll_cb)
+        
+        layout.addWidget(options_group)
+        
+        # Spacer pour pousser le contenu vers le haut
+        layout.addStretch(1)
         
     def get_filter_params(self) -> Dict:
         """Récupère les paramètres de filtrage"""
@@ -409,90 +620,23 @@ class LogFilterWidget(QWidget):
             'end_date': self.end_date.dateTime().toPython()
         }
         
-        # Niveau
-        level = self.level_combo.currentText()
-        if level != "Tous":
-            params['level_filter'] = [level]
-        
-        # Logger
-        logger = self.logger_combo.currentText()
-        if logger and logger != "Tous":
-            params['logger_filter'] = logger
-        
-        # Recherche
-        search = self.search_edit.text().strip()
-        if search:
-            params['search_term'] = search
-        
+        # Filtre par niveau
+        if self.level_combo.currentText() != "Tous":
+            params['level'] = self.level_combo.currentText()
+            
+        # Filtre par logger
+        if self.logger_combo.currentText() != "Tous":
+            params['logger_name'] = self.logger_combo.currentText()
+            
+        # Recherche dans le message
+        search_text = self.search_edit.text().strip()
+        if search_text:
+            params['message_contains'] = search_text
+            
         return params
-    
-    def update_loggers(self, loggers: List[str]):
-        """Met à jour la liste des loggers"""
-        current = self.logger_combo.currentText()
-        self.logger_combo.clear()
-        self.logger_combo.addItem("Tous")
-        self.logger_combo.addItems(loggers)
-        
-        # Restaure la sélection si possible
-        index = self.logger_combo.findText(current)
-        if index >= 0:
-            self.logger_combo.setCurrentIndex(index)
-
-class NotificationWidget(QWidget):
-    """Widget pour afficher les notifications"""
-    
-    def __init__(self):
-        super().__init__()
-        self.setup_ui()
-        self.notifications = []
-        
-    def setup_ui(self):
-        """Configure l'interface des notifications"""
-        self.setFixedHeight(100)
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #2a2a2a;
-                border: 1px solid #555;
-                border-radius: 5px;
-            }
-        """)
-        
-        layout = QVBoxLayout(self)
-        
-        # Titre
-        title = QLabel("🔔 Notifications")
-        title.setFont(QFont("Arial", 10, QFont.Bold))
-        layout.addWidget(title)
-        
-        # Zone de notifications
-        self.notification_text = QTextEdit()
-        self.notification_text.setMaximumHeight(60)
-        self.notification_text.setReadOnly(True)
-        layout.addWidget(self.notification_text)
-        
-    def add_notification(self, entry: LogEntry):
-        """Ajoute une notification"""
-        timestamp = entry.timestamp.strftime("%H:%M:%S")
-        level_color = entry.level.value[1]
-        
-        message = f"<span style='color: {level_color}'>[{timestamp}] {entry.level.value[0]}</span>: {entry.message}"
-        
-        self.notification_text.append(message)
-        
-        # Limite le nombre de notifications affichées
-        self.notifications.append(entry)
-        if len(self.notifications) > 50:
-            self.notifications = self.notifications[-50:]
-            # Recharge le texte
-            self.notification_text.clear()
-            for notif in self.notifications[-10:]:  # Affiche les 10 dernières
-                ts = notif.timestamp.strftime("%H:%M:%S")
-                color = notif.level.value[1]
-                msg = f"<span style='color: {color}'>[{ts}] {notif.level.value[0]}</span>: {notif.message}"
-                self.notification_text.append(msg)
 
 class LogViewerMainWindow(QMainWindow):
-    """Fenêtre principale du visualiseur de logs"""
+    """Fenêtre principale unifiée du visualiseur de logs"""
     
     def __init__(self):
         super().__init__()
@@ -520,14 +664,19 @@ class LogViewerMainWindow(QMainWindow):
         self.setup_connections()
         self.setup_timers()
         self.setup_system_tray()
+        self.setup_shortcuts()
         
         # Charge les logs initiaux
         self.refresh_logs()
         
     def setup_ui(self):
         """Configure l'interface utilisateur"""
-        self.setWindowTitle("Neuro-Bot - Visualiseur de Logs Avancé")
-        self.setGeometry(100, 100, 1400, 800)
+        self.setWindowTitle("🤖 Neuro-Bot - Visionneur de Logs Unifié")
+        self.setGeometry(100, 100, 1200, 700)
+        
+        # Lancement automatique en plein écran
+        self.showMaximized()
+        print("🖥️ Log Viewer lancé en plein écran")
         
         # Widget central
         central_widget = QWidget()
@@ -535,197 +684,146 @@ class LogViewerMainWindow(QMainWindow):
         
         # Layout principal
         main_layout = QHBoxLayout(central_widget)
+        main_layout.setContentsMargins(8, 8, 8, 8)
+        main_layout.setSpacing(8)
         
         # Splitter principal
         main_splitter = QSplitter(Qt.Horizontal)
         main_layout.addWidget(main_splitter)
         
-        # Panel de gauche (filtres et stats)
+        # Panel gauche - Filtres et statistiques
         left_panel = QWidget()
-        left_panel.setMaximumWidth(350)
+        left_panel.setMinimumWidth(280)
+        left_panel.setMaximumWidth(380)  # Plus compact
         left_layout = QVBoxLayout(left_panel)
+        left_layout.setContentsMargins(8, 8, 8, 8)
+        left_layout.setSpacing(8)
         
-        # Filtres (si UI sans panneau filtres, commentez ces deux lignes)
+        # Widget de filtrage
         self.filter_widget = LogFilterWidget()
         left_layout.addWidget(self.filter_widget)
         
-        # Statistiques
+        # Widget de statistiques
         self.stats_widget = LogStatsWidget()
         left_layout.addWidget(self.stats_widget)
         
         main_splitter.addWidget(left_panel)
         
-        # Panel de droite (logs et notifications)
-        right_panel = QWidget()
-        right_layout = QVBoxLayout(right_panel)
+        # Panel central - Table des logs
+        center_widget = QWidget()
+        center_layout = QVBoxLayout(center_widget)
+        center_layout.setContentsMargins(8, 8, 8, 8)
         
-        # Onglets
-        self.tab_widget = QTabWidget()
+        # En-tête
+        header_layout = QHBoxLayout()
+        title_label = QLabel("📋 Logs en Temps Réel")
+        title_label.setFont(QFont("Arial", 14, QFont.Bold))
+        title_label.setStyleSheet(f"color: {COLOR_PALETTE['accent_blue']};")
+        header_layout.addWidget(title_label)
         
-        # Onglet Table
-        table_tab = QWidget()
-        table_layout = QVBoxLayout(table_tab)
+        # Indicateur de statut
+        self.status_label = QLabel("🟢 Connecté")
+        self.status_label.setStyleSheet(f"color: {COLOR_PALETTE['success']}; font-weight: bold;")
+        header_layout.addWidget(self.status_label)
+        header_layout.addStretch()
         
+        center_layout.addLayout(header_layout)
+        
+        # Table des logs
         self.log_table = LogTableWidget()
-        table_layout.addWidget(self.log_table)
+        center_layout.addWidget(self.log_table)
         
-        self.tab_widget.addTab(table_tab, "📋 Table")
+        main_splitter.addWidget(center_widget)
         
-        # Onglet Texte
-        text_tab = QWidget()
-        text_layout = QVBoxLayout(text_tab)
+        # Répartition des tailles (plus flexible)
+        main_splitter.setSizes([350, 850])
+        main_splitter.setStretchFactor(0, 0)  # Panel gauche ne s'étire pas trop
+        main_splitter.setStretchFactor(1, 1)  # Panel central prend l'espace restant
         
-        self.log_text = QTextEdit()
-        self.log_text.setReadOnly(True)
-        self.log_text.setFont(QFont("Consolas", 9))
-        text_layout.addWidget(self.log_text)
-        
-        self.tab_widget.addTab(text_tab, "📄 Texte")
-        
-        right_layout.addWidget(self.tab_widget)
-        
-        # Notifications
-        self.notification_widget = NotificationWidget()
-        right_layout.addWidget(self.notification_widget)
-        
-        main_splitter.addWidget(right_panel)
-        
-        # Proportions du splitter
-        main_splitter.setSizes([350, 1050])
-        
-        # Barre de statut
-        self.statusBar().showMessage("Prêt")
-        
-        # Barre de menu
-        self.create_menu_bar()
-        
-    def create_menu_bar(self):
-        """Crée la barre de menu"""
-        menubar = self.menuBar()
-        
-        # Menu Fichier
-        file_menu = menubar.addMenu("📁 Fichier")
-        
-        export_action = QAction("💾 Exporter les logs", self)
-        export_action.triggered.connect(self.export_logs)
-        file_menu.addAction(export_action)
-        
-        file_menu.addSeparator()
-        
-        quit_action = QAction("❌ Quitter", self)
-        quit_action.triggered.connect(self.close)
-        file_menu.addAction(quit_action)
-        
-        # Menu Affichage
-        view_menu = menubar.addMenu("👁️ Affichage")
-        
-        refresh_action = QAction("🔄 Actualiser", self)
-        refresh_action.triggered.connect(self.refresh_logs)
-        view_menu.addAction(refresh_action)
-        
-        clear_action = QAction("🗑️ Effacer l'affichage", self)
-        clear_action.triggered.connect(self.clear_display)
-        view_menu.addAction(clear_action)
-        
-        # Menu Outils
-        tools_menu = menubar.addMenu("🔧 Outils")
-        
-        cleanup_action = QAction("🧹 Nettoyer les anciens logs", self)
-        cleanup_action.triggered.connect(self.cleanup_logs)
-        tools_menu.addAction(cleanup_action)
-        
-        purge_action = QAction("🗑️ Vider tous les logs", self)
-        purge_action.triggered.connect(self.purge_all_logs)
-        tools_menu.addAction(purge_action)
-        
-        config_action = QAction("⚙️ Configuration", self)
-        config_action.triggered.connect(self.show_config)
-        tools_menu.addAction(config_action)
+        # Barre d'état
+        self.statusBar().setStyleSheet(f"""
+            QStatusBar {{
+                background: {COLOR_PALETTE['bg_tertiary']};
+                color: {COLOR_PALETTE['text_primary']};
+                border-top: 2px solid {COLOR_PALETTE['accent_blue']};
+                font-weight: bold;
+            }}
+        """)
+        self.statusBar().showMessage("🚀 Visualiseur de logs unifié initialisé")
         
     def setup_connections(self):
         """Configure les connexions de signaux"""
         # Filtres
         self.filter_widget.filter_changed.connect(self.refresh_logs)
+        
+        # Boutons
         self.filter_widget.clear_btn.clicked.connect(self.clear_display)
         self.filter_widget.export_btn.clicked.connect(self.export_logs)
-        self.filter_widget.auto_scroll_cb.toggled.connect(self.toggle_auto_scroll)
+        self.filter_widget.purge_btn.clicked.connect(self.cleanup_logs)
         
-        # Gestionnaire de logs
-        if self.log_manager:
-            self.log_manager.add_gui_callback(self.on_new_log_entry)
-    
+        # Auto-scroll
+        self.filter_widget.auto_scroll_cb.toggled.connect(self.set_auto_scroll)
+        
     def setup_timers(self):
         """Configure les timers"""
-        # Timer pour actualiser les stats
+        # Timer pour rafraîchir les logs automatiquement
+        self.refresh_timer = QTimer()
+        self.refresh_timer.timeout.connect(self.refresh_logs)
+        self.refresh_timer.start(5000)  # Rafraîchir toutes les 5 secondes
+        
+        # Timer pour mettre à jour les statistiques
         self.stats_timer = QTimer()
         self.stats_timer.timeout.connect(self.update_stats)
-        self.stats_timer.start(5000)  # Toutes les 5 secondes
+        self.stats_timer.start(10000)  # Mettre à jour toutes les 10 secondes
         
-        # Timer pour vérifier les notifications
-        self.notification_timer = QTimer()
-        self.notification_timer.timeout.connect(self.check_notifications)
-        self.notification_timer.start(1000)  # Toutes les secondes
-    
     def setup_system_tray(self):
         """Configure l'icône de la barre système"""
         if QSystemTrayIcon.isSystemTrayAvailable():
             self.tray_icon = QSystemTrayIcon(self)
             
-            # Icône (créer une icône simple)
-            pixmap = QPixmap(16, 16)
-            pixmap.fill(QColor(13, 115, 119))
-            self.tray_icon.setIcon(QIcon(pixmap))
-            
             # Menu contextuel
             tray_menu = QMenu()
             
-            show_action = tray_menu.addAction("Afficher")
+            show_action = QAction("Afficher", self)
             show_action.triggered.connect(self.show)
+            tray_menu.addAction(show_action)
             
-            hide_action = tray_menu.addAction("Masquer")
+            hide_action = QAction("Masquer", self)
             hide_action.triggered.connect(self.hide)
+            tray_menu.addAction(hide_action)
             
             tray_menu.addSeparator()
             
-            quit_action = tray_menu.addAction("Quitter")
+            quit_action = QAction("Quitter", self)
             quit_action.triggered.connect(self.close)
+            tray_menu.addAction(quit_action)
             
             self.tray_icon.setContextMenu(tray_menu)
             self.tray_icon.show()
     
-    def on_new_log_entry(self, entry: LogEntry):
-        """Traite une nouvelle entrée de log"""
-        # Ajoute à la table
-        self.log_table.add_log_entry(entry)
+    def setup_shortcuts(self):
+        """Configure les raccourcis clavier"""
+        from PySide6.QtGui import QShortcut, QKeySequence
         
-        # Ajoute au texte
-        timestamp = entry.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-        level_color = entry.level.value[1]
+        # F11: Basculer plein écran/fenêtré
+        self.fullscreen_shortcut = QShortcut(QKeySequence("F11"), self)
+        self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
         
-        # Format HTML pour le texte coloré
-        html_line = (f"<span style='color: #888'>[{timestamp}]</span> "
-                    f"<span style='color: {level_color}; font-weight: bold'>{entry.level.value[0]}</span> "
-                    f"<span style='color: #aaa'>{entry.logger_name}</span> - "
-                    f"<span style='color: white'>{entry.message}</span>")
-        
-        self.log_text.append(html_line)
-        
-        # Notification si nécessaire
-        if (entry.level.value[0] in self.log_manager.config.get("notification_levels", ["ERROR", "CRITICAL"]) and
-            self.log_manager.config.get("notifications_enabled", True)):
-            self.notification_widget.add_notification(entry)
-            
-            # Notification système
-            if hasattr(self, 'tray_icon') and self.tray_icon.isVisible():
-                self.tray_icon.showMessage(
-                    f"Neuro-Bot - {entry.level.value[0]}",
-                    entry.message[:100] + ("..." if len(entry.message) > 100 else ""),
-                    QSystemTrayIcon.Warning if entry.level.value[0] == "WARNING" else QSystemTrayIcon.Critical,
-                    3000
-                )
+        # F5: Actualiser les logs
+        self.refresh_shortcut = QShortcut(QKeySequence("F5"), self)
+        self.refresh_shortcut.activated.connect(self.refresh_logs)
     
+    def toggle_fullscreen(self):
+        """Basculer entre plein écran et mode fenêtré"""
+        if self.isFullScreen():
+            self.showMaximized()
+            self.statusBar().showMessage("🖥️ Mode fenêtré maximisé activé", 2000)
+        else:
+            self.showFullScreen()
+            self.statusBar().showMessage("🖥️ Mode plein écran activé", 2000)
+        
     def refresh_logs(self):
-        """Actualise l'affichage des logs"""
+        """Rafraîchit l'affichage des logs"""
         if not self.log_manager:
             return
         
@@ -733,70 +831,39 @@ class LogViewerMainWindow(QMainWindow):
             # Récupère les paramètres de filtrage
             filter_params = self.filter_widget.get_filter_params()
             
-            # Charge les logs
+            # Récupère les logs
             logs = self.log_manager.get_logs(**filter_params)
             
             # Met à jour la table
             self.log_table.update_logs(logs)
             
-            # Met à jour le texte
-            self.log_text.clear()
-            for log in reversed(logs):
-                timestamp = log.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-                level_color = log.level.value[1]
-                
-                html_line = (f"<span style='color: #888'>[{timestamp}]</span> "
-                           f"<span style='color: {level_color}; font-weight: bold'>{log.level.value[0]}</span> "
-                           f"<span style='color: #aaa'>{log.logger_name}</span> - "
-                           f"<span style='color: white'>{log.message}</span>")
-                
-                self.log_text.append(html_line)
-            
-            # Met à jour la liste des loggers
-            loggers = list(set(log.logger_name for log in logs))
-            loggers.sort()
-            self.filter_widget.update_loggers(loggers)
-            
-            self.statusBar().showMessage(f"Logs chargés: {len(logs)}")
+            # Met à jour le statut
+            self.status_label.setText(f"🟢 {len(logs)} logs affichés")
+            self.statusBar().showMessage(f"Dernière mise à jour: {datetime.now().strftime('%H:%M:%S')} - {len(logs)} entrées")
             
         except Exception as e:
-            QMessageBox.warning(self, "Erreur", f"Erreur lors du chargement des logs: {e}")
-    
+            self.status_label.setText("🔴 Erreur")
+            self.statusBar().showMessage(f"Erreur lors du rafraîchissement: {e}")
+            
     def update_stats(self):
         """Met à jour les statistiques"""
         if not self.log_manager:
             return
         
         try:
-            stats = self.log_manager.get_stats(7)  # 7 derniers jours
+            stats = self.log_manager.get_stats()
             self.stats_widget.update_stats(stats)
         except Exception as e:
-            print(f"Erreur mise à jour stats: {e}")
+            print(f"Erreur lors de la mise à jour des stats: {e}")
     
-    def check_notifications(self):
-        """Vérifie les nouvelles notifications"""
-        if not self.log_manager:
-            return
-        
-        try:
-            while True:
-                try:
-                    entry = self.log_manager.notification_queue.get_nowait()
-                    # La notification est déjà traitée dans on_new_log_entry
-                except Empty:
-                    break
-        except Exception as e:
-            print(f"Erreur vérification notifications: {e}")
-    
-    def toggle_auto_scroll(self, enabled: bool):
+    def set_auto_scroll(self, enabled: bool):
         """Active/désactive l'auto-scroll"""
         self.auto_scroll_enabled = enabled
         self.log_table.auto_scroll_enabled = enabled
-    
+        
     def clear_display(self):
         """Efface l'affichage"""
         self.log_table.clear_logs()
-        self.log_text.clear()
         self.statusBar().showMessage("Affichage effacé")
     
     def export_logs(self):
@@ -831,89 +898,40 @@ class LogViewerMainWindow(QMainWindow):
             success = self.log_manager.export_logs(file_path, format_type, **filter_params)
             
             if success:
-                QMessageBox.information(self, "Succès", f"Logs exportés vers: {file_path}")
+                QMessageBox.information(self, "Succès", f"✅ Logs exportés vers:\n{file_path}")
             else:
-                QMessageBox.warning(self, "Erreur", "Erreur lors de l'export des logs")
+                QMessageBox.warning(self, "Erreur", "❌ Erreur lors de l'export des logs")
                 
         except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Erreur lors de l'export: {e}")
+            QMessageBox.critical(self, "Erreur", f"❌ Erreur lors de l'export:\n{e}")
     
     def cleanup_logs(self):
         """Nettoie les anciens logs selon le sélecteur de jours"""
         if not self.log_manager:
             return
         
-        # Demande toujours le nombre de jours à conserver via une boîte de dialogue
-        default_days = int(self.log_manager.config.get('cleanup_days', 30))
-        days, ok = QInputDialog.getInt(
-            self,
-            "Nettoyage des anciens logs",
-            "Garder (jours):",
-            default_days,
-            1, 3650, 1
-        )
-        if not ok:
-            return
-        # Calcul du cutoff à 00:00 locale (nettoyage par jour)
-        now_local = datetime.now().astimezone()
-        cutoff_dt = (now_local - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
-        # Format selon locale système
-        cutoff_str = cutoff_dt.strftime("%c")
-        # Compte les entrées impactées
-        try:
-            to_delete = self.log_manager.count_logs_older_than(cutoff_dt)
-        except Exception:
-            to_delete = None
-        info_count = f"\nEntrées concernées: {to_delete}" if to_delete is not None else ""
+        # Demande confirmation
+        days = self.filter_widget.cleanup_days_spin.value()
         reply = QMessageBox.question(
             self,
             "Confirmation",
-            f"Supprimer les logs plus vieux que {days} jour(s) (avant le {cutoff_str}) ?{info_count}",
+            f"Voulez-vous vraiment supprimer tous les logs de plus de {days} jours?\n"
+            f"Cette action est irréversible.",
             QMessageBox.Yes | QMessageBox.No
         )
         
         if reply == QMessageBox.Yes:
             try:
-                deleted_count = self.log_manager.cleanup_logs(cutoff_iso=cutoff_dt.isoformat())
-                QMessageBox.information(
-                    self,
-                    "Nettoyage terminé",
-                    f"{deleted_count} entrées de log supprimées"
-                )
-                self.refresh_logs()
-            except Exception as e:
-                QMessageBox.critical(self, "Erreur", f"Erreur lors du nettoyage: {e}")
-
-    def purge_all_logs(self):
-        """Vider complètement la table des logs (avec confirmation)"""
-        if not self.log_manager:
-            return
-        
-        reply = QMessageBox.warning(
-            self,
-            "Vider tous les logs",
-            "Cette opération supprimera TOUTES les entrées de logs de manière irréversible.\n\nConfirmer ?",
-            QMessageBox.Yes | QMessageBox.No
-        )
-        if reply == QMessageBox.Yes:
-            try:
-                deleted_count = self.log_manager.delete_all_logs()
+                deleted_count = self.log_manager.cleanup_old_logs(days)
                 QMessageBox.information(
                     self,
                     "Purge terminée",
-                    f"{deleted_count} entrées supprimées"
+                    f"✅ {deleted_count} entrées supprimées"
                 )
                 self.clear_display()
+                self.refresh_logs()
             except Exception as e:
-                QMessageBox.critical(self, "Erreur", f"Erreur lors de la purge: {e}")
-    
-    def show_config(self):
-        """Affiche la configuration"""
-        QMessageBox.information(
-            self,
-            "Configuration",
-            "Interface de configuration à implémenter"
-        )
+                QMessageBox.critical(self, "Erreur", f"❌ Erreur lors de la purge:\n{e}")
     
     def closeEvent(self, event):
         """Gère la fermeture de la fenêtre"""
@@ -933,8 +951,8 @@ def main():
     else:
         need_exec = False
     
-    # Applique le thème sombre
-    DarkTheme.apply(app)
+    # Applique le thème Neuro-Bot unifié
+    NeuroTheme.apply(app)
     
     # Crée la fenêtre principale
     window = LogViewerMainWindow()

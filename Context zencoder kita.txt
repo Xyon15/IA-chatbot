@@ -1,54 +1,3 @@
-Xyon chatbot :
-
-
-Launch
-
-cd C:\Dev\IA-chatbot
-.\llama-venv\Scripts\activate
-python gui/launch_gui.py
-
-
-
-
-
-A faire : 
-- Erreur db discussion classique (prblm avec facts)
-- Gestion de la mémoire et apprentissage (cad ajouter une table dans db pour les recherches) 
-- Elle enregistre elle même des facts
-- Externaliser la configuration (paths, model params) dans un fichier config.json pour éviter d'éditer le code.
-
-Améliorer le système de recherche web (trop de texte et aussi en anglais)
-
-
---------------------------------------------------
-le gui se lance en plein écran mais pas le log viewer.
-
-
-
-fermer les cmd quand fenêtres pythons fermées
-
-renommer bot kira ( cest kira sur) et changer toutes les variables
-
-
-
-
-
-
-
-
-
-
-Perso : "Tu es une Neuro, une VTubeuse française, drôle, naturelle, expressive qui as la même personnalité que neuro_sama. "
-        "Tu ne mentionnes jamais de sources ou de recherches web. "
-        "Réponds toujours en français de façon fluide, avec des phrases courtes, sans lien ni citation.\n"
-        f"Utilisateur: {prompt}\nNeuro:"
-
-
-
-
-
-
-
 Tu es assistant·e dev. Aide à développer Neuro-Bot (chatbot Discord local). Priorise sécurité, fiabilité, performance GPU et persistance.
 
 Contrainte technique
@@ -107,25 +56,4 @@ Code PR-ready + tests (pytest) + requirements.txt/setup_dev.bat + checklist d'ac
 
 Si jamais tu viens a créer des scripts de test (ce n'est pas obligatoire d'en faire tout le temps, que quand c'est utile) tu les mettras dans le dossier "zen tests"
 
-
-
-
-
-Tu es assistant·e dev. Aide à développer une interface de suivi des performances. 
 Tu parles toujours en français
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

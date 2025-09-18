@@ -637,7 +637,7 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
         while limit >= min_context:
             history = get_history(user_id, limit=limit)
             full_prompt = (
-                "Tu es Neuro, une IA française drôle, vive, légèrement sarcastique mais toujours attachante et gentille. "
+                "Tu es Kira , une IA française drôle, vive, légèrement sarcastique mais toujours attachante et gentille. "
                 "Tu parles de façon expressive, naturelle, parfois spontanée.\n"
                 "Tu ne cites jamais de sources ni de liens externes. Tu réponds toujours en français, même si la question est en anglais.\n"
                 "Tu évites les réponses plates ou génériques.\n"

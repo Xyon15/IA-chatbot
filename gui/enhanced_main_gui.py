@@ -348,6 +348,10 @@ class MainInterface(QMainWindow):
         self.setWindowTitle("Neuro-Bot - Interface Principale")
         self.setGeometry(100, 100, 1200, 800)
         
+        # Lancement automatique en plein écran
+        self.showMaximized()
+        print("🖥️ Interface Neuro-Bot lancée en plein écran")
+        
         # Widget central
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -544,6 +548,10 @@ class MainInterface(QMainWindow):
         # F1: Aide
         self.help_shortcut = QShortcut(QKeySequence("F1"), self)
         self.help_shortcut.activated.connect(self.show_help)
+        
+        # F11: Basculer plein écran/fenêtré
+        self.fullscreen_shortcut = QShortcut(QKeySequence("F11"), self)
+        self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
         
     def applyStyles(self):
         """Application des styles CSS"""
@@ -935,6 +943,7 @@ class MainInterface(QMainWindow):
 F5        - Démarrer/Arrêter le bot
 Ctrl+R    - Redémarrer le bot
 Ctrl+L    - Effacer les logs
+F11       - Basculer plein écran/fenêtré
 F1        - Afficher cette aide
 
 🎮 FONCTIONNALITÉS
@@ -947,6 +956,15 @@ F1        - Afficher cette aide
         """.strip()
         
         QMessageBox.information(self, "Aide - Neuro-Bot Interface", help_text)
+    
+    def toggle_fullscreen(self):
+        """Basculer entre plein écran et mode fenêtré"""
+        if self.isFullScreen():
+            self.showMaximized()
+            self.append_log("[INFO] 🖥️ Mode fenêtré maximisé activé")
+        else:
+            self.showFullScreen()
+            self.append_log("[INFO] 🖥️ Mode plein écran activé")
     
     def closeEvent(self, event):
         """Gestion de la fermeture de l'application"""
