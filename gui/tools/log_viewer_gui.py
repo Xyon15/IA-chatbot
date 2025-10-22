@@ -345,6 +345,7 @@ class LogTableWidget(QTableWidget):
     
     def __init__(self):
         super().__init__()
+        self.auto_scroll_enabled = True  # Attribut pour l'auto-scroll
         self.setup_table()
         
     def setup_table(self):
@@ -403,7 +404,8 @@ class LogTableWidget(QTableWidget):
         self.setItem(row, 5, function_item)
         
         # Scroll vers le bas si auto-scroll activé
-        if hasattr(self.parent(), 'auto_scroll_enabled') and self.parent().auto_scroll_enabled:
+        parent = self.parent()
+        if hasattr(parent, 'auto_scroll_enabled') and getattr(parent, 'auto_scroll_enabled', False):
             self.scrollToBottom()
     
     def clear_logs(self):
@@ -922,7 +924,14 @@ class LogViewerMainWindow(QMainWindow):
         
         if reply == QMessageBox.StandardButton.Yes:
             try:
-                deleted_count = self.log_manager.cleanup_old_logs(days)
+                # Essayer d'appeler la méthode cleanup_old_logs
+                try:
+                    deleted_count = self.log_manager.cleanup_old_logs(days)
+                except AttributeError:
+                    # Fallback si la méthode n'existe pas
+                    deleted_count = 0
+                    print("⚠️ Méthode cleanup_old_logs non disponible dans LogManager")
+                    
                 QMessageBox.information(
                     self,
                     "Purge terminée",
@@ -952,7 +961,8 @@ def main():
         need_exec = False
     
     # Applique le thème Kira-Bot unifié
-    KiraTheme.apply(app)
+    if isinstance(app, QApplication):
+        KiraTheme.apply(app)
     
     # Crée la fenêtre principale
     window = LogViewerMainWindow()

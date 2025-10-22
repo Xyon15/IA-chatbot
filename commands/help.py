@@ -7,20 +7,20 @@ def setup(bot):
         try:
             help_text = """
 ```
-📚 COMMANDES DE NEURO
+📚 COMMANDES DE KIRA
 ────────────────────────────
 
-💬 Parle à Neuro simplement en la mentionnant ou en envoyant un message sans préfixe (!).
+💬 Parle à Kira simplement en la mentionnant ou en envoyant un message sans préfixe (!).
 
 🔧 Commandes disponibles :
 
-📊 !stats → Affiche les stats système et mémoire de Neuro
+📊 !stats → Affiche les stats système et mémoire de Kira
 🧠 !reset → Réinitialise la mémoire
 🛠️ !auto on/off → Active ou désactive les réponses automatiques
-🔢 !context <1-50> → Choisis le nombre d'échanges que neuro se souvient activement
+🔢 !context <1-50> → Choisis le nombre d'échanges que Kira se souvient activement
 🌐 !web on/off → Active ou désactive l'accès web (DuckDuckGo)
 🧪 !webtest <texte> → Teste une recherche web manuellement
-🧾 !remember [texte] → Ajoute un fait à la mémoire à long terme de Neuro
+🧾 !remember [texte] → Ajoute un fait à la mémoire à long terme de Kira
 🔍 !facts [@user] → Affiche les faits connus (soi-même ou un autre utilisateur)
 🧹 !forget me/@user/all → Oublie les faits
 📏 !limits [valeur] → Définit ou affiche la longueur maximale des réponses
@@ -34,7 +34,7 @@ def setup(bot):
 👋 !bye → Arrête proprement le bot
 ❓ !helpme → Affiche ce message d'aide
 
-⚠️ Seuls les utilisateurs avec le rôle « NeuroMaster » peuvent utiliser ces commandes.
+⚠️ Seuls les utilisateurs avec le rôle « KiraMaster » peuvent utiliser ces commandes.
 🔒 Certaines commandes nécessitent une authentification 2FA supplémentaire.
 ```
             """

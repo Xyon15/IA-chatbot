@@ -193,7 +193,7 @@ class ModelManager:
     
     def __init__(self):
         self.llm = None
-        self.current_profile = None
+        self.current_profile = 'cpu_fallback'  # Valeur par défaut sûre
         self.gpu_info = None
         self._detect_gpu_capabilities()
         self._initialize_model()
@@ -215,9 +215,9 @@ class ModelManager:
                 gpu_name = gpu_name.decode()
             
             mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-            vram_total_mb = mem_info.total // (1024**2)
-            vram_free_mb = mem_info.free // (1024**2)
-            vram_used_mb = mem_info.used // (1024**2)
+            vram_total_mb = int(mem_info.total) // (1024**2)
+            vram_free_mb = int(mem_info.free) // (1024**2)
+            vram_used_mb = int(mem_info.used) // (1024**2)
             
             self.gpu_info = {
                 'name': gpu_name,
@@ -234,7 +234,10 @@ class ModelManager:
             
             logger.info(f"GPU détectée: {gpu_name}")
             logger.info(f"VRAM: {vram_used_mb} MB utilisée / {vram_total_mb} MB total ({vram_free_mb} MB libre)")
-            logger.info(f"Profil sélectionné: {LLM_PROFILES[self.current_profile]['name']}")
+            if self.current_profile is not None:
+                logger.info(f"Profil sélectionné: {LLM_PROFILES[self.current_profile]['name']}")
+            else:
+                logger.info("Profil: Non défini")
             
         except Exception as e:
             logger.warning(f"Erreur détection GPU: {e} - utilisation CPU uniquement")
@@ -274,6 +277,9 @@ class ModelManager:
     
     def _get_llm_config(self):
         """Récupère la configuration LLM pour le profil actuel"""
+        if self.current_profile is None:
+            self.current_profile = 'cpu_fallback'
+            
         profile = LLM_PROFILES[self.current_profile].copy()
         
         # Supprimer les métadonnées pour ne garder que la config LLM
@@ -287,6 +293,8 @@ class ModelManager:
         """Initialise le modèle LLaMA avec la configuration optimisée"""
         try:
             llm_config = self._get_llm_config()
+            if self.current_profile is None:
+                self.current_profile = 'cpu_fallback'
             profile_name = LLM_PROFILES[self.current_profile]['name']
             
             logger.info(f"Initialisation du modèle: {config.MODEL_PATH}")
@@ -296,7 +304,8 @@ class ModelManager:
             # Utiliser la configuration de l'optimiseur GPU si disponible
             if GPU_OPTIMIZER_AVAILABLE:
                 try:
-                    optimized_config = gpu_optimizer.get_profile_config(self.current_profile)
+                    if self.current_profile is not None:
+                        optimized_config = gpu_optimizer.get_profile_config(self.current_profile)
                     # Fusionner avec la config existante, optimiseur priorisé
                     llm_config.update(optimized_config)
                     logger.info(f"Configuration optimiseur GPU appliquée: {optimized_config}")
@@ -356,6 +365,9 @@ class ModelManager:
     
     def get_current_profile(self):
         """Retourne le profil actuellement utilisé"""
+        if self.current_profile is None:
+            self.current_profile = 'cpu_fallback'
+            
         info = {
             'key': self.current_profile,
             'config': LLM_PROFILES[self.current_profile],
@@ -387,7 +399,7 @@ class ModelManager:
             pynvml.nvmlInit()
             handle = pynvml.nvmlDeviceGetHandleByIndex(0)
             mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-            vram_free_mb = mem_info.free // (1024**2)
+            vram_free_mb = int(mem_info.free) // (1024**2)
             pynvml.nvmlShutdown()
             
             # Sélection du profil optimal avec nouveaux profils
@@ -446,16 +458,33 @@ class ModelManager:
             elif n_ctx_attr is not None:
                 actual_ctx = n_ctx_attr
             else:
-                actual_ctx = LLM_PROFILES[self.current_profile]['n_ctx']
+                if self.current_profile is not None:
+                    actual_ctx = LLM_PROFILES[self.current_profile]['n_ctx']
+                else:
+                    actual_ctx = 4096  # Valeur par défaut
             
-            configured_ctx = LLM_PROFILES[self.current_profile]['n_ctx']
+            if self.current_profile is not None:
+                configured_ctx = LLM_PROFILES[self.current_profile]['n_ctx']
+            else:
+                configured_ctx = 4096  # Valeur par défaut
             training_ctx = 32768  # Contexte d'entraînement typique pour les modèles 7B
+            
+            # S'assurer que actual_ctx est un nombre valide
+            actual_ctx_num = 4096.0  # Valeur par défaut sûre
+            try:
+                if isinstance(actual_ctx, (int, float)):
+                    actual_ctx_num = float(actual_ctx)
+                elif actual_ctx is not None:
+                    # Essayer de convertir en string puis en float
+                    actual_ctx_num = float(str(actual_ctx))
+            except (ValueError, TypeError, AttributeError):
+                actual_ctx_num = 4096.0
             
             return {
                 'configured_ctx': configured_ctx,
                 'actual_ctx': actual_ctx,
                 'training_ctx': training_ctx,
-                'efficiency_percent': (actual_ctx / training_ctx) * 100,
+                'efficiency_percent': (actual_ctx_num / training_ctx) * 100,
                 'profile': self.current_profile
             }
             
@@ -466,6 +495,9 @@ class ModelManager:
     def get_gpu_optimization_report(self):
         """Retourne un rapport d'optimisation GPU détaillé"""
         if not GPU_OPTIMIZER_AVAILABLE:
+            if self.current_profile is None:
+                self.current_profile = 'cpu_fallback'
+                
             return {
                 "error": "Optimiseur GPU avancé non disponible",
                 "fallback_info": {
@@ -622,7 +654,10 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
             max_total = context_info['actual_ctx']
         else:
             # Fallback vers la configuration du profil
-            max_total = LLM_PROFILES[model_manager.current_profile]['n_ctx']
+            if model_manager.current_profile is not None:
+                max_total = LLM_PROFILES[model_manager.current_profile]['n_ctx']
+            else:
+                max_total = 4096  # Valeur par défaut sûre
         
         # S'assurer que max_total est un entier
         max_total = int(max_total)
@@ -641,9 +676,8 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
                 "Tu ne cites jamais de sources ni de liens externes. Tu réponds toujours en français, même si la question est en anglais.\n"
                 "Tu évites les réponses plates ou génériques.\n"
                 "Si une information t'est donnée, utilise-la naturellement dans ta réponse sans dire que tu l'as trouvée ou recherchée.\n"
-                "                "Kira adore plaisanter, poser des questions en retour ou rebondir de manière surprenante."
+                "Kira adore plaisanter, poser des questions en retour ou rebondir de manière surprenante."
                 "\n\n"
-\n\n"
             )
 
             # Injecte les faits connus sur l'utilisateur
@@ -679,6 +713,9 @@ async def generate_reply(user_id: str, prompt: str, context_limit: int = 10) -> 
         start = time.time()
         
         # Génération avec le modèle (exécuté dans un thread pour ne pas bloquer l'event loop)
+        if llm is None:
+            return "❌ Erreur : modèle non initialisé"
+            
         output = await asyncio.to_thread(
             llm,
             full_prompt,

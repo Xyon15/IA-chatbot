@@ -1,19 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Contrôles avancés pour NeuroBot GUI
-Interface de configuration et contrôle approfondi
+Contrôles avancés pour Kira-Bot GUI
+Interface de configuration et contrôle approfondi - Version modulaire
 """
 
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox,
-    QLabel, QPushButton, QSlider, QSpinBox, QComboBox, QCheckBox,
-    QProgressBar, QTextEdit, QTabWidget, QFrame, QSplitter,
-    QScrollArea, QDial, QLCDNumber
-)
-from PySide6.QtCore import QTimer, Signal, Qt
-from PySide6.QtGui import QFont, QPixmap, QColor
-import psutil
+# Import de l'architecture modulaire
+try:
+    from gui.core.qt_imports import *
+    from gui.modules.monitoring import SystemMetricCard, CircularProgressIndicator
+    from gui.modules.notifications import show_success, show_error, show_warning
+    MODULAR_GUI_AVAILABLE = True
+except ImportError:
+    # Fallback vers imports directs
+    from PySide6.QtWidgets import (
+        QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox,
+        QLabel, QPushButton, QSlider, QSpinBox, QComboBox, QCheckBox,
+        QProgressBar, QTextEdit, QTabWidget, QFrame, QSplitter,
+        QScrollArea, QDial, QLCDNumber
+    )
+    from PySide6.QtCore import QTimer, Signal, Qt
+    from PySide6.QtGui import QFont, QPixmap, QColor
+    MODULAR_GUI_AVAILABLE = False
+
+# Imports système
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+
 import json
 import os
 from typing import Dict, Any
@@ -66,7 +82,7 @@ class PerformanceWidget(QWidget):
         
         # Barres de charge par CPU core
         self.cpu_bars = []
-        cpu_count = psutil.cpu_count()
+        cpu_count = psutil.cpu_count() or 4  # Fallback à 4 cores si None
         for i in range(min(cpu_count, 8)):  # Maximum 8 barres pour l'affichage
             bar_layout = QHBoxLayout()
             
@@ -105,12 +121,12 @@ class PerformanceWidget(QWidget):
         
         # Unité
         unit_label = QLabel(unit)
-        unit_label.setAlignment(Qt.AlignCenter)
+        unit_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         unit_label.setStyleSheet("color: #666; font-size: 12px; font-weight: bold;")
         layout.addWidget(unit_label)
         
-        # Stocke la référence LCD
-        group.lcd = lcd
+        # Stocke la référence LCD dans une propriété
+        setattr(group, 'lcd', lcd)
         return group
         
     def setup_monitoring(self):
@@ -129,7 +145,7 @@ class PerformanceWidget(QWidget):
             # CPU fréquence
             cpu_freq = psutil.cpu_freq()
             if cpu_freq:
-                self.cpu_freq_group.lcd.display(round(cpu_freq.current / 1000, 2))
+                getattr(self.cpu_freq_group, 'lcd').display(round(cpu_freq.current / 1000, 2))
             
             # CPU par core
             cpu_percents = psutil.cpu_percent(percpu=True)
@@ -138,27 +154,30 @@ class PerformanceWidget(QWidget):
                 
             # Température CPU (si disponible)
             try:
-                temps = psutil.sensors_temperatures()
-                if 'coretemp' in temps and temps['coretemp']:
-                    cpu_temp = temps['coretemp'][0].current
-                    self.cpu_temp_group.lcd.display(round(cpu_temp, 1))
+                if hasattr(psutil, 'sensors_temperatures'):
+                    temps = psutil.sensors_temperatures()
+                    if 'coretemp' in temps and temps['coretemp']:
+                        cpu_temp = temps['coretemp'][0].current
+                        getattr(self.cpu_temp_group, 'lcd').display(round(cpu_temp, 1))
+                    else:
+                        getattr(self.cpu_temp_group, 'lcd').display(0)
                 else:
-                    self.cpu_temp_group.lcd.display(0)
+                    getattr(self.cpu_temp_group, 'lcd').display(0)
             except:
-                self.cpu_temp_group.lcd.display(0)
+                getattr(self.cpu_temp_group, 'lcd').display(0)
             
             # Réseau
             current_network = psutil.net_io_counters()
             if hasattr(self, 'last_network_io'):
                 net_speed = (current_network.bytes_recv - self.last_network_io.bytes_recv) / (1024 * 1024)
-                self.network_group.lcd.display(round(net_speed, 2))
+                getattr(self.network_group, 'lcd').display(round(net_speed, 2))
             self.last_network_io = current_network
             
             # Disque I/O
             current_disk = psutil.disk_io_counters()
-            if current_disk and hasattr(self, 'last_disk_io'):
+            if current_disk and hasattr(self, 'last_disk_io') and self.last_disk_io:
                 disk_speed = (current_disk.read_bytes - self.last_disk_io.read_bytes) / (1024 * 1024)
-                self.disk_group.lcd.display(round(disk_speed, 2))
+                getattr(self.disk_group, 'lcd').display(round(disk_speed, 2))
             if current_disk:
                 self.last_disk_io = current_disk
                 
@@ -204,7 +223,7 @@ class ModelConfigWidget(QWidget):
         # Threads
         main_layout.addWidget(QLabel("Threads CPU:"), 2, 0)
         self.threads_spin = QSpinBox()
-        self.threads_spin.setRange(1, psutil.cpu_count())
+        self.threads_spin.setRange(1, psutil.cpu_count() or 8)
         self.threads_spin.setValue(6)
         main_layout.addWidget(self.threads_spin, 2, 1)
         

@@ -8,6 +8,23 @@ import os
 import json
 import discord
 from discord.ext import commands
+from typing import Optional, Dict, Any, Union
+import time
+import asyncio
+
+# --- Classes personnalisées ---
+class KiraBot(commands.Bot):
+    """Bot Discord personnalisé avec attributs supplémentaires"""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Attributs personnalisés
+        self.waiting_for_2fa: Dict[int, Dict[str, Any]] = {}
+        self.current_context_limit: int = 10
+        self.auto_reply_enabled: bool = False
+        self.web_enabled: bool = False
+        self.DB_PATH: Optional[str] = None
+        self.bot_start_time: float = time.time()
 import time
 import asyncio
 from commands import setup_all_commands
@@ -74,8 +91,7 @@ def create_bot():
     intents = discord.Intents.default()
     intents.messages = True
     intents.message_content = True
-    bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
-    bot.waiting_for_2fa = {}
+    bot = KiraBot(command_prefix="!", intents=intents, help_command=None)
 
     # Charge dynamiquement le context_limit
     try:
@@ -113,12 +129,21 @@ def start_bot(loop=None):
     global bot, _bot_task, _bot_loop
     if bot is not None:
         logger.warning("Bot déjà démarré")
-        return _bot_task
+        if _bot_task is not None:
+            return _bot_task
+        else:
+            # Si bot existe mais pas de task, on redémarre
+            bot = None
     if loop is None:
         loop = asyncio.get_event_loop()
     _bot_loop = loop
     bot = create_bot()
     logger.info("Démarrage du bot Discord...")
+    
+    # Vérification du token
+    if config.TOKEN is None:
+        raise ValueError("Token Discord non configuré")
+        
     return bot.start(config.TOKEN)
 
 async def stop_bot():
@@ -136,4 +161,6 @@ if __name__ == "__main__":
     asyncio.run(start_bot())
 
 async def some_function(user_id, prompt):
+    if bot is None:
+        raise RuntimeError("Bot non initialisé")
     reply = await generate_reply(user_id, prompt, context_limit=bot.current_context_limit)

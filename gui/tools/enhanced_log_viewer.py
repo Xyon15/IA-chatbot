@@ -64,19 +64,19 @@ class KiraTheme:
         
         # Palette de couleurs
         palette = QPalette()
-        palette.setColor(QPalette.Window, QColor(COLOR_PALETTE['bg_primary']))
-        palette.setColor(QPalette.WindowText, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.Base, QColor(COLOR_PALETTE['bg_secondary']))
-        palette.setColor(QPalette.AlternateBase, QColor(COLOR_PALETTE['bg_tertiary']))
-        palette.setColor(QPalette.ToolTipBase, QColor(COLOR_PALETTE['bg_secondary']))
-        palette.setColor(QPalette.ToolTipText, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.Text, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.Button, QColor(COLOR_PALETTE['bg_tertiary']))
-        palette.setColor(QPalette.ButtonText, QColor(COLOR_PALETTE['text_primary']))
-        palette.setColor(QPalette.BrightText, QColor(COLOR_PALETTE['error']))
-        palette.setColor(QPalette.Link, QColor(COLOR_PALETTE['accent_blue']))
-        palette.setColor(QPalette.Highlight, QColor(COLOR_PALETTE['accent_blue']))
-        palette.setColor(QPalette.HighlightedText, QColor(COLOR_PALETTE['bg_primary']))
+        palette.setColor(QPalette.ColorRole.Window, QColor(COLOR_PALETTE['bg_primary']))
+        palette.setColor(QPalette.ColorRole.WindowText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.Base, QColor(COLOR_PALETTE['bg_secondary']))
+        palette.setColor(QPalette.ColorRole.AlternateBase, QColor(COLOR_PALETTE['bg_tertiary']))
+        palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(COLOR_PALETTE['bg_secondary']))
+        palette.setColor(QPalette.ColorRole.ToolTipText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.Text, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.Button, QColor(COLOR_PALETTE['bg_tertiary']))
+        palette.setColor(QPalette.ColorRole.ButtonText, QColor(COLOR_PALETTE['text_primary']))
+        palette.setColor(QPalette.ColorRole.BrightText, QColor(COLOR_PALETTE['error']))
+        palette.setColor(QPalette.ColorRole.Link, QColor(COLOR_PALETTE['accent_blue']))
+        palette.setColor(QPalette.ColorRole.Highlight, QColor(COLOR_PALETTE['accent_blue']))
+        palette.setColor(QPalette.ColorRole.HighlightedText, QColor(COLOR_PALETTE['bg_primary']))
         
         app.setPalette(palette)
         
@@ -333,7 +333,7 @@ class StatsCard(QFrame):
     def __init__(self, title: str, icon: str, value: str = "0"):
         super().__init__()
         self.setFixedHeight(100)
-        self.setFrameStyle(QFrame.Box)
+        self.setFrameStyle(QFrame.Shape.Box)
         
         layout = QVBoxLayout(self)
         layout.setContentsMargins(16, 12, 16, 12)
@@ -356,7 +356,7 @@ class StatsCard(QFrame):
         # Valeur
         self.value_label = QLabel(value)
         self.value_label.setStyleSheet(f"color: {COLOR_PALETTE['text_primary']}; font-size: 18px; font-weight: bold;")
-        self.value_label.setAlignment(Qt.AlignCenter)
+        self.value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.value_label)
         
         # Style de la carte
@@ -387,18 +387,18 @@ class EnhancedLogTable(QTableWidget):
         self.setHorizontalHeaderLabels(headers)
         
         self.setAlternatingRowColors(True)
-        self.setSelectionBehavior(QTableWidget.SelectRows)
+        self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setSortingEnabled(True)
         self.setShowGrid(True)
         
         # Redimensionnement des colonnes
         header = self.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(3, QHeaderView.Stretch)
-        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)
         
     def add_log_entry(self, entry: LogEntry, auto_scroll: bool = True):
         """Ajoute une entrée de log avec couleurs"""
@@ -432,7 +432,7 @@ class EnhancedLogTable(QTableWidget):
         level_icon = level_icons.get(entry.level.value[0], '📝')
         level_item = QTableWidgetItem(f"{level_icon} {entry.level.value[0]}")
         level_item.setForeground(QColor(level_color))
-        level_item.setData(Qt.UserRole, entry.level.value[0])
+        level_item.setData(Qt.ItemDataRole.UserRole, entry.level.value[0])
         self.setItem(row, 1, level_item)
         
         # Logger
@@ -605,7 +605,7 @@ class StatsPanel(QWidget):
         # Titre
         title = QLabel("📊 Statistiques des Logs")
         title.setStyleSheet(f"font-size: 14px; font-weight: bold; color: {COLOR_PALETTE['accent_blue']}; margin-bottom: 10px;")
-        title.setAlignment(Qt.AlignCenter)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
         
         # Cartes de stats
@@ -676,7 +676,7 @@ class EnhancedLogViewer(QMainWindow):
         main_layout.setSpacing(16)
         
         # Splitter principal
-        main_splitter = QSplitter(Qt.Horizontal)
+        main_splitter = QSplitter(Qt.Orientation.Horizontal)
         main_layout.addWidget(main_splitter)
         
         # Panel gauche
@@ -777,7 +777,10 @@ class EnhancedLogViewer(QMainWindow):
         """Actualise les logs"""
         try:
             filter_params = self.filter_panel.get_filter_params()
-            logs = self.log_manager.log_db.get_logs(**filter_params)
+            if self.log_manager and hasattr(self.log_manager, 'log_db') and self.log_manager.log_db:
+                logs = self.log_manager.log_db.get_logs(**filter_params)
+            else:
+                logs = []  # Liste vide si pas de log_db
             
             # Met à jour la table
             self.log_table.update_logs(logs)
@@ -834,8 +837,13 @@ class EnhancedLogViewer(QMainWindow):
     def update_stats(self):
         """Met à jour les statistiques"""
         try:
-            stats = self.log_manager.log_db.get_log_stats(7)
-            self.stats_panel.update_stats(stats)
+            if self.log_manager and hasattr(self.log_manager, 'log_db') and self.log_manager.log_db:
+                stats = self.log_manager.log_db.get_log_stats(7)
+                self.stats_panel.update_stats(stats)
+            else:
+                # Stats par défaut si pas de log_db
+                default_stats = {'total': 0, 'errors': 0, 'warnings': 0, 'info': 0}
+                self.stats_panel.update_stats(default_stats)
         except Exception as e:
             print(f"Erreur stats: {e}")
             
@@ -857,7 +865,10 @@ class EnhancedLogViewer(QMainWindow):
         if file_path:
             try:
                 filter_params = self.filter_panel.get_filter_params()
-                logs = self.log_manager.log_db.get_logs(**filter_params)
+                if self.log_manager and hasattr(self.log_manager, 'log_db') and self.log_manager.log_db:
+                    logs = self.log_manager.log_db.get_logs(**filter_params)
+                else:
+                    logs = []  # Liste vide si pas de log_db
                 
                 # Export simple en JSON
                 import json
@@ -891,7 +902,10 @@ class EnhancedLogViewer(QMainWindow):
         
         if ok:
             try:
-                deleted = self.log_manager.log_db.cleanup_old_logs(days)
+                if self.log_manager and hasattr(self.log_manager, 'log_db') and self.log_manager.log_db:
+                    deleted = self.log_manager.log_db.cleanup_old_logs(days)
+                else:
+                    deleted = 0  # Aucune suppression si pas de log_db
                 QMessageBox.information(
                     self, 
                     "Nettoyage terminé", 
@@ -912,7 +926,8 @@ def main():
         need_exec = False
     
     # Applique le thème
-    KiraTheme.apply(app)
+    if isinstance(app, QApplication):
+        KiraTheme.apply(app)
     
     # Crée et affiche la fenêtre
     viewer = EnhancedLogViewer()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-NeuroBot - Interface GUI Principale Améliorée
+Kira-Bot - Interface GUI Principale Améliorée
 Interface moderne avec indicateurs circulaires pour les performances
 """
 
@@ -11,30 +11,50 @@ import time
 import threading
 import asyncio
 import sqlite3
-import psutil
-import pynvml
 import json
 import math
 from datetime import datetime
 from typing import Dict, List, Optional
 import traceback
 
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
-    QGridLayout, QLabel, QPushButton, QTextEdit, QFrame, QProgressBar,
-    QSplitter, QGroupBox, QSystemTrayIcon, QMenu, QMessageBox, QSpacerItem, QSizePolicy
-)
-from PySide6.QtCore import (
-    QTimer, QThread, Signal, Qt, QPropertyAnimation, QEasingCurve,
-    QRect, QSize, QPoint
-)
-from PySide6.QtGui import (
-    QFont, QPixmap, QPainter, QColor, QBrush, QPen, QLinearGradient,
-    QIcon, QAction, QPalette, QRadialGradient, QKeySequence, QShortcut
-)
-
 # Ajout du répertoire parent au path pour les imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import de l'architecture modulaire
+try:
+    from gui.core.qt_imports import *
+    from gui.modules.notifications import show_success, show_error, show_warning, NotificationManager
+    from gui.modules.monitoring import SystemMonitorPanel, CircularProgressIndicator
+    MODULAR_GUI_AVAILABLE = True
+except ImportError:
+    # Fallback vers imports directs
+    from PySide6.QtWidgets import (
+        QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
+        QGridLayout, QLabel, QPushButton, QTextEdit, QFrame, QProgressBar,
+        QSplitter, QGroupBox, QSystemTrayIcon, QMenu, QMessageBox, QSpacerItem, QSizePolicy
+    )
+    from PySide6.QtCore import (
+        QTimer, QThread, Signal, Qt, QPropertyAnimation, QEasingCurve,
+        QRect, QSize, QPoint
+    )
+    from PySide6.QtGui import (
+        QFont, QPixmap, QPainter, QColor, QBrush, QPen, QLinearGradient,
+        QIcon, QAction, QPalette, QRadialGradient, QKeySequence, QShortcut, QTextCursor
+    )
+    MODULAR_GUI_AVAILABLE = False
+
+# Imports systèmes requis
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+
+try:
+    import pynvml
+    PYNVML_AVAILABLE = True
+except ImportError:
+    PYNVML_AVAILABLE = False
 
 # Import des modules du bot
 try:
@@ -44,8 +64,32 @@ except ImportError as e:
     print(f"Modules du bot non disponibles : {e}")
     BOT_AVAILABLE = False
 
-# Configuration des couleurs
-COLOR_PALETTE = {
+# Configuration des couleurs - Migration vers architecture modulaire
+if MODULAR_GUI_AVAILABLE:
+    # Utiliser la palette centralisée
+    try:
+        from gui.core.qt_imports import COLOR_PALETTE
+    except ImportError:
+        # Définition locale pour fallback
+        COLOR_PALETTE = {
+            'bg_primary': '#0f0f0f',       # Noir très profond
+            'bg_secondary': '#1a1a1a',     # Noir profond
+            'bg_tertiary': '#2a2a2a',      # Gris très sombre
+            'accent_blue': '#00d4ff',      # Bleu néon
+            'accent_green': '#00ff88',     # Vert néon
+            'accent_orange': '#ff6b35',    # Orange vif
+            'accent_purple': '#8b5cf6',    # Violet
+            'text_primary': '#ffffff',     # Blanc pur
+            'text_secondary': '#b0b0b0',   # Gris clair
+            'text_accent': '#00d4ff',      # Bleu pour accents
+            'success': '#00ff88',          # Vert succès
+            'warning': '#ffaa00',          # Orange avertissement
+            'error': '#ff4444',            # Rouge erreur
+            'neutral': '#666666'           # Gris neutre
+        }
+else:
+    # Configuration locale pour compatibilité
+    COLOR_PALETTE = {
     'bg_primary': '#0f0f0f',       # Noir très profond
     'bg_secondary': '#1a1a1a',     # Noir profond
     'bg_tertiary': '#2a2a2a',      # Gris très sombre
@@ -76,7 +120,7 @@ class CircularIndicator(QWidget):
         self.text_value = "0%"
         self.setFixedSize(size, size)
         
-    def setValue(self, value: float, text_value: str = None):
+    def setValue(self, value: float, text_value: str = ""):
         self.value = max(0, min(value, self.max_value))
         if text_value:
             self.text_value = text_value
@@ -86,7 +130,7 @@ class CircularIndicator(QWidget):
         
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
         # Configuration
         rect = self.rect()
@@ -105,17 +149,17 @@ class CircularIndicator(QWidget):
             
             # Couleur avec gradient
             pen_color = QColor(self.color)
-            painter.setPen(QPen(pen_color, 6, Qt.SolidLine, Qt.RoundCap))
+            painter.setPen(QPen(pen_color, 6, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
             painter.drawArc(center.x() - radius, center.y() - radius, 
                           radius * 2, radius * 2, start_angle, span_angle)
         
         # Texte central - valeur
         painter.setPen(QColor(COLOR_PALETTE['text_primary']))
-        font = QFont("Segoe UI", 12, QFont.Bold)
+        font = QFont("Segoe UI", 12, QFont.Weight.Bold)
         painter.setFont(font)
         
         text_rect = QRect(center.x() - radius//2, center.y() - 10, radius, 20)
-        painter.drawText(text_rect, Qt.AlignCenter, self.text_value)
+        painter.drawText(text_rect, Qt.AlignmentFlag.AlignCenter, self.text_value)
         
         # Titre en bas
         painter.setPen(QColor(COLOR_PALETTE['text_secondary']))
@@ -123,7 +167,7 @@ class CircularIndicator(QWidget):
         painter.setFont(font)
         
         title_rect = QRect(center.x() - radius, center.y() + 15, radius * 2, 20)
-        painter.drawText(title_rect, Qt.AlignCenter, self.title)
+        painter.drawText(title_rect, Qt.AlignmentFlag.AlignCenter, self.title)
 
 class TemperatureCircularIndicator(QWidget):
     """Widget indicateur circulaire pour la température GPU"""
@@ -174,7 +218,7 @@ class TemperatureCircularIndicator(QWidget):
         
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
         # Configuration
         rect = self.rect()
@@ -203,7 +247,7 @@ class TemperatureCircularIndicator(QWidget):
                 alpha = int(155 + 100 * abs(time.time() * 2 % 1 - 0.5))
                 pen_color.setAlpha(alpha)
             
-            painter.setPen(QPen(pen_color, 8, Qt.SolidLine, Qt.RoundCap))
+            painter.setPen(QPen(pen_color, 8, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
             painter.drawArc(center.x() - radius, center.y() - radius, 
                           radius * 2, radius * 2, start_angle, span_angle)
             
@@ -215,17 +259,17 @@ class TemperatureCircularIndicator(QWidget):
                 # Couleur plus discrète pour l'utilisation
                 util_color = QColor(COLOR_PALETTE['text_secondary'])
                 util_color.setAlpha(120)
-                painter.setPen(QPen(util_color, 3, Qt.SolidLine, Qt.RoundCap))
+                painter.setPen(QPen(util_color, 3, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
                 painter.drawArc(center.x() - radius + 6, center.y() - radius + 6, 
                               (radius - 6) * 2, (radius - 6) * 2, start_angle, util_span)
         
         # Texte central - température
         painter.setPen(QColor(COLOR_PALETTE['text_primary']))
-        font = QFont("Segoe UI", 11, QFont.Bold)
+        font = QFont("Segoe UI", 11, QFont.Weight.Bold)
         painter.setFont(font)
         
         text_rect = QRect(center.x() - radius//2, center.y() - 15, radius, 20)
-        painter.drawText(text_rect, Qt.AlignCenter, self.text_value)
+        painter.drawText(text_rect, Qt.AlignmentFlag.AlignCenter, self.text_value)
         
         # Utilisation en petit texte
         if self.utilization > 0:
@@ -233,7 +277,7 @@ class TemperatureCircularIndicator(QWidget):
             font = QFont("Segoe UI", 8)
             painter.setFont(font)
             util_rect = QRect(center.x() - radius//2, center.y() + 2, radius, 15)
-            painter.drawText(util_rect, Qt.AlignCenter, f"{self.utilization:.0f}%")
+            painter.drawText(util_rect, Qt.AlignmentFlag.AlignCenter, f"{self.utilization:.0f}%")
         
         # Titre en bas
         painter.setPen(QColor(COLOR_PALETTE['text_secondary']))
@@ -241,7 +285,7 @@ class TemperatureCircularIndicator(QWidget):
         painter.setFont(font)
         
         title_rect = QRect(center.x() - radius, center.y() + 20, radius * 2, 20)
-        painter.drawText(title_rect, Qt.AlignCenter, self.title)
+        painter.drawText(title_rect, Qt.AlignmentFlag.AlignCenter, self.title)
 
 class StatusCard(QFrame):
     """Widget carte de statut"""
@@ -250,7 +294,7 @@ class StatusCard(QFrame):
         super().__init__()
         self.setObjectName("status_card")
         self.setFixedHeight(80)
-        self.setFrameStyle(QFrame.Box)
+        self.setFrameStyle(QFrame.Shape.Box)
         
         layout = QHBoxLayout(self)
         layout.setContentsMargins(15, 10, 15, 10)
@@ -379,7 +423,7 @@ class MainInterface(QMainWindow):
         # Titre
         title = QLabel("📊 PERFORMANCES SYSTÈME")
         title.setStyleSheet(f"color: {COLOR_PALETTE['text_primary']}; font-size: 18px; font-weight: bold;")
-        title.setAlignment(Qt.AlignCenter)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         perf_layout.addWidget(title)
         
         # Grille d'indicateurs circulaires
@@ -664,11 +708,26 @@ class MainInterface(QMainWindow):
                 mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
                 temp = pynvml.nvmlDeviceGetTemperature(handle, pynvml.NVML_TEMPERATURE_GPU)
                 
-                self.gpu_indicator.setValue(util.gpu, f"{temp}°C")
+                # Conversion sécurisée des valeurs
+                try:
+                    gpu_util = float(util.gpu) if util.gpu else 0.0
+                    temp_val = float(temp) if temp else 0.0
+                except (ValueError, TypeError):
+                    gpu_util = 0.0
+                    temp_val = 0.0
                 
-                vram_used = mem_info.used / (1024**2)
-                vram_total = mem_info.total / (1024**2)
-                vram_percent = (mem_info.used / mem_info.total) * 100
+                self.gpu_indicator.setValue(gpu_util, f"{temp_val:.0f}°C")
+                
+                # Conversion sécurisée VRAM
+                try:
+                    vram_used = float(mem_info.used) / (1024**2)
+                    vram_total = float(mem_info.total) / (1024**2)
+                    vram_percent = (float(mem_info.used) / float(mem_info.total)) * 100
+                except (ValueError, TypeError, ZeroDivisionError):
+                    vram_used = 0.0
+                    vram_total = 0.0
+                    vram_percent = 0.0
+                    
                 self.vram_indicator.setValue(vram_percent, f"{vram_used:.0f}M")
                 
                 pynvml.nvmlShutdown()
@@ -773,8 +832,8 @@ class MainInterface(QMainWindow):
         # Limite le nombre de lignes
         if self.log_display.document().lineCount() > 100:
             cursor = self.log_display.textCursor()
-            cursor.movePosition(cursor.Start)
-            cursor.select(cursor.LineUnderCursor)
+            cursor.movePosition(QTextCursor.MoveOperation.Start)
+            cursor.select(QTextCursor.SelectionType.LineUnderCursor)
             cursor.removeSelectedText()
             cursor.deleteChar()  # Supprime le saut de ligne
     
@@ -971,8 +1030,8 @@ F1        - Afficher cette aide
         if self.bot_thread and self.bot_thread.running:
             reply = QMessageBox.question(self, 'Fermeture', 
                                        'Le bot est en cours d\'exécution. Voulez-vous l\'arrêter et fermer ?',
-                                       QMessageBox.Yes | QMessageBox.No)
-            if reply == QMessageBox.Yes:
+                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.Yes:
                 self.stop_bot()
                 event.accept()
             else:
@@ -991,8 +1050,8 @@ def main():
     # Style global sombre
     app.setStyle('Fusion')
     dark_palette = QPalette()
-    dark_palette.setColor(QPalette.Window, QColor(COLOR_PALETTE['bg_primary']))
-    dark_palette.setColor(QPalette.WindowText, QColor(COLOR_PALETTE['text_primary']))
+    dark_palette.setColor(QPalette.ColorRole.Window, QColor(COLOR_PALETTE['bg_primary']))
+    dark_palette.setColor(QPalette.ColorRole.WindowText, QColor(COLOR_PALETTE['text_primary']))
     app.setPalette(dark_palette)
     
     window = MainInterface()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Lanceur principal unifié pour toutes les interfaces GUI de Neuro-Bot
+Lanceur principal unifié pour toutes les interfaces GUI de Kira-Bot
 Gère le lancement de l'interface moderne et de l'interface améliorée
 """
 
@@ -36,19 +36,23 @@ def check_dependencies():
     return True
 
 def launch_legacy_gui():
-    """Lance l'ancienne interface graphique (neuro_gui) - Legacy"""
+    """Lance l'ancienne interface graphique (kira_gui) - Legacy"""
     if not check_dependencies():
         return False
     
     try:
-        print("🚀 Lancement de NeuroBot GUI Legacy...")
-        
+        print("🚀 Lancement de KiraBot GUI Legacy...")
+
         # Créer l'application Qt d'abord pour éviter les conflits
         from PySide6.QtWidgets import QApplication
         
         # Vérifier si une application Qt existe déjà
         app = QApplication.instance()
         if app is None:
+            app = QApplication(sys.argv)
+        
+        # S'assurer que nous avons une QApplication (pas QCoreApplication)
+        if not isinstance(app, QApplication):
             app = QApplication(sys.argv)
             app_created = True
         else:
@@ -57,10 +61,17 @@ def launch_legacy_gui():
         # Ajout du répertoire parent au path
         parent_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         if parent_path not in sys.path:
-            sys.path.append(parent_path)
-        
-        # Import et configuration après création de l'app
-        from gui.neuro_gui import MainWindow, STYLES
+            sys.path.insert(0, parent_path)
+
+        # Vérification du chemin d'import et importation du module
+        try:
+            from gui.kira_gui import MainWindow, STYLES
+        except ModuleNotFoundError:
+            # Tentative d'import absolu si l'import relatif échoue
+            import importlib
+            kira_gui = importlib.import_module("gui.kira_gui")
+            MainWindow = getattr(kira_gui, "MainWindow")
+            STYLES = getattr(kira_gui, "STYLES")
         
         # Application du style global
         app.setStyleSheet(STYLES)
@@ -90,7 +101,7 @@ def launch_main_gui():
         return False
     
     try:
-        print("🚀 Lancement de NeuroBot GUI Moderne...")
+        print("🚀 Lancement de KiraBot GUI Moderne...")
         
         # Ajout du répertoire parent au path
         parent_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -114,7 +125,7 @@ def show_banner():
     """Affiche la bannière de bienvenue"""
     banner = """
     ╔══════════════════════════════════════════════════════════╗
-    ║                    🤖 NEUROBOT GUI                       ║
+    ║                    🤖 Kira GUI                           ║
     ║                   Lanceur Unifié                         ║
     ╠══════════════════════════════════════════════════════════╣
     ║                                                          ║
@@ -123,7 +134,7 @@ def show_banner():
     ║                     avec indicateurs circulaires        ║
     ║                                                          ║
     ║  📋 Interface Alternative :                              ║
-    ║     🎨 Legacy     : Ancienne interface neuro_gui        ║
+    ║     🎨 Legacy     : Ancienne interface kira_gui        ║
     ║                                                          ║
     ║  ✨ Fonctionnalités :                                    ║
     ║     📊 Monitoring temps réel (CPU, RAM, GPU, VRAM)      ║
@@ -140,7 +151,7 @@ def show_banner():
 def main():
     """Fonction principale avec sélection d'interface"""
     parser = argparse.ArgumentParser(
-        description="Lanceur unifié pour les interfaces GUI de Neuro-Bot",
+        description="Lanceur unifié pour les interfaces GUI de Kira-Bot",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemples d'utilisation:
@@ -180,7 +191,7 @@ Exemples d'utilisation:
     elif args.select:
         print("\n🎯 Sélection de l'interface :")
         print("  1. Interface Moderne (enhanced_main_gui) - RECOMMANDÉE")
-        print("  2. Interface Legacy (neuro_gui)")
+        print("  2. Interface Legacy (kira_gui)")
         
         while True:
             try:

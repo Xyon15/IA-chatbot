@@ -1,4 +1,30 @@
-# 🤖 IA-ChatBot (Kira-Bot)
+# ⚠️ PROJET ARCHIVÉ - Développement Continué sur Desktop-Mate
+
+> **📦 Ce projet a été archivé le 22 octobre 2025**
+> 
+> Le développement de **Kira-Bot** continue maintenant dans le projet **[Desktop-Mate](https://github.com/Xyon15/desktop-mate)** !
+> 
+> ### 🚀 Pourquoi Desktop-Mate ?
+> - **🎭 Avatar VRM Interactif** : Kira prend vie avec un avatar 3D sur votre bureau
+> - **🤖 IA Conversationnelle** : Toutes les fonctionnalités de Kira-Bot + expressions faciales émotionnelles
+> - **🖥️ Architecture Moderne** : Hybride Unity + Python, plus propre et extensible
+> - **📊 Session 10 en cours** : Intégration complète de l'IA conversationnelle (LLM local, Discord, 2FA)
+> 
+> ### 📖 Documentation Desktop-Mate
+> - **Repo GitHub** : [github.com/Xyon15/desktop-mate](https://github.com/Xyon15/desktop-mate)
+> - **Documentation** : [docs/START_HERE.md](https://github.com/Xyon15/desktop-mate/blob/main/docs/START_HERE.md)
+> - **Session 10 (IA)** : [docs/sessions/session_10_ai_chat/](https://github.com/Xyon15/desktop-mate/tree/main/docs/sessions/session_10_ai_chat)
+> 
+> ### 🔄 Ce qui a été migré
+> - ✅ Système de mémoire conversationnelle SQLite (amélioré)
+> - ✅ Architecture modulaire (src/ai/, src/discord_bot/, src/auth/)
+> - ✅ Modèle LLM Zephyr-7B (6.8 GB)
+> - ✅ Optimisation GPU avec profils adaptatifs
+> - ⏳ **En cours** : Configuration IA, Model Manager, Chat Engine
+> 
+> ---
+
+# 🤖 IA-ChatBot (Kira-Bot) - LEGACY
 
 Développé par Xyon
 
@@ -623,6 +649,66 @@ python launch_gui.py --help        # AIDE - Documentation complète
 
 ---
 
-*Documentation mise à jour - Kira-Bot v1.0 (Fusion GUI)*
+## 🔄 Migration vers Desktop-Mate
 
-**Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)
+### 🎯 Nouveau Projet : Desktop-Mate
+
+**Kira-Bot** évolue ! Le projet continue sous une forme **encore plus ambitieuse** avec **Desktop-Mate** :
+
+#### 🌟 Nouvelles Fonctionnalités
+- **🎭 Avatar VRM 3D** : Kira prend vie avec un modèle 3D interactif
+- **😊 Expressions Faciales** : 5 émotions avec transitions fluides
+- **👁️ Clignement Naturel** : Animation SmoothStep réaliste
+- **🎬 Mouvements de Tête** : Comportement vivant et naturel
+- **🖥️ Interface 3 Onglets** : GUI moderne et organisée
+- **🤖 IA Conversationnelle** : Toutes les fonctionnalités de Kira-Bot intégrées
+
+#### 📊 Progression Desktop-Mate
+- ✅ **Sessions 0-9** : Avatar VRM complet avec expressions et animations
+- 🔄 **Session 10** : IA Conversationnelle (Phases 1-2 complétées)
+  - Phase 1 : Architecture de Base ✅
+  - Phase 2 : Mémoire Conversationnelle SQLite ✅
+  - Phase 3-5 : Config IA + LLM + Chat Engine (en cours)
+  - Phases 6-14 : Discord Bot, GUI Chat, 2FA, Tests complets
+
+#### 🔗 Liens Importants
+- **GitHub** : [github.com/Xyon15/desktop-mate](https://github.com/Xyon15/desktop-mate)
+- **Documentation** : [docs/START_HERE.md](https://github.com/Xyon15/desktop-mate/blob/main/docs/START_HERE.md)
+- **Progression IA** : [Session 10 - IA Conversationnelle](https://github.com/Xyon15/desktop-mate/tree/main/docs/sessions/session_10_ai_chat)
+
+#### 💡 Pourquoi Migrer ?
+1. **Architecture Plus Propre** : Réorganisation complète avec Unity + Python
+2. **Meilleure Modularité** : Code mieux structuré et maintenable
+3. **Documentation Complète** : 10 sessions documentées avec guides techniques
+4. **Fonctionnalités Visuelles** : Avatar 3D interactif avec émotions
+5. **Évolutivité** : Base solide pour futures fonctionnalités (voix, mobilité, etc.)
+
+---
+
+## 📦 État d'Archivage
+
+**Date d'archivage** : 22 octobre 2025  
+**Version finale** : 1.0 (Fusion GUI)  
+**Statut** : Archived - Read Only  
+**Successeur** : [Desktop-Mate](https://github.com/Xyon15/desktop-mate)
+
+### 🔐 Ce Qui Reste Disponible
+- ✅ Code source complet en lecture seule
+- ✅ Documentation technique de référence
+- ✅ Historique Git complet
+- ✅ Issues et discussions fermées
+
+### 🚫 Ce Qui N'Est Plus Maintenu
+- ❌ Nouvelles fonctionnalités
+- ❌ Corrections de bugs
+- ❌ Support utilisateur
+- ❌ Pull requests
+
+**Utilisez Desktop-Mate pour toutes les nouvelles contributions !**
+
+---
+
+*Documentation archivée - Kira-Bot v1.0 (Legacy)*
+
+**Développé par** : Xyon | **Idée principale** : [vedal.ai](https://vedal.ai)  
+**Continué sur** : [Desktop-Mate](https://github.com/Xyon15/desktop-mate) 🎭
